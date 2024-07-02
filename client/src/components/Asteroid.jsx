@@ -1,5 +1,5 @@
 // src/components/Asteroid.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const Asteroid = ({ initialPosition }) => {
     const [position, setPosition] = useState(initialPosition);
@@ -9,12 +9,12 @@ const Asteroid = ({ initialPosition }) => {
     });
 
     useEffect(() => {
-        const moveAsteroid = () => {
-          setPosition(prevPosition => ({
-            x: prevPosition.x + velocity.x,
-            y: prevPosition.y + velocity.y,
-          }));
-        };
+      const moveAsteroid = () => {
+        setPosition(prevPosition => ({
+          x: wrapPosition(prevPosition.x + velocity.x, 'x'),
+          y: wrapPosition(prevPosition.y + velocity.y, 'y'),
+        }));
+      };
     
         const asteroidInterval = setInterval(() => {
           moveAsteroid();
@@ -22,7 +22,20 @@ const Asteroid = ({ initialPosition }) => {
     
         return () => clearInterval(asteroidInterval);
       }, [velocity]);
+
+      const wrapPosition = (value, axis) => {
+        const maxValue = axis === 'x' ? 900 : 500; // Width and height of game board
+        const buffer = 30; // Buffer zone beyond the boundary
     
+        if (value < -buffer) {
+          return maxValue + buffer + value;
+        } else if (value > maxValue + buffer) {
+          return value - maxValue - buffer;
+        }
+        return value;
+      };
+
+      // consider putting below in css file if possible    
       const asteroidStyle = {
         position: 'absolute',
         left: `${position.x}px`,
