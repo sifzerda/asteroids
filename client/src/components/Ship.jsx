@@ -55,6 +55,7 @@ const Ship = ({ position, onShoot }) => {
 
   // wrapPosition wraps the screen boundary around so ship re-enters 
   // the buffer allows ship to pass a little beyond the boundary before re-entering
+  // changing these values alters where the ship passes in and out
   const wrapPosition = (value, axis) => {
     const maxValue = axis === 'x' ? 900 : 500; // Width and height of game board
     const buffer = 30; // Adjust the buffer zone as needed
