@@ -330,6 +330,14 @@ p.success {
 border: 2px solid var(--volt);
 }
 
+.game-board {
+  position: relative;
+  width: 900px;
+  height: 500px;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+}
+
 .ship {
   position: absolute;
   width: 30px;
@@ -344,3 +352,12 @@ border: 2px solid var(--volt);
   background-color: rgb(230, 10, 10);
   border-radius: 50%;
 }
+
+.projectile {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: red;
+  border-radius: 50%;
+}
+

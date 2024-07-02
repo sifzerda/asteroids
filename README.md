@@ -3,7 +3,8 @@
 Current games in gamestack:
 
 - [ ] Minesweeper
-- [x] Solitaire
+- [ ] Solitaire
+- [x] Asteroids
 
 ## Table of Contents
 

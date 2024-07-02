@@ -69,7 +69,7 @@ const GameBoard = () => {
     const gameLoop = () => {
       updateGame();
       requestAnimationFrame(gameLoop);
-    };
+    };       
     gameLoop();
   }, []);
 
