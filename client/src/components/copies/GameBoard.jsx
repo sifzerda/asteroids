@@ -33,9 +33,8 @@ const GameBoard = () => {
   }, [shipPosition]);
 
   const moveShip = () => {
-    // Calculate new position based on current rotation
-    const newX = shipPosition.x + Math.sin(shipPosition.rotation * Math.PI / 180) * 5;
-    const newY = shipPosition.y - Math.cos(shipPosition.rotation * Math.PI / 180) * 5;
+    const newX = shipPosition.x + Math.sin(shipPosition.rotation * (Math.PI / 180)) * 5;
+    const newY = shipPosition.y - Math.cos(shipPosition.rotation * (Math.PI / 180)) * 5;
     setShipPosition(prevPosition => ({ ...prevPosition, x: newX, y: newY }));
   };
 
@@ -52,6 +51,10 @@ const GameBoard = () => {
 
   // Game loop using useEffect and requestAnimationFrame
   useEffect(() => {
+    const initialAsteroids = [
+      { x: 100, y: 100 },
+      { x: 400, y: 200 },
+    ];
     const gameLoop = () => {
       // Update game state
       updateGame();
@@ -59,27 +62,35 @@ const GameBoard = () => {
       requestAnimationFrame(gameLoop);
     };
     gameLoop(); // Start the game loop
+    setAsteroids(initialAsteroids);
+  }, []);
+
+  useEffect(() => {
+    const gameLoop = () => {
+      updateGame();
+      requestAnimationFrame(gameLoop);
+    };
+    gameLoop();
   }, []);
 
   // Update game state
   const updateGame = () => {
-    // Update asteroids, check collisions, etc.
-    // Example: Move asteroids
+    // Update asteroids
     setAsteroids(prevAsteroids => (
-      prevAsteroids.map(asteroid => ({
+      prevAsteroids.map((asteroid, index) => ({
         ...asteroid,
-        x: asteroid.x + asteroid.velocityX,
-        y: asteroid.y + asteroid.velocityY,
+        x: asteroid.x + Math.random() * 2 - 1, // Random movement (-1 to 1)
+        y: asteroid.y + Math.random() * 2 - 1,
       }))
     ));
-    // Check for collisions, update score, etc.
+    // Additional game logic such as collision detection can be added here
   };
 
   return (
     <div className="game-board">
       <Ship position={shipPosition} />
       {asteroids.map((asteroid, index) => (
-        <Asteroid key={index} position={asteroid} />
+        <Asteroid key={index} initialPosition={asteroid} />
       ))}
     </div>
   );
