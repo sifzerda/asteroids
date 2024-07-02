@@ -1,9 +1,12 @@
-// src/components/Ship.js
 import { useState, useEffect } from 'react';
 
-const Ship = ({ onShoot }) => {
-  const [position, setPosition] = useState({ x: 300, y: 300 });
+const Ship = ({ position, onShoot }) => {
+  const [currentPosition, setCurrentPosition] = useState(position);
   const [rotation, setRotation] = useState(0);
+
+  useEffect(() => {
+    setCurrentPosition(position);
+  }, [position]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -30,13 +33,13 @@ const Ship = ({ onShoot }) => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [position, rotation, onShoot]);
+  }, [currentPosition, rotation, onShoot]);
 
   const moveShip = () => {
     const speed = 5; // Adjust as needed
-    const newX = position.x + Math.sin(rotation * (Math.PI / 180)) * speed;
-    const newY = position.y - Math.cos(rotation * (Math.PI / 180)) * speed;
-    setPosition({ x: newX, y: newY });
+    const newX = currentPosition.x + Math.sin(rotation * (Math.PI / 180)) * speed;
+    const newY = currentPosition.y - Math.cos(rotation * (Math.PI / 180)) * speed;
+    setCurrentPosition({ x: wrapPosition(newX, 'x'), y: wrapPosition(newY, 'y') });
   };
 
   const rotateShip = (direction) => {
@@ -50,10 +53,24 @@ const Ship = ({ onShoot }) => {
     setRotation(newRotation);
   };
 
+  // wrapPosition wraps the screen boundary around so ship re-enters 
+  // the buffer allows ship to pass a little beyond the boundary before re-entering
+  const wrapPosition = (value, axis) => {
+    const maxValue = axis === 'x' ? 900 : 500; // Width and height of game board
+    const buffer = 30; // Adjust the buffer zone as needed
+
+    if (value < -buffer) {
+      return maxValue + buffer + value;
+    } else if (value > maxValue + buffer) {
+      return value - maxValue - buffer;
+    }
+    return value;
+  };
+
   const shipStyle = {
     position: 'absolute',
-    left: `${position.x}px`,
-    top: `${position.y}px`,
+    left: `${currentPosition.x}px`,
+    top: `${currentPosition.y}px`,
     width: '30px',
     height: '30px',
     backgroundColor: 'white',

@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
 import '../App.css';
-import '../minesweeper.css';
+import '../asteroids.css';
 
 const Profile = () => {
     const { loading, data, error } = useQuery(QUERY_ME);

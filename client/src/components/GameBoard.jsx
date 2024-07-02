@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import Ship from './Ship';
 import Asteroid from './Asteroid';
+//import StartGame from '../components/StartGame';
+//import HighScores from '../components/HighScores';
+//import FinalScore from '../components/FinalScore';
 
 const GameBoard = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
@@ -37,8 +40,8 @@ const GameBoard = () => {
     const newY = shipPosition.y - Math.cos(shipPosition.rotation * (Math.PI / 180)) * speed;
     setShipPosition(prevPosition => ({
       ...prevPosition,
-      x: clamp(newX, 0, 600), // Clamp ship's x position between 0 and 600
-      y: clamp(newY, 0, 400), // Clamp ship's y position between 0 and 400
+      x: wrapPosition(newX, 'x'), // Ensure wrapping for ship's x position
+      y: wrapPosition(newY, 'y'), // Ensure wrapping for ship's y position
     }));
   };
 
@@ -80,32 +83,28 @@ const GameBoard = () => {
     gameLoop();
   }, []);
 
-  // Update game state
-  const updateGame = () => {
-    // Update asteroids
-    setAsteroids(prevAsteroids => (
-      prevAsteroids.map(asteroid => ({
-        ...asteroid,
-        x: wrapPosition(asteroid.x + Math.random() * 2 - 1, 'x'),
-        y: wrapPosition(asteroid.y + Math.random() * 2 - 1, 'y'),
-      }))
-    ));
-    // Additional game logic such as collision detection can be added here
-  };
+// Update game state
+const updateGame = () => {
+  // Update asteroids
+  setAsteroids(prevAsteroids => (
+    prevAsteroids.map(asteroid => ({
+      ...asteroid,
+      x: wrapPosition(asteroid.x + Math.random() * 2 - 1, 'x'),
+      y: wrapPosition(asteroid.y + Math.random() * 2 - 1, 'y'),
+    }))
+  ));
+  // Additional game logic such as collision detection can be added here
+};
 
-  const wrapPosition = (value, axis) => {
-    const maxValue = axis === 'x' ? 600 : 400; // Width and height of game board
-    if (value < 0) {
-      return maxValue + value;
-    } else if (value > maxValue) {
-      return value - maxValue;
-    }
-    return value;
-  };
-
-  const clamp = (value, min, max) => {
-    return Math.min(Math.max(value, min), max);
-  };
+const wrapPosition = (value, axis) => {
+  const maxValue = axis === 'x' ? 900 : 500; // Width and height of game board
+  if (value < 0) {
+    return maxValue + value;
+  } else if (value > maxValue) {
+    return value - maxValue;
+  }
+  return value;
+};
 
   return (
     <div className="game-board">
