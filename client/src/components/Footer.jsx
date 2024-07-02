@@ -7,10 +7,8 @@ function Footer() {
       <div className="row d-flex justify-content-center">
         <div className="col-lg-8">
 
-
-        <p className="footer-text">Explodere est pars facillima.</p>
           <p className="footer-text">
-          <span className='flag'>🚩</span> minesweeper <span className='flag'>🚩</span>
+          <span className='flag'>🚀</span> asteroids <span className='flag'>🚀</span>
           </p>
 
           <p className="footer-text">sifzerda</p>
