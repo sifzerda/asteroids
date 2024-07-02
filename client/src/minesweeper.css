@@ -334,8 +334,9 @@ border: 2px solid var(--volt);
   position: relative;
   width: 900px;
   height: 500px;
-  margin: 20px auto;
-  border: 1px solid #ccc;
+  overflow: hidden;
+  margin: auto;
+  border: 2px solid purple;
 }
 
 .ship {
