@@ -116,6 +116,7 @@ Other:
 - [x] Create basic black game screen
 - [x] Create moving ship 
 - [x] Create some randomly moving asteroids
+- [ ] Make more asteroids and different size asteroids
 - [ ] Enable projectile firing
 - [ ] Projectile collision detection with asteroids
 - [ ] Ship detection with asteroids
@@ -125,7 +126,10 @@ Other:
 - [ ] refine ship movement; add limited inertia, add acceleration (longer you hold down up, faster you speed up), 
 - [ ] bullet flashing/muzzle flare effect
 - [ ] asteroids flash or change color when hit
-- [ ] Power ups randomly appear around screen for several seconds which change projectile type/power/appearance
+- [ ] Power ups randomly appear around screen for several seconds which change projectile type/power/appearance:
+  - [ ] Speed up (or slow down)
+  - [ ] Boost (or add boost ability in general)
+  - [ ] 
 - [ ] 
 - [ ] Level progression:
   - [ ] Higher level (i.e. more time) asteroids take longer to break up, or break up into smaller divisions
