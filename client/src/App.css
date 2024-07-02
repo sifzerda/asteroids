@@ -218,6 +218,7 @@ div.container.my-1-9 {
   text-align: left;
   margin: 0 auto;
   background-color: black;
+  border-top: var(--dark-blue) ridge 8px;
 }
 
 .main-content {
@@ -266,10 +267,6 @@ a:hover {
 }
 
 /* ------ -------------------- ----------- */
-
-div.bucket-app {
-  border-top: var(--dark-blue) ridge 8px;
-}
 
 aside.sidebar {
   border-right: var(--dark-blue) ridge 8px;
@@ -447,10 +444,6 @@ ol.nav.nav-tabs {
 }
 
 /* ================  ========================== */
- 
-.read-the-docs {
-  color: #888;
-}
 
 @keyframes logo-spin {
   from {
