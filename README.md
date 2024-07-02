@@ -1,4 +1,4 @@
-# ASTEROIDS 🂡
+# ASTEROIDS 🚀
 
 Current games in gamestack:
 
@@ -25,22 +25,11 @@ Current games in gamestack:
 
 ## (1) Description
 
-A personal project to create a react MERN stack app which has a number of simple games. I used trial and error and ChatGPT prompting. This was more challenging to make than minesweeper and took some experimentation, and a lot of debugging.
+A personal project to create a react MERN stack app which has a number of simple games. I used trial and error and ChatGPT prompting. 
 
-As with minesweeper the game had to be divided up into the smallest working components/units. It began as a simple DnD interface where one of 52 boxes (cards) could be dragged and dropped onto 4 rectangles (foundations). Then the DnD dynamic was configured to operate according to Solitaire rules, preventing DnD unless there was a match of card suit and rank.
+This was built with React, Node, Javascript, and CSS. 
 
-Lessons learned from building this project:
-
-- How to implement a Drag and Drop package (react beautiful dnd);
-  - The dnd packages don't allow dragging of group items. I had to combine grouped cards into one object and style it like multiple cards. Apparently you can drag multiple objects using 'react-beautiful-dnd multi drag pattern'.
-- Make the game full generally, rather than specific and partially;
-- Create basic working dnd structures and build the game around them, rather than try to make a conditional click-based display/game, and implement the dnd dynamic later. The more moving parts, the harder it is to get dnd in;
-- Create all game display parts (stockpile, foundations, tableau) first, and then give them operational logic, rather than create one fully working part one at a time;
-- Make all possible moves legal and then impose conditions later, rather than build on priori rules.
-- Try to keep all code together for context, but where necessary, make backup copies with partial code for debugging.
-- Save all/extra code in backup files.
-
-<u>Generally: Build God mode basic, expand, then limit. </u>
+The game had to be divided up into the smallest working components/units. It began as a game screen with a moving ship, then a couple of asteroids which moved randomly. Collision detection and projectile shooting were put in later.
 
 ## (2) Badges
 
@@ -64,24 +53,24 @@ Lessons learned from building this project:
 
 ## (3) Visuals
 
-[Visit App deployed to Heroku](https://solitaire-10-c835a42e5e11.herokuapp.com/)
+[Visit App deployed to Heroku](https://asteroids-10-[...].herokuapp.com/)
 
-![solitaire-screenshot-1](https://github.com/sifzerda/solitaire/assets/139626561/a82c2908-baa8-4085-89b9-f19f782646c9)
+![asteroids-screenshot-1](https://github.com/sifzerda/solitaire/assets/139626561/a82c2908-baa8-4085-89b9-f19f782646c9)
 
-![solitaire-screenshot-2](https://github.com/sifzerda/solitaire/assets/139626561/597cc570-c867-4a2b-9975-7aa68b7aa358)
+![asteroids-screenshot-2](https://github.com/sifzerda/solitaire/assets/139626561/597cc570-c867-4a2b-9975-7aa68b7aa358)
 
 ## (4) Installation
 
 ```bash
-git clone https://github.com/sifzerda/solitaire.git
-cd solitaire
+git clone https://github.com/sifzerda/asteroids.git
+cd asteroids
 npm install
 npm run start
 ```
 
 ## (5) Usage
 
- The game executes a game of solitaire with traditional rules. Parts:
+ The app executes a version of the retro arcade game 'asteroids'. Parts:
  
  - Start screen
  - Game
@@ -91,20 +80,24 @@ npm run start
 
 ## (6) Dev Stuff: Building:
 
-The main/mother function is 'onDragEnd' which indexes and executes all other major DnD functions. 
+The main functions of code:
 
-1. <u>'const initialCards':</u> Creates full playing card deck data.  
-2. <u>'const initialDecks':</u> Splits the deck into 4 suits and initializes empty.
-3. <u>'const initialTableau':</u> Creates Tableau into 7 cols, each col contains the number of cards as it's id (e.g. col 7 contains 7 cards). Initializes empty. Originally tableau sliced off cards from the stockpile, but the 'card sharing' caused issues and had to be reworked.
-4. <u>'const Solitaire':</u> Runs main game code (i.e. covers user activity).
-5. <u>'const updatedCards', 'const updatedDecks'</u> The state of each foundation suit deck is trackable separately and updated per card dropped.
-6. <u>'const [currentCardIndex, setCurrentCardIndex] = useState(0)', 'const nextCard' + onClick={nextCard}:</u> Actions the Stockpile click cycle. 
-7. <u>'const shuffleArray':</u> shuffles cards in stockpile and tableau after distribution.
-8. <u>'const onDragEnd':</u> Collects and Executes all DnD functions for stockpile, tableau and foundations:
+1. <u>Initialization, Positioning:</u> mmmmmm.
+2. <u>Movement:</u> A useEffect hook and EventListeners on keydown enable ship movement with arrow keys. useEffect calls moveShip and rotateShip on key-press.
+3. 
+4. 
+5. 
+6. 
+7. <u>'const initialTableau':</u> Creates Tableau into 7 cols, each col contains the number of cards as it's id (e.g. col 7 contains 7 cards). Initializes empty. Originally tableau sliced off cards from the stockpile, but the 'card sharing' caused issues and had to be reworked.
+8. <u>'const Solitaire':</u> Runs main game code (i.e. covers user activity).
+9. <u>'const updatedCards', 'const updatedDecks'</u> The state of each foundation suit deck is trackable separately and updated per card dropped.
+10. <u>'const [currentCardIndex, setCurrentCardIndex] = useState(0)', 'const nextCard' + onClick={nextCard}:</u> Actions the Stockpile click cycle. 
+11. <u>'const shuffleArray':</u> shuffles cards in stockpile and tableau after distribution.
+12. <u>'const onDragEnd':</u> Collects and Executes all DnD functions for stockpile, tableau and foundations:
    - <u>'const handleStockpileToTableauDrop':</u> DnD from Stockpile to Tableau;
    - <u>'const handleTableauToTableauDrop':</u> DnD from Tableau to Tableau;
    - <u>'handleFoundationDrop':</u> DnD from any to Foundations.
-9.  <u>'return':</u> renders stockpile ('cards'), tableau, and foundations and contains in DnD areas.
+13. <u>'return':</u> renders stockpile ('cards'), tableau, and foundations and contains in DnD areas.
 Other:
 1.  <u>'else if (source.droppableId.startsWith('tableau')...)':</u> Enables tableau cards to be dragged in stacks (piles), from source.index -> last-item. 
 2.  <u>'return {... t-drag-card-group}':</u> this targets a tableau -> tableau pile of cards and applies a class selector which allowed me to modify appearance of dragging card pile as a single object/stack. React Beautiful DnD didn't seem to have a 'group/multiple object/s' dragging graphic, so I had to make it manually with CSS.
@@ -114,52 +107,61 @@ Other:
 
 ## (7) Bugs: 
 
-- Cards must be put onto tableau in specific position (i.e. on top) otherwise insert at some other point in the tableau pile
-- Very rarely a card will vanish entirely after dropping and game must be restarted
-- Cards can be pulled from anywhere in the tableau pile.
-- Sometimes a card dropped onto a tableau pile will switch to facedown state. Clicking it will cause it to return to faceup state.
+- 
+- 
+- 
 
 ## (8) To do: 
 
-- [x] Create Foundation area/boxes for cards to slot/stack into
-- [x] Create Stockpile of free cards
-- [x] Drag n Drop mechanics between stockpile and foundation
-- [x] Foundation logic: accept cards in sequential order (A -> K)
-  - [x] Will accept Ace per suit
-  - [x] Will accept Ace - > 2 per suit
-  - [x] Will accept Ace - > 3 per suit
-  - [x] Will accept Ace -> K (all) per suit 
-- [x] Create Tableau of 7 cols with incrementally more card rows
-- [x] Drag n Drop mechanics between tableau and foundation
-- [x] Drag n Drop mechanics between stockpile and tableau
-  - [x] refine dropping to obey solitaire rules conditions
-- [x] Drag n Drop between tableau columns
-  - [x] refine dropping to obey solitaire rules conditions
-- [x] Drag n Drop of entire tableau groups of cards between cols
-- [x] Facedown all tableau cards except top
-- [x] Change 'next card' button to a facedown stack of cards
-  - [x] I.e. make the stockpile a stack (or show all cards) and style like foundation and tableau stacks (but increase neg margin)
-- [x] Style cards in tableau to layer
-- [x] Style cards in foundation to layer
-- [x] recover tableau group drag animation (group drag works it's just lost the in-between animation)
-  - [x] After testing/debugging, change -150 to -170 of CSS: .card-in-deck + .card-in-deck
+- [x] Create basic black game screen
+- [x] Create moving ship 
+- [x] Create some randomly moving asteroids
+- [ ] Enable projectile firing
+- [ ] Projectile collision detection with asteroids
+- [ ] Ship detection with asteroids
+- [ ] When you shoot an asteroid it disappears
+  - [ ] When you shoot asteroids they break into two smaller, and so on
+- [ ] improve graphics elements
+- [ ] refine ship movement; add limited inertia, add acceleration (longer you hold down up, faster you speed up), 
+- [ ] bullet flashing/muzzle flare effect
+- [ ] asteroids flash or change color when hit
+- [ ] Power ups randomly appear around screen for several seconds which change projectile type/power/appearance
+- [ ] 
+- [ ] Level progression:
+  - [ ] Higher level (i.e. more time) asteroids take longer to break up, or break up into smaller divisions
+- [ ] 
+- [ ] Dividing play session into levels. After a certain time, 'level 2' flashes on screen and difficulty ramps each level increase. Also next to timer, put level.
+- [ ]
+- [ ] Points every asteroid hit
+- [ ] Timer (counts from 0)
+- [ ] Time is added to final score or possibly multipled up (every second = 10 or 100 points)
+- [ ] 
+- [ ]
+- [ ]
+- [ ]
+- [ ] 
+- [ ] 
 
-Stuff to do once main game functioning (i.e. easier implementable latter tasks):
 
-- [ ] double clicking a card in stockpile; if there's a valid move to foundations (but not other areas), will automatically make that move 
-- [ ] double clicking a card in tableau; if there's a valid move to foundations (but not other areas), will automatically make that move 
-- [x] import card images - prob do this last
-- [x] reshuffle stockpile button, basically restarts game
-- [x] timer: restarts on game refresh
-- [ ] Points system, each time a card is placed on foundation, it adds points (if cards can be removed from foundation, don't forget to subtract points for that)
--  Points system: add time to points so the less time, the more points you get, *** put this in minesweeper
-- [x] Handling upon: game win
-- [ ] Handling upon: game loss, or no valid moves left that would allow game win
-- [x] highscores comp
-- [x] submit score/time if logged in
-- [x] user profile page shows how many games user has won, and quickest (least time) wins
-- [ ] Make each part of the game a separate component
-- [ ] OPTIONAL: Some kind of animation upon winning game
+
+Borrow from minesweeper:
+
+- [ ] Game Start screen
+- [ ] Game win/loss screen
+  - [ ] Timer
+  - [ ] Score
+  - [ ] Total level
+  - [ ] 
+- [ ] Exit game through main game
+- [ ] Highscores (from start screen)
+- [ ] Submit highscores
+- [ ] Profile scores and logging in
+
+
+
+
+
+ 
 
 ## (9) To do for all games
 - [x] create start game landing screen: + start game btn; + high scores btn
