@@ -1,0 +1,319 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+/* ------------------------- minesweeper -------------------------*/
+
+h1 {
+  font-family: 'VT323', monospace;
+  font-size: 2.5rem;
+  color: var(--volt);
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: black;
+}
+
+.start {
+  position: relative;
+  border: 5px solid var(--midnight);
+}
+
+.end {
+  position: relative;
+  animation: neon-flashing 1s infinite alternate;
+  border: 5px solid var(--midnight);
+}
+
+@keyframes neon-flashing {
+  from {
+    text-shadow: 0 0 10px  white, 0 0 20px var(--volt), 0 0 30px var(--volt), 0 0 40px var(--volt), 0 0 70px #00fff6, 0 0 80px #00fff6;
+  }
+  to {
+    text-shadow: none;
+  }}
+
+.grid-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .white-box {
+    display: grid;
+    place-items: center; 
+    background-color: white;
+    padding: 20px;
+    padding-left: 40px;
+    border-radius: 10px;
+    border: 8px solid var(--midnight);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: fit-content; 
+    height: fit-content;
+  }
+  
+  .grid-container {
+    margin-top: 20px; 
+    display: grid;
+    min-width: 900px;
+    place-items: center; 
+    
+  }
+  
+  .cell {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    display: inline-flex;
+    background-color: #e0e0e0; /* Default background color for cells */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cell.revealed {
+    background-color: rgb(245, 245, 245);
+  }
+  
+  .cell.inactive {
+    background-color: red;  /* cells that were not clicked/activated, e.g. bomb cells that were not clicked*/
+    color: white;
+  }
+  
+  .cell.flag {
+    background-color: #dceb0d; 
+  }
+  
+  /* this is the bomb user clicks*/
+  .cell.bomb {
+    background-color: red;
+  }
+   
+  /* this is the bomb user clicks*/
+  .cell.isBombClicked {
+    background-color: red;
+    color: white;
+  }
+  
+  .row {
+    display: flex;
+  }
+  
+  .cell {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    background-color: #ccc; /* Default cell color */
+  }
+  
+  .cell:hover {
+    background-color: #ddd; /* Hover effect */
+  }
+  
+  .mine {
+    background-color: #f00; /* Color for cells containing mines */
+    color: #fff;
+  }
+  
+  .flagged {
+    background-color: #ff0; /* Color for flagged cells */
+  }
+  
+  .grid {
+    gap: 1px; /* Gap between squares */
+    border: 1px solid #000; /* Border around the grid */
+  }
+   
+  .square {
+    width: 30px; /* Square width */
+    height: 30px; /* Square height */
+    background-color: #fff; /* Square background color */
+    border: 1px solid #000; /* Square border */
+  }
+
+.submit-button-m {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 20px auto;
+  padding: 12px 16px;
+  font-size: 16px;
+  background-color: var(--volt);
+  color: var(--midnight);
+  border: 2px solid var(--blue);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s, border-color 0.3s;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Increased box shadow for lift effect */
+}
+
+  .submit-button-m:hover {
+    background-color: #ffffff;
+    border: 2px solid var(--blue);
+    color: var(--blue);
+  }
+
+  .submit-button-m:active {
+    transform: translateY(2px); /* Move button down slightly when pressed */
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1); /* Reduce shadow for pressed effect */
+  }
+
+.timer-score-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.timer-container,
+.score-container {
+  display: inline-block;  
+  background-color: black;
+  border-radius: 5px;
+  border: 2px solid var(--blue);
+  margin: 0 5px;  
+  padding: 0;  
+  line-height: 1; 
+}
+
+.timer-container p,
+.score-container p {
+  font-size: 1rem;
+  margin: 0;  
+  padding: 7px;
+  color: var(--volt);
+  background-color: black;
+  font-family: 'Share Tech Mono', 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+p.black-text {
+  color: black;
+}
+
+.high-scores-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.high-scores-table th, .high-scores-table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.high-scores-table th {
+  background-color: #f2f2f2;
+}
+
+.high-scores-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.high-scores-table tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+.black-text a {
+  color: #007bff; /* Blue color for links */
+  text-decoration: none; /* Remove underline from links */
+  margin: 0 5px; /* Adjust margins between links */
+  transition: color 0.9s ease; 
+  font-weight: bold;
+  font-family: 'Share Tech Mono', 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.black-text a:hover {
+  color: #0056b3!important; /* Darker blue color on hover */ /* Underline links on hover */
+  border: 2px dashed var(--blue);
+  padding: 5px;
+  font-weight: bold;
+}
+
+p.success {
+  display: block;
+  width: 100%;
+  margin: 20px auto;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: var(--midnight);
+  border: 2px dashed var(--blue);
+  border-radius: 5px;
+}
+
+/* ---------------- profile -----------------*/
+
+.jumbo-bg-dark {
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.jumbo-bg-dark-text {
+  margin: 0;
+  padding: 0;
+  font-size: 2rem;
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-container h1 {
+  text-align: center;
+}
+
+.profile-container p.email-info {
+  color: var(--light-red);
+  font-size: 0.9rem;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.profile-text {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  color: black;
+}
+
+/* difficulty radio switches */
+
+.difficulty-selector {
+  display: flex;
+  gap: 10px;  
+  justify-content: center;
+}
+
+.difficulty-selector label {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.9s ease;
+}
+
+.difficulty-selector input[type="radio"] {
+  margin-right: 5px;
+  cursor: pointer;
+}
+ 
+.difficulty-selector input[type="radio"]:checked + span {
+  font-weight: bold;
+}
+
+.difficulty-selector label:hover {
+  color: #555;
+}
+

@@ -1,0 +1,577 @@
+/* Import Google fonts - Josefin+Sans, Outfit, Source Code Pro, Rubik, Poppins, Vazmatin, Jersey 10, Space Grotesk */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Vazmatin&display-swap");
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Outfit:wght@100..900&family=Rowdies:wght@300;400;700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Righteous');
+@import url('https://fonts.googleapis.com/css?family=Poppins:900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Denk+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Permanent+Marker&family=Rubik+Mono+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poiret+One&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --blue: #2684ff;
+  --lblue: #4f9bff;
+  --light-blue: #87f7f1;
+  --volt: #c8ff00;
+  --dark-blue: #000102;
+  --yellow: #e5dc15;
+  --dark-yellow: #c2bb11;
+  --bootstrap-dark: #212529;
+  --bootstrap-lighter: #364459;
+  --bootstrap-lightest: #96a4b3;
+  --cyan: #01fff7;
+  --light-red: #f02652;
+  --gold: #ffc107;
+  --creepy-green: #9cffd9;
+  --creepy-green2:  #cefff4;
+  --midnight: rgb(8, 29, 88);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Rubik', 'Montserrat', sans-serif;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+}
+
+/* ------- main header title --------*/
+
+.header {
+  padding: 20px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.header-gold {
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+ol, ul {
+  color: white;
+}
+
+li {
+  color:white;
+}
+
+/*---------------------------------------------------*/
+
+/* Additional styling */
+
+.px-5 {
+  padding-right: 3rem !important;
+  padding-left: 3rem !important;
+  padding-bottom: 3rem !important;
+}
+
+.justify-content-center {
+  justify-content: center !important;
+  padding-top: 40px;
+}
+
+p.lead.my-3 {
+  color: white;
+}
+
+/* -----------------------*/
+
+html,
+body {
+  position: relative;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  font-family: "Poppins", sans-serif;
+  place-items: center;
+  background-color: #222;
+}
+
+#root {
+  border: var(--dark-blue) ridge 8px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+a.back-link {
+  text-decoration: none;
+  color: white;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+/* signup ---------------------------------------------------------*/
+
+.signup-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: var(--bootstrap-dark);
+  border: 3px solid black;
+}
+
+.signup-form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.error-message {
+  color: rgb(252, 74, 89);
+  font-size: 0.9em;  
+  margin-top: 5px;  
+}
+
+.submit-button-z:hover {
+  background-color: #ffffff;
+  border: 2px solid var(--blue);
+  color: var(--blue);
+}
+
+.submit-button-z {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: var(--midnight);
+  color: #fff;
+  border: 2px solid var(--blue);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.5s;
+}
+
+.button-container-z {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.back-link {
+  text-decoration: none;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.form-group-z {
+  margin-bottom: 20px;
+}
+
+.label-z {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-z {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 6px var(--midnight) solid;
+  border-radius: 5px;
+}
+
+.error-text {
+  color: #dc3545;
+}
+
+h2.login-title {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  color: var(--volt);
+}
+
+div.container.my-1-9 {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: black;
+  border: 1px solid white;
+}
+
+/* bucket app ---------------------------------------------------------*/
+
+.bucket-app {
+  display: flex;
+  flex-direction: row;
+  /* Change to row to align items horizontally */
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100vh;
+  background:  black;
+  text-align: left;
+  margin: 0 auto;
+  background-color: black;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+header.header {
+  background: black;
+  border: none;
+}
+
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-right: var(--dark-blue) ridge 8px;
+  align-items: center;
+  padding: 0;
+}
+
+footer {
+  border-top: var(--dark-blue) ridge 8px;
+  margin-top: auto;
+  background: black;
+  padding: 16px;
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* svg icons on contact page*/
+a:hover {
+  color: var(--volt)!important;
+}
+
+/* ------ -------------------- ----------- */
+
+div.bucket-app {
+  border-top: var(--dark-blue) ridge 8px;
+}
+
+aside.sidebar {
+  border-right: var(--dark-blue) ridge 8px;
+}
+
+.nav-tabs-subjects {
+  justify-content: right;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  margin: 0 20px;
+}
+
+.nav-link {
+  background-color: black !important;
+  color:   white !important;
+  border: 2px solid var(--midnight) !important;
+}
+
+.nav-link.active {
+  background-color: black !important;
+  color: var(--volt) !important;
+  border: 2px solid var(--volt) !important;
+  font-style: italic;
+}
+
+li.nav-item {
+  min-width: 130px;
+}
+ 
+.sidebar {
+  width: 250px;
+  background-color: black;
+  color: white;
+  padding-top: 20px;
+}
+
+h1 {
+  font-size: 40px !important;
+  margin: auto 0;
+  justify-content: center;
+  display: grid;
+  font-family: "Rajdhani", cursive;
+  color:  var(--volt);
+  text-shadow: 5px 8px 5px rgba(0, 0, 0, 0.5);
+}
+
+span.bomb {
+  color: var(--light-red);
+border: 3px solid white;
+  padding: 10px;
+  font-size: 25px;
+}
+
+span.flag {
+  color: var(--light-red);
+  font-size: 20px;
+}
+
+.separator-line {
+  width: 100%;
+  height: 1px;
+  background-color: #fff; 
+  margin: 20px 0; 
+}
+
+/* projects ---------------------------------------------------------*/
+
+p {
+  color: #ffffff;
+}
+
+/* Footer -------------------------------------------------------------- */
+
+p.footer-text {
+  color: white;
+}
+
+a {
+  color: white;
+  font-family: 'Source Code Pro';
+}
+
+
+h4 {
+  color: var(--light-red);
+}
+
+h2 {
+  color: var(--creepy-green);
+}
+
+p.mb-0-1 {
+  color: white;
+}
+
+h5 {
+  color: rgb(0, 110, 255);
+}
+
+/* content ------------------------------------------------*/
+
+.jumbotron {
+  padding: 2rem;
+  margin: 0 auto;
+  border: 1px solid #ffffff;
+  background-color: black!important;
+}
+
+p.code-left {
+  margin-left: 20px;
+  margin-right: 20px;
+  text-indent: 20px;
+}
+
+.bg-light {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.delete-icon,
+.edit-icon {
+  margin-right: 5px;
+  color: #fff;
+}
+
+/* ================== Contact Form ======================== */
+
+form {
+  width: 40%;
+  margin: 0 auto;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.centered-button {
+  display: block;
+  margin: 15px auto;
+}
+
+label {
+  display: block;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 0.2em;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  color: white;
+  font-family: 'Source Code Pro';
+}
+
+/* ================  Dropdown menu for subjects ========================== */
+
+ol.nav.nav-tabs {
+  list-style: decimal-leading-zero;
+}
+
+/* ================  ========================== */
+ 
+.read-the-docs {
+  color: #888;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================= media queries ======================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* media query for contact flex-box icons*/
+@media screen and (max-width: 600px) {
+  div.icon-container {
+    flex-basis: 50%;
+  }
+
+  h1.jumbo-bg-dark-text {
+    font-size: 20px;
+  }
+
+  h2.profile-text {
+    font-size: 1.2rem;
+  }
+}
+
+/* Small screens (mobile devices) */
+@media screen and (max-width: 768px) {
+
+  h1 {
+    font-size: 32px;
+  }
+
+  .nav-links li {
+    margin: 0 10px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+  }
+
+
+  h1 {
+    margin: 16px 0;
+    font-size: 36px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  p.separator {
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  a.a-title {
+    margin: 10px;
+  }
+
+  .icons {
+    font-size: 20px;
+  }
+
+  form {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .form-container button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Medium screens (tablets) */
+@media screen and (max-width: 1023px) and (min-width: 768px) {
+
+  main.mx-3 {
+    margin: 0 10px;
+  }
+
+  form {
+    width: 80%;
+  }
+
+  .form-container button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Large screens (desktops and laptops) */
+@media screen and (min-width: 1024px) {
+
+  /* Add your styles for large screens here */
+  /* For example: */
+
+  div.icon-container {
+    justify-content: center;
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+      width: 180px; /* Narrowed width when window is minimized */
+  }
+  .aside.sidebar {
+width: 180px;
+  }
+}
+ 
