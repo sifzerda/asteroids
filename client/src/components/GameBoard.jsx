@@ -34,26 +34,25 @@ const GameBoard = () => {
     };
   }, [shipPosition]);
 
-  const moveShip = () => {
-    const speed = 5; // Adjust as needed
-    const newX = shipPosition.x + Math.sin(shipPosition.rotation * (Math.PI / 180)) * speed;
-    const newY = shipPosition.y - Math.cos(shipPosition.rotation * (Math.PI / 180)) * speed;
+  const moveShip = () => updateShipPosition('move');
+  const rotateShip = (direction) => updateShipPosition(direction);
+
+  const updateShipPosition = (action) => {
+    const speed = action === 'move' ? 5 : 5; // Adjust as needed
+    const rotationSpeed = action === 'left' ? -5 : action === 'right' ? 5 : 0; // Adjust as needed
+
     setShipPosition(prevPosition => ({
       ...prevPosition,
-      x: wrapPosition(newX, 'x'),
-      y: wrapPosition(newY, 'y'),
+      x: wrapPosition(
+        prevPosition.x + Math.sin(prevPosition.rotation * (Math.PI / 180)) * speed,
+        'x'
+      ),
+      y: wrapPosition(
+        prevPosition.y - Math.cos(prevPosition.rotation * (Math.PI / 180)) * speed,
+        'y'
+      ),
+      rotation: (prevPosition.rotation + rotationSpeed) % 360,
     }));
-  };
-
-  const rotateShip = (direction) => {
-    const rotationSpeed = 5; // Adjust as needed
-    let newRotation = shipPosition.rotation;
-    if (direction === 'left') {
-      newRotation -= rotationSpeed;
-    } else if (direction === 'right') {
-      newRotation += rotationSpeed;
-    }
-    setShipPosition(prevPosition => ({ ...prevPosition, rotation: newRotation }));
   };
 
   const shootProjectile = () => {
@@ -106,11 +105,12 @@ const GameBoard = () => {
   };
 
   const wrapPosition = (value, axis) => {
-    const maxValue = axis === 'x' ? 900 : 500; // Width and height of game board
-    if (value < 0) {
-      return maxValue + value;
-    } else if (value > maxValue) {
-      return value - maxValue;
+    const maxValue = axis === 'x' ? 1500 : 682; // Width and height of game board
+    const buffer = 30;
+    if (value < -buffer) {
+      return maxValue + buffer + value;
+    } else if (value > maxValue + buffer) {
+      return value - maxValue - buffer;
     }
     return value;
   };
