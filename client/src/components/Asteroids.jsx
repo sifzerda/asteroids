@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-const GameBoard = () => {
+const Asteroids = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [asteroids, setAsteroids] = useState([]);
   const [projectiles, setProjectiles] = useState([]);
@@ -199,4 +199,4 @@ const GameBoard = () => {
   );
 };
 
-export default GameBoard;
+export default Asteroids;

@@ -1,5 +1,5 @@
 import '../App.css';
-import GameBoard from '../components/GameBoard';
+import Asteroids from '../components/Asteroids';
 import '../asteroids.css';
 
 export default function About () {
@@ -9,7 +9,7 @@ export default function About () {
 {/* game component */}
 
 
-<GameBoard />
+<Asteroids />
 
 
 {/* -------------- */}
