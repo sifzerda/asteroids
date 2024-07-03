@@ -89,7 +89,6 @@ Controls:
 
 The main functions of code:
 
- 
 1. <u>const handleKeyDown:</u> key press event listening to control ship movement and gunfire.
 2. <u>const updateShipPosition:</u> sets ship speed and rotational radius.
 3. <u>setShipPosition…wrapPosition:</u> ship’s movement wraps to other side of game boundary when passing outside. A ‘buffer’ zone allows ship to pass and re-enter just outside boundary.
@@ -194,7 +193,7 @@ Borrow from minesweeper:
 - [ ] volume increase/decrease for music
 - [ ] play through albums as 8-bit, and can play next song in list
 
-## .(10) Support
+## (10) Support
 
 For support, users can contact tydamon@hotmail.com.
 
