@@ -16,9 +16,9 @@ export const QUERY_USERS = gql`
       _id
       username
       email
-      mineScore {
-        minePoints
-        mineTimeTaken
+      astScore {
+        astPoints
+        astTimeTaken
       }
     }
   }
@@ -30,19 +30,19 @@ export const QUERY_ME = gql`
       _id
       username
       email
-            mineScore {
-        minePoints
-        mineTimeTaken
+            astScore {
+        astPoints
+        astTimeTaken
       }
     }
   }
 `;
 
-export const GET_MINE_SCORE = gql`
-  query getMineScore($userId: ID!) {
-    getMineScore(userId: $userId) {
-      minePoints
-      minetimeTaken
+export const GET_AST_SCORE = gql`
+  query getAstScore($userId: ID!) {
+    getAstScore(userId: $userId) {
+      astPoints
+      astTimeTaken
     }
   }
 `;

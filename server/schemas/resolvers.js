@@ -20,12 +20,12 @@ const resolvers = {
       throw new AuthenticationError('You must be logged in');
     },
 
-    getMineScore: async (parent, { userId }) => {
+    getAstScore: async (parent, { userId }) => {
       const user = await User.findById(userId);
       if (!user) {
         throw new Error('User not found');
       }
-      return user.mineScore;
+      return user.astScore;
     },
 
   },
@@ -73,10 +73,10 @@ const resolvers = {
       return { token, user };
     },
 
-    saveMineScore: async (parent, { userId, minePoints, mineTimeTaken }) => {
+    saveAstScore: async (parent, { userId, astPoints, astTimeTaken }) => {
       const updatedUser = await User.findByIdAndUpdate(
         userId,
-        { $push: { mineScore: { minePoints, mineTimeTaken } } },
+        { $push: { astScore: { astPoints, astTimeTaken } } },
         { new: true }
       );
       if (!updatedUser) {

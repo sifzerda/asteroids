@@ -20,13 +20,13 @@ const userSchema = new Schema({
     required: true,
     minlength: 5
   },
-  mineScore: [
+  astScore: [
     {
-      minePoints: {
+      astPoints: {
         type: Number,
         required: true,
       },
-      mineTimeTaken: {
+      astTimeTaken: {
         type: Number,
         required: true,
       },

@@ -253,3 +253,15 @@ border: 2px solid var(--volt);
   border-radius: 50%;
 }
 
+
+/* ----------------- FinalScore game over -----------------*/
+
+.grid-container {
+  background-color: rgba(255, 255, 255, 0.6); /* White background with 80% opacity */
+  height: 380px;
+  width: 300px;
+  border: 2px solid var(--volt);
+  border-radius: 10px;
+ margin: auto;
+ 
+}

@@ -13,11 +13,11 @@ const HighScores = () => {
   // Aggregate all mineScore entries with associated usernames
   let allScores = [];
   users.forEach(user => {
-    user.mineScore.forEach(score => {
+    user.astScore.forEach(score => {
       allScores.push({
         username: user.username,
-        minePoints: score.minePoints,
-        mineTimeTaken: score.mineTimeTaken,
+        astPoints: score.astPoints,
+        astTimeTaken: score.astTimeTaken,
       });
     });
   });
@@ -25,10 +25,10 @@ const HighScores = () => {
   // Sort combined scores by minePoints in descending order
   // If points are the same, then sort by mineTimeTaken in ascending order
   allScores.sort((a, b) => {
-    if (b.minePoints !== a.minePoints) {
-      return b.minePoints - a.minePoints; // Sort by points descending
+    if (b.astPoints !== a.astPoints) {
+      return b.astPoints - a.astPoints; // Sort by points descending
     } else {
-      return a.mineTimeTaken - b.mineTimeTaken; // Sort by time ascending if points are tied
+      return a.astTimeTaken - b.astTimeTaken; // Sort by time ascending if points are tied
     }
 });
 
@@ -51,8 +51,8 @@ return (
           {top20Scores.map((score, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
-              <td>{score.minePoints}</td>
-              <td>{score.mineTimeTaken}</td>
+              <td>{score.astPoints}</td>
+              <td>{score.astTimeTaken}</td>
               <td>{score.username}</td>
             </tr>
           ))}
