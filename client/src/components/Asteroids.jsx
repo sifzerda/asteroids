@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import FinalScore from './FinalScore';
+import HighScores from './HighScores';
 
 const Asteroids = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [asteroids, setAsteroids] = useState([]);
   const [projectiles, setProjectiles] = useState([]);
   const [gameOver, setGameOver] = useState(false); // State to track game over
-
+  const [showHighScores, setShowHighScores] = useState(false);
+  
   const requestRef = useRef();
 
   useEffect(() => {
@@ -129,10 +131,34 @@ const Asteroids = () => {
         handleCollision();
       }
     });
+
+    // Check for projectile-asteroid collisions
+    projectiles.forEach((projectile, pIndex) => {
+      asteroids.forEach((asteroid, aIndex) => {
+        const projectileRadius = 15; // Adjust projectile radius as needed
+        const asteroidRadius = 25; // Adjust asteroid radius as needed
+        const distance = Math.sqrt((projectile.x - asteroid.x) ** 2 + (projectile.y - asteroid.y) ** 2);
+        if (distance < projectileRadius + asteroidRadius) {
+          handleProjectileCollision(aIndex, pIndex);
+        }
+      });
+    });
   };
 
   const handleCollision = () => {
     setGameOver(true); // Set game over state or handle collision logic here
+  };
+
+  const handleProjectileCollision = (asteroidIndex, projectileIndex) => {
+    setAsteroids(prevAsteroids => prevAsteroids.map((asteroid, index) => {
+      if (index === asteroidIndex) {
+        const newHits = asteroid.hits + 1;
+        console.log(`Asteroid ${asteroid.id} has been hit ${newHits} times`);
+        return newHits >= 3 ? null : { ...asteroid, hits: newHits };
+      }
+      return asteroid;
+    }).filter(asteroid => asteroid !== null));
+    setProjectiles(prevProjectiles => prevProjectiles.filter((_, index) => index !== projectileIndex));
   };
 
   const shipStyle = {
