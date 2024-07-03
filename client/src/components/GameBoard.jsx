@@ -1,24 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
-import Ship from './Ship';
 import Asteroid from './Asteroid';
-import Projectile from './Projectile';
-//import StartGame from '../components/StartGame';
-//import HighScores from '../components/HighScores';
-//import FinalScore from '../components/FinalScore';
 
 const GameBoard = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [asteroids, setAsteroids] = useState([]);
   const [projectiles, setProjectiles] = useState([]);
 
-  // for bullet fade
   const requestRef = useRef();
-
-// Event listener for keyboard input--------------------//
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Handle ship movement
       switch (e.key) {
         case 'ArrowUp':
           moveShip();
@@ -26,16 +17,16 @@ const GameBoard = () => {
         case 'ArrowLeft':
           rotateShip('left');
           break;
-          case 'ArrowRight':
-            rotateShip('right');
-            break;
-          case ' ':
-            shootProjectile();
-            break;
-          default:
-            break;
-        }
-      };
+        case 'ArrowRight':
+          rotateShip('right');
+          break;
+        case ' ':
+          shootProjectile();
+          break;
+        default:
+          break;
+      }
+    };
 
     document.addEventListener('keydown', handleKeyDown);
 
@@ -44,20 +35,16 @@ const GameBoard = () => {
     };
   }, [shipPosition]);
 
-// MOVING SHIP -----------------------------------------//
-
   const moveShip = () => {
     const speed = 5; // Adjust as needed
     const newX = shipPosition.x + Math.sin(shipPosition.rotation * (Math.PI / 180)) * speed;
     const newY = shipPosition.y - Math.cos(shipPosition.rotation * (Math.PI / 180)) * speed;
     setShipPosition(prevPosition => ({
       ...prevPosition,
-      x: wrapPosition(newX, 'x'), // Ensure wrapping for ship's x position
-      y: wrapPosition(newY, 'y'), // Ensure wrapping for ship's y position
+      x: wrapPosition(newX, 'x'),
+      y: wrapPosition(newY, 'y'),
     }));
   };
-
-// 360o ROTATING SHIP ---------------------------------//
 
   const rotateShip = (direction) => {
     const rotationSpeed = 5; // Adjust as needed
@@ -70,85 +57,108 @@ const GameBoard = () => {
     setShipPosition(prevPosition => ({ ...prevPosition, rotation: newRotation }));
   };
 
-// SHOOTING PROJECTILES --------------------------------//
-
-const shootProjectile = () => {
-  const speed = 10; // Adjust as needed
-  const newProjectile = {
-    x: shipPosition.x + Math.sin(shipPosition.rotation * (Math.PI / 180)) * 15,
-    y: shipPosition.y - Math.cos(shipPosition.rotation * (Math.PI / 180)) * 15,
-    rotation: shipPosition.rotation,
-    speed,
-    lifetime: 100, // Adjust as needed, this represents the lifespan of the projectile
+  const shootProjectile = () => {
+    const speed = 10; // Adjust as needed
+    const newProjectile = {
+      x: shipPosition.x + Math.sin(shipPosition.rotation * (Math.PI / 180)) * 15,
+      y: shipPosition.y - Math.cos(shipPosition.rotation * (Math.PI / 180)) * 15,
+      rotation: shipPosition.rotation,
+      speed,
+      lifetime: 100, // Adjust as needed
+    };
+    setProjectiles(prevProjectiles => [...prevProjectiles, newProjectile]);
   };
-  setProjectiles((prevProjectiles) => [...prevProjectiles, newProjectile]);
-};
 
-// Game loop using useEffect and requestAnimationFrame
-// Initialize asteroids and start game loop
-useEffect(() => {
-  const initialAsteroids = [
-    { x: 100, y: 100 },
-    { x: 400, y: 200 },
-  ];
-  setAsteroids(initialAsteroids);
+  useEffect(() => {
+    const initialAsteroids = [
+      { x: 100, y: 100 },
+      { x: 400, y: 200 },
+    ];
+    setAsteroids(initialAsteroids);
 
-  const gameLoop = () => {
-    updateGame();
+    const gameLoop = () => {
+      updateGame();
+      requestRef.current = requestAnimationFrame(gameLoop);
+    };
+
     requestRef.current = requestAnimationFrame(gameLoop);
+    return () => cancelAnimationFrame(requestRef.current);
+  }, []);
+
+  const updateGame = () => {
+    setAsteroids(prevAsteroids =>
+      prevAsteroids.map(asteroid => ({
+        ...asteroid,
+        x: wrapPosition(asteroid.x + Math.random() * 2 - 1, 'x'),
+        y: wrapPosition(asteroid.y + Math.random() * 2 - 1, 'y'),
+      }))
+    );
+
+    setProjectiles(prevProjectiles =>
+      prevProjectiles
+        .map(projectile => ({
+          ...projectile,
+          x: wrapPosition(projectile.x + Math.sin(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'x'),
+          y: wrapPosition(projectile.y - Math.cos(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'y'),
+          lifetime: projectile.lifetime - 1,
+        }))
+        .filter(projectile => projectile.lifetime > 0)
+    );
   };
 
-  requestRef.current = requestAnimationFrame(gameLoop);
-  return () => cancelAnimationFrame(requestRef.current);
-}, []);
+  const wrapPosition = (value, axis) => {
+    const maxValue = axis === 'x' ? 900 : 500; // Width and height of game board
+    if (value < 0) {
+      return maxValue + value;
+    } else if (value > maxValue) {
+      return value - maxValue;
+    }
+    return value;
+  };
 
-// Update game state
-const updateGame = () => {
-  setAsteroids((prevAsteroids) =>
-    prevAsteroids.map((asteroid) => ({
-      ...asteroid,
-      x: wrapPosition(asteroid.x + Math.random() * 2 - 1, 'x'),
-      y: wrapPosition(asteroid.y + Math.random() * 2 - 1, 'y'),
-    }))
+  const shipStyle = {
+    position: 'absolute',
+    left: `${shipPosition.x}px`,
+    top: `${shipPosition.y}px`,
+    width: '30px',
+    height: '30px',
+    backgroundColor: 'white',
+    transform: `rotate(${shipPosition.rotation}deg)`,
+  };
+
+  const Projectile = ({ position }) => {
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        // Handle projectile expiration logic here if needed
+      }, position.lifetime);
+
+      return () => clearTimeout(timer);
+    }, [position]);
+
+    const projectileStyle = {
+      position: 'absolute',
+      left: `${position.x}px`,
+      top: `${position.y}px`,
+      width: '5px',
+      height: '5px',
+      backgroundColor: 'red',
+      transform: `rotate(${position.rotation}deg)`,
+    };
+
+    return <div className="projectile" style={projectileStyle}></div>;
+  };
+  
+  return (
+    <div className="game-board">
+      <div className="ship" style={shipStyle}></div>
+      {asteroids.map((asteroid, index) => (
+        <Asteroid key={index} initialPosition={asteroid} />
+      ))}
+      {projectiles.map((projectile, index) => (
+        <Projectile key={index} position={projectile} />
+      ))}
+    </div>
   );
-
-  setProjectiles((prevProjectiles) =>
-    prevProjectiles
-      .map((projectile) => ({
-        ...projectile,
-        x: wrapPosition(projectile.x + Math.sin(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'x'),
-        y: wrapPosition(projectile.y - Math.cos(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'y'),
-        lifetime: projectile.lifetime - 1, // Decrease lifetime
-      }))
-      .filter((projectile) => projectile.lifetime > 0) // Remove projectiles with lifetime <= 0
-  );
-};
-
-// WRAP GAME BOUNDARIES --------------------------------//
-
-const wrapPosition = (value, axis) => {
-  const maxValue = axis === 'x' ? 900 : 500; // Width and height of game board
-  if (value < 0) {
-    return maxValue + value;
-  } else if (value > maxValue) {
-    return value - maxValue;
-  }
-  return value;
-};
-
-// RENDER-----------------------------------------------//
-
-return (
-  <div className="game-board">
-    <Ship position={shipPosition} onShoot={shootProjectile} />
-    {asteroids.map((asteroid, index) => (
-      <Asteroid key={index} initialPosition={asteroid} />
-    ))}
-    {projectiles.map((projectile, index) => (
-      <Projectile key={index} position={projectile} />
-    ))}
-  </div>
-);
 };
 
 export default GameBoard;
