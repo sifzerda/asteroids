@@ -1,3 +1,9 @@
+// + moving ship
+// + ship rotates around a circular axis (rather than in place)
+// + asteroids move
+// + projectile fire
+// + collision detection: ship and asteroid, ship disappears on collision, asteroid doesn't
+
 import { useState, useEffect, useRef } from 'react';
 
 const Asteroids = () => {

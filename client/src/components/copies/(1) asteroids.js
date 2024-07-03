@@ -1,10 +1,15 @@
+// + moving ship
+// + ship rotates around a circular axis (rather than in place)
+// + asteroids move
+// + projectile fire
+// - collision detection
+
 import { useState, useEffect, useRef } from 'react';
 
 const Asteroids = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [asteroids, setAsteroids] = useState([]);
   const [projectiles, setProjectiles] = useState([]);
-  const [gameOver, setGameOver] = useState(false); // State to track game over
 
   const requestRef = useRef();
 
@@ -51,8 +56,6 @@ const Asteroids = () => {
       ),
       rotation: (prevPosition.rotation + rotationSpeed) % 360,
     }));
-    // Check for collisions after moving the ship
-    checkCollisions();
   };
 
   const shootProjectile = () => {
@@ -81,7 +84,7 @@ const Asteroids = () => {
 
     requestRef.current = requestAnimationFrame(gameLoop);
     return () => cancelAnimationFrame(requestRef.current);
-  }, [gameOver]);
+  }, []);
 
   const updateGame = () => {
     setAsteroids(prevAsteroids =>
@@ -102,8 +105,6 @@ const Asteroids = () => {
         }))
         .filter(projectile => projectile.lifetime > 0)
     );
-    // Check for collisions during game loop
-    checkCollisions();
   };
 
   const wrapPosition = (value, axis) => {
@@ -115,21 +116,6 @@ const Asteroids = () => {
       return value - maxValue - buffer;
     }
     return value;
-  };
-
-  const checkCollisions = () => {
-    const shipRadius = 15; // Adjust ship radius as needed
-    asteroids.forEach(asteroid => {
-      const asteroidRadius = 25; // Adjust asteroid radius as needed
-      const distance = Math.sqrt((shipPosition.x - asteroid.x) ** 2 + (shipPosition.y - asteroid.y) ** 2);
-      if (distance < shipRadius + asteroidRadius) {
-        handleCollision();
-      }
-    });
-  };
-
-  const handleCollision = () => {
-    setGameOver(true); // Set game over state or handle collision logic here
   };
 
   const shipStyle = {
@@ -180,14 +166,13 @@ const Asteroids = () => {
 
   return (
     <div className="game-board">
-      {!gameOver && <div className="ship" style={shipStyle}></div>}
+      <div className="ship" style={shipStyle}></div>
       {asteroids.map(asteroid => (
         <Asteroid key={asteroid.id} asteroid={asteroid} />
       ))}
       {projectiles.map((projectile, index) => (
         <Projectile key={index} position={projectile} />
       ))}
-      {gameOver && <div className="game-over">Game Over</div>}
     </div>
   );
 };
