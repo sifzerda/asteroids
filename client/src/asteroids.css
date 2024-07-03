@@ -247,8 +247,8 @@ border: 2px solid var(--volt);
 
 .asteroid-half {
   position: absolute;
-  width: 10px; /* Adjust size as needed */
-  height: 10px; /* Adjust size as needed */
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
   background-color: rgba(255, 187, 0, 0.8); /* Adjust color and transparency */
   border-radius: 50%;
 }
