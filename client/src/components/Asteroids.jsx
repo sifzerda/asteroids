@@ -149,6 +149,7 @@ const Asteroids = () => {
     setGameOver(true); // Set game over state or handle collision logic here
   };
 
+  // newHits creates a hit counter
   const handleProjectileCollision = (asteroidIndex, projectileIndex) => {
     setAsteroids(prevAsteroids => prevAsteroids.map((asteroid, index) => {
       if (index === asteroidIndex) {
