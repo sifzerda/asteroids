@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import Asteroid from './Asteroid';
 
 const GameBoard = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
@@ -71,8 +70,8 @@ const GameBoard = () => {
 
   useEffect(() => {
     const initialAsteroids = [
-      { x: 100, y: 100 },
-      { x: 400, y: 200 },
+      { x: 100, y: 100, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 } },
+      { x: 400, y: 200, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 } },
     ];
     setAsteroids(initialAsteroids);
 
@@ -89,8 +88,8 @@ const GameBoard = () => {
     setAsteroids(prevAsteroids =>
       prevAsteroids.map(asteroid => ({
         ...asteroid,
-        x: wrapPosition(asteroid.x + Math.random() * 2 - 1, 'x'),
-        y: wrapPosition(asteroid.y + Math.random() * 2 - 1, 'y'),
+        x: wrapPosition(asteroid.x + asteroid.velocity.x, 'x'),
+        y: wrapPosition(asteroid.y + asteroid.velocity.y, 'y'),
       }))
     );
 
@@ -147,15 +146,54 @@ const GameBoard = () => {
 
     return <div className="projectile" style={projectileStyle}></div>;
   };
-  
+
+  const Asteroid = ({ asteroid }) => {
+    const [astPosition, setAstPosition] = useState(asteroid);
+
+    useEffect(() => {
+      const moveAsteroid = () => {
+        setAstPosition(prevAstPosition => ({
+          x: wrapPosition(prevAstPosition.x + asteroid.velocity.x, 'x'),
+          y: wrapPosition(prevAstPosition.y + asteroid.velocity.y, 'y'),
+        }));
+      };
+
+      const asteroidInterval = setInterval(() => {
+        moveAsteroid();
+      }, 100); // Adjust speed of asteroid movement
+
+      return () => clearInterval(asteroidInterval);
+    }, [asteroid]);
+
+    const asteroidStyle = {
+      position: 'absolute',
+      left: `${astPosition.x}px`,
+      top: `${astPosition.y}px`,
+      width: '50px',
+      height: '50px',
+      backgroundColor: 'gray',
+      borderRadius: '50%',
+    };
+
+    return <div className="asteroid" style={asteroidStyle}></div>;
+  };
+
   return (
     <div className="game-board">
       <div className="ship" style={shipStyle}></div>
-      {asteroids.map((asteroid, index) => (
-        <Asteroid key={index} initialPosition={asteroid} />
+      {asteroids.map(asteroid => (
+        <Asteroid key={asteroid.id} asteroid={asteroid} />
       ))}
       {projectiles.map((projectile, index) => (
-        <Projectile key={index} position={projectile} />
+        <div key={index} className="projectile" style={{
+          position: 'absolute',
+          left: `${projectile.x}px`,
+          top: `${projectile.y}px`,
+          width: '5px',
+          height: '5px',
+          backgroundColor: 'red',
+          transform: `rotate(${projectile.rotation}deg)`,
+        }}></div>
       ))}
     </div>
   );
