@@ -25,7 +25,7 @@ const Asteroid = ({ initialPosition }) => {
 
       const wrapPosition = (value, axis) => {
         const maxValue = axis === 'x' ? 900 : 500; // Width and height of game board
-        const buffer = 30; // Buffer zone beyond the boundary
+        const buffer = 40; // Buffer zone beyond the boundary
     
         if (value < -buffer) {
           return maxValue + buffer + value;

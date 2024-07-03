@@ -5,7 +5,9 @@ const Ship = ({ position, onShoot }) => {
   const [rotation, setRotation] = useState(0);
 
   useEffect(() => {
-    setCurrentPosition(position);
+    if (position.x !== currentPosition.x || position.y !== currentPosition.y) {
+      setCurrentPosition(position);
+    }
   }, [position]);
 
   useEffect(() => {
@@ -65,7 +67,7 @@ const Ship = ({ position, onShoot }) => {
     } else if (value > maxValue + buffer) {
       return value - maxValue - buffer;
     }
-    return value;
+    return value;   
   };
 
   const shipStyle = {
@@ -75,7 +77,7 @@ const Ship = ({ position, onShoot }) => {
     width: '30px',
     height: '30px',
     backgroundColor: 'white',
-    transform: `rotate(${rotation}deg)`,
+    transform: `rotate(${currentPosition.rotation}deg)`,
   };
 
   return <div className="ship" style={shipStyle}></div>;
