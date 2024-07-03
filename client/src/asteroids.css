@@ -54,7 +54,6 @@ h1 {
     display: grid;
     min-width: 900px;
     place-items: center; 
-    
   }
   
 
@@ -235,6 +234,7 @@ border: 2px solid var(--volt);
   width: 30px;
   height: 30px;
   background-color: white;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8)); 
 }
 
 .asteroid {
