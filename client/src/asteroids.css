@@ -224,7 +224,7 @@ border: 2px solid var(--volt);
 .game-board {
   position: relative;
   width: 1500px;
-  height: 682px;
+  height: 680px;
   overflow: hidden;
   margin: auto;
   border: 2px solid purple;

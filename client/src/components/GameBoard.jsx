@@ -105,7 +105,7 @@ const GameBoard = () => {
   };
 
   const wrapPosition = (value, axis) => {
-    const maxValue = axis === 'x' ? 1500 : 682; // Width and height of game board
+    const maxValue = axis === 'x' ? 1500 : 680; // Width and height of game board
     const buffer = 30;
     if (value < -buffer) {
       return maxValue + buffer + value;
