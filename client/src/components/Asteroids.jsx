@@ -72,8 +72,8 @@ const Asteroids = () => {
 
   useEffect(() => {
     const initialAsteroids = [
-      { x: 100, y: 100, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 }, id: 1 },
-      { x: 400, y: 200, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 }, id: 2 },
+      { x: 100, y: 100, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 }, size: 50, id: 1 },
+      { x: 400, y: 200, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 }, size: 50, id: 2 },
     ];
     setAsteroids(initialAsteroids);
 
@@ -156,16 +156,23 @@ const Asteroids = () => {
       prevAsteroids.forEach((asteroid, index) => {
         if (index === asteroidIndex) {
           // Break asteroid into two smaller asteroids
+          const newSize = asteroid.size / 3; // New size is one-third of original size
           const newVelocity1 = { x: asteroid.velocity.x + 1, y: asteroid.velocity.y + 1 }; // Adjust velocities as needed
           const newVelocity2 = { x: asteroid.velocity.x - 1, y: asteroid.velocity.y - 1 }; // Adjust velocities as needed
           newAsteroids.push({
             ...asteroid,
+            x: asteroid.x,
+            y: asteroid.y,
             velocity: newVelocity1,
+            size: newSize,
             id: asteroid.id * 10 + 1, // Example of assigning unique ids for new asteroids
           });
           newAsteroids.push({
             ...asteroid,
+            x: asteroid.x,
+            y: asteroid.y,
             velocity: newVelocity2,
+            size: newSize,
             id: asteroid.id * 10 + 2,
           });
         } else {
@@ -200,7 +207,7 @@ const Asteroids = () => {
 
   const Asteroid = ({ asteroid }) => {
     const [astPosition, setAstPosition] = useState(asteroid);
-
+  
     useEffect(() => {
       const moveAsteroid = () => {
         setAstPosition(prevAstPosition => ({
@@ -208,17 +215,22 @@ const Asteroids = () => {
           y: wrapPosition(prevAstPosition.y + asteroid.velocity.y, 'y'),
         }));
       };
-      
-      const asteroidInterval = setInterval(moveAsteroid, 100); //set asteroid speed
+  
+      const asteroidInterval = setInterval(moveAsteroid, 100); // Set asteroid speed
       return () => clearInterval(asteroidInterval);
     }, [asteroid]);
-
+  
     const asteroidStyle = {
       left: `${astPosition.x}px`,
       top: `${astPosition.y}px`,
+      width: `${asteroid.size}px`, // Adjust size based on the asteroid's size property
+      height: `${asteroid.size}px`, // Adjust size based on the asteroid's size property
     };
 
-    return <div className="asteroid" style={asteroidStyle}></div>;
+    // conditionally renders normal or smaller asteroid
+    const asteroidClassName = asteroid.size < 50 ? 'asteroid-half' : 'asteroid';
+
+    return <div className={asteroidClassName} style={asteroidStyle}></div>;
   };
 
   return (
