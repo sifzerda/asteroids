@@ -68,6 +68,13 @@ npm install
 npm run start
 ```
 
+Controls:
+- Press arrow keys to move
+- Spacebar to fire
+- ?
+- ?
+- ?
+
 ## (5) Usage
 
  The app executes a version of the retro arcade game 'asteroids'. Parts:
@@ -82,28 +89,36 @@ npm run start
 
 The main functions of code:
 
-1. <u>Initialization, Positioning:</u> mmmmmm.
-2. <u>Movement:</u> A useEffect hook and EventListeners on keydown enable ship movement with arrow keys. useEffect calls moveShip and rotateShip on key-press.
-3. 
-4. 
-5. 
-6. 
-7. <u>'const initialTableau':</u> Creates Tableau into 7 cols, each col contains the number of cards as it's id (e.g. col 7 contains 7 cards). Initializes empty. Originally tableau sliced off cards from the stockpile, but the 'card sharing' caused issues and had to be reworked.
-8. <u>'const Solitaire':</u> Runs main game code (i.e. covers user activity).
-9. <u>'const updatedCards', 'const updatedDecks'</u> The state of each foundation suit deck is trackable separately and updated per card dropped.
-10. <u>'const [currentCardIndex, setCurrentCardIndex] = useState(0)', 'const nextCard' + onClick={nextCard}:</u> Actions the Stockpile click cycle. 
-11. <u>'const shuffleArray':</u> shuffles cards in stockpile and tableau after distribution.
-12. <u>'const onDragEnd':</u> Collects and Executes all DnD functions for stockpile, tableau and foundations:
-   - <u>'const handleStockpileToTableauDrop':</u> DnD from Stockpile to Tableau;
-   - <u>'const handleTableauToTableauDrop':</u> DnD from Tableau to Tableau;
-   - <u>'handleFoundationDrop':</u> DnD from any to Foundations.
-13. <u>'return':</u> renders stockpile ('cards'), tableau, and foundations and contains in DnD areas.
-Other:
-1.  <u>'else if (source.droppableId.startsWith('tableau')...)':</u> Enables tableau cards to be dragged in stacks (piles), from source.index -> last-item. 
-2.  <u>'return {... t-drag-card-group}':</u> this targets a tableau -> tableau pile of cards and applies a class selector which allowed me to modify appearance of dragging card pile as a single object/stack. React Beautiful DnD didn't seem to have a 'group/multiple object/s' dragging graphic, so I had to make it manually with CSS.
-3.  <u>return {...}</u> conditionally renders tableau card as faceup or facedown depending on card's array index.
-4.  <u>'index === pile.cards.length - 1 ? ...'</u> Conditional rendering of card DnD based on whether card is faceup or facedown. Facedown cards are not draggable. Tableau.pile array -1 is facedown (i.e. everything but top card).
-5.  <u>'const initialTableau': </u>'faceUp' property tracks faceup cards. 
+ 
+1. <u>const handleKeyDown:</u> key press event listening to control ship movement and gunfire.
+2. <u>const updateShipPosition:</u> sets ship speed and rotational radius.
+3. <u>setShipPosition…wrapPosition:</u> ship’s movement wraps to other side of game boundary when passing outside. A ‘buffer’ zone allows ship to pass and re-enter just outside boundary.
+4. <u>shootProjectile:</u> sets gunfire speed, fire position, and fire decay.
+5. <u>useEffect…initialAsteroids:</u> creates some starting asteroids in random starting position and inertia (velocity).
+6. <u>useEffect…initialAsteroids:</u> creates some starting asteroids in random starting position and inertia (velocity).
+7. <u>const gameLoop:</u>  Keep game running (updating) until game ends. ‘requestAnimationFrame’ is an API which smoothes game updating (of gameLoop) into seamless continual flow. requestRef is a hook which gives each animation ‘frame’ an id, allowing gameLoop to cease on any frame.
+8. <u>const updateGame and setProjectiles:</u> limits asteroid and projectile fire to wrap the game boundary.
+9. <u>const wrapPositions:</u> wraps game boundary around so there is no game edge; objects pass around to opposite side.
+10. <u>const checkCollisions and projectiles.forEach:</u> delimits collision radius of ship and asteroids, and projectiles and asteroids.
+11. <u>handleProjectileCollision:</u> when asteroids are hit, they split into two new asteroids with differing initial velocities.
+12. <u>const Projectile:</u> makes projectile lifespan a (decaying) timer from firing.
+13. <u>const moveAsteroid:</u> handles  asteroid motion and speed.
+14. <u></u>
+15. <u></u>
+16. <u></u>
+17. <u></u>
+18. <u></u>
+19. <u></u>
+20. <u></u>
+21. <u></u>
+22. <u></u>
+23. <u></u>
+24. <u></u>
+25. <u></u>
+26. <u></u>
+27. <u></u>
+28. <u></u>
+29. <u></u>
 
 ## (7) Bugs: 
 
@@ -121,10 +136,10 @@ Other:
 - [ ] timer, score count every asteroid hit
   - [ ] Or one single score count which is continuously running up (like a timer) and gets extra increments every asteroid destroyed
 - [x] Gunfire decay and boundary wrapping
-- [ ] Projectile collision detection with asteroids
-- [ ] Ship detection with asteroids
-- [ ] When you shoot an asteroid it disappears
-  - [ ] When you shoot asteroids they break into two smaller, and so on
+- [x] Projectile collision detection with asteroids
+- [x] Ship detection with asteroids
+- [x] When you shoot an asteroid it disappears
+  - [x] When you shoot asteroids they break into two smaller, and so on
 - [ ] improve graphics elements
 - [ ] refine ship movement; add limited inertia, add acceleration (longer you hold down up, faster you speed up), 
 - [ ] bullet flashing/muzzle flare effect
