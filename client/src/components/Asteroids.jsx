@@ -113,12 +113,8 @@ const Asteroids = () => {
   };
 
   const shipStyle = {
-    position: 'absolute',
     left: `${shipPosition.x}px`,
     top: `${shipPosition.y}px`,
-    width: '30px',
-    height: '30px',
-    backgroundColor: 'white',
     transform: `rotate(${shipPosition.rotation}deg)`,
   };
 
@@ -131,12 +127,8 @@ const Asteroids = () => {
     }, [position]);
 
     const projectileStyle = {
-      position: 'absolute',
       left: `${position.x}px`,
       top: `${position.y}px`,
-      width: '5px',
-      height: '5px',
-      backgroundColor: 'red',
       transform: `rotate(${position.rotation}deg)`,
     };
 
@@ -159,13 +151,8 @@ const Asteroids = () => {
     }, [asteroid]);
 
     const asteroidStyle = {
-      position: 'absolute',
       left: `${astPosition.x}px`,
       top: `${astPosition.y}px`,
-      width: '50px',
-      height: '50px',
-      backgroundColor: 'gray',
-      borderRadius: '50%',
     };
 
     return <div className="asteroid" style={asteroidStyle}></div>;
