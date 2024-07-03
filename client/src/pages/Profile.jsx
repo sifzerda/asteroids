@@ -10,14 +10,14 @@ const Profile = () => {
     if (error) return <p>Error: {error.message}</p>;
 
     const user = data?.me;
-    const mineScores = user?.mineScore || [];
+    const astScores = user?.astScore || [];
 
     // Sort scores by highest minePoints, and then by least time taken if points are tied
-    const sortedScores = [...mineScores].sort((a, b) => {
-        if (b.minePoints !== a.minePoints) {
-            return b.minePoints - a.minePoints; // Sort by points descending
+    const sortedScores = [...astScores].sort((a, b) => {
+        if (b.astPoints !== a.astPoints) {
+            return b.astPoints - a.astPoints; // Sort by points descending
         } else {
-            return a.mineTimeTaken - b.mineTimeTaken; // Sort by time ascending if points are tied
+            return a.astTimeTaken - b.astTimeTaken; // Sort by time ascending if points are tied
         }
     });
 
@@ -48,8 +48,8 @@ const Profile = () => {
                         {limitedScores.map((score, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{score.minePoints}</td>
-                                <td>{score.mineTimeTaken}</td>
+                                <td>{score.astPoints}</td>
+                                <td>{score.astTimeTaken}</td>
                             </tr>
                         ))}
                     </tbody>
