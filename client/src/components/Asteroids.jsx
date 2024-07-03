@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import FinalScore from './FinalScore';
 
 const Asteroids = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
@@ -69,14 +70,16 @@ const Asteroids = () => {
 
   useEffect(() => {
     const initialAsteroids = [
-      { x: 100, y: 100, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 } },
-      { x: 400, y: 200, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 } },
+      { x: 100, y: 100, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 }, id: 1 },
+      { x: 400, y: 200, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 }, id: 2 },
     ];
     setAsteroids(initialAsteroids);
 
     const gameLoop = () => {
-      updateGame();
-      requestRef.current = requestAnimationFrame(gameLoop);
+      if (!gameOver) {
+        updateGame();
+        requestRef.current = requestAnimationFrame(gameLoop);
+      }
     };
 
     requestRef.current = requestAnimationFrame(gameLoop);
@@ -118,7 +121,7 @@ const Asteroids = () => {
   };
 
   const checkCollisions = () => {
-    const shipRadius = 15; // Adjust ship radius as needed
+    const shipRadius = 18; // Adjust ship radius as needed
     asteroids.forEach(asteroid => {
       const asteroidRadius = 25; // Adjust asteroid radius as needed
       const distance = Math.sqrt((shipPosition.x - asteroid.x) ** 2 + (shipPosition.y - asteroid.y) ** 2);
@@ -140,9 +143,7 @@ const Asteroids = () => {
 
   const Projectile = ({ position }) => {
     useEffect(() => {
-      const timer = setTimeout(() => {
-        // Handle projectile expiration logic here if needed
-      }, position.lifetime);
+      const timer = setTimeout(() => {}, position.lifetime);
       return () => clearTimeout(timer);
     }, [position]);
 
@@ -181,13 +182,13 @@ const Asteroids = () => {
   return (
     <div className="game-board">
       {!gameOver && <div className="ship" style={shipStyle}></div>}
-      {asteroids.map(asteroid => (
+      {asteroids.map((asteroid) => (
         <Asteroid key={asteroid.id} asteroid={asteroid} />
       ))}
       {projectiles.map((projectile, index) => (
         <Projectile key={index} position={projectile} />
       ))}
-      {gameOver && <div className="game-over">Game Over</div>}
+      {gameOver && <FinalScore />}
     </div>
   );
 };
