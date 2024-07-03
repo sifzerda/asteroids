@@ -3,6 +3,7 @@
 // + asteroids move
 // + projectile fire
 // + collision detection: ship and asteroid, ship disappears on collision, asteroid doesn't
+// + collision: if asteroids collide, they bounce off each other
 
 import { useState, useEffect, useRef } from 'react';
 
