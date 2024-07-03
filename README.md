@@ -99,7 +99,7 @@ The main functions of code:
 8. <u>const updateGame and setProjectiles:</u> limits asteroid and projectile fire to wrap the game boundary.
 9. <u>const wrapPositions:</u> wraps game boundary around so there is no game edge; objects pass around to opposite side.
 10. <u>const checkCollisions and projectiles.forEach:</u> delimits collision radius of ship and asteroids, and projectiles and asteroids.
-11. <u>handleProjectileCollision:</u> when asteroids are hit, they split into two new asteroids with differing initial velocities.
+11. <u>handleProjectileCollision:</u> when asteroids are hit, they split into new asteroids with differing initial velocities, and size property.
 12. <u>const Projectile:</u> makes projectile lifespan a (decaying) timer from firing.
 13. <u>const moveAsteroid:</u> handles  asteroid motion and speed.
 14. <u></u>
