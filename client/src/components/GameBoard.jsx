@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Ship from './Ship';
 import Asteroid from './Asteroid';
 import Projectile from './Projectile';
@@ -10,6 +10,9 @@ const GameBoard = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [asteroids, setAsteroids] = useState([]);
   const [projectiles, setProjectiles] = useState([]);
+
+  // for bullet fade
+  const requestRef = useRef();
 
 // Event listener for keyboard input--------------------//
 
@@ -72,40 +75,32 @@ const GameBoard = () => {
 const shootProjectile = () => {
   const speed = 10; // Adjust as needed
   const newProjectile = {
-    x: shipPosition.x + Math.sin(shipPosition.rotation * (Math.PI / 180)) * 15, // Start slightly ahead of the ship
+    x: shipPosition.x + Math.sin(shipPosition.rotation * (Math.PI / 180)) * 15,
     y: shipPosition.y - Math.cos(shipPosition.rotation * (Math.PI / 180)) * 15,
     rotation: shipPosition.rotation,
     speed,
+    lifetime: 100, // Adjust as needed, this represents the lifespan of the projectile
   };
-  setProjectiles(prevProjectiles => [...prevProjectiles, newProjectile]);
+  setProjectiles((prevProjectiles) => [...prevProjectiles, newProjectile]);
 };
 
 // Game loop using useEffect and requestAnimationFrame
-  useEffect(() => {
-    const initialAsteroids = [
-      { x: 100, y: 100 },
-      { x: 400, y: 200 },
-    ];
+// Initialize asteroids and start game loop
+useEffect(() => {
+  const initialAsteroids = [
+    { x: 100, y: 100 },
+    { x: 400, y: 200 },
+  ];
+  setAsteroids(initialAsteroids);
 
-    const gameLoop = () => {
-      // Update game state
-      updateGame();
-      // Request next frame
-      requestAnimationFrame(gameLoop);
-    };
+  const gameLoop = () => {
+    updateGame();
+    requestRef.current = requestAnimationFrame(gameLoop);
+  };
 
-    gameLoop(); // Start the game loop
-    setAsteroids(initialAsteroids);
-    return () => cancelAnimationFrame(gameLoop);
-  }, []);
-
-  useEffect(() => {
-    const gameLoop = () => {
-      updateGame();
-      requestAnimationFrame(gameLoop);
-    };       
-    gameLoop();
-  }, []);
+  requestRef.current = requestAnimationFrame(gameLoop);
+  return () => cancelAnimationFrame(requestRef.current);
+}, []);
 
 // Update game state
 const updateGame = () => {
@@ -118,11 +113,14 @@ const updateGame = () => {
   );
 
   setProjectiles((prevProjectiles) =>
-    prevProjectiles.map((projectile) => ({
-      ...projectile,
-      x: wrapPosition(projectile.x + Math.sin(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'x'),
-      y: wrapPosition(projectile.y - Math.cos(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'y'),
-    }))
+    prevProjectiles
+      .map((projectile) => ({
+        ...projectile,
+        x: wrapPosition(projectile.x + Math.sin(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'x'),
+        y: wrapPosition(projectile.y - Math.cos(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'y'),
+        lifetime: projectile.lifetime - 1, // Decrease lifetime
+      }))
+      .filter((projectile) => projectile.lifetime > 0) // Remove projectiles with lifetime <= 0
   );
 };
 
