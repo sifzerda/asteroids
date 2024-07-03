@@ -118,6 +118,8 @@ Other:
 - [x] Create some randomly moving asteroids
 - [ ] Make more asteroids and different size asteroids
 - [x] Enable projectile firing
+- [ ] timer, score count every asteroid hit
+  - [ ] Or one single score count which is continuously running up (like a timer) and gets extra increments every asteroid destroyed
 - [x] Gunfire decay and boundary wrapping
 - [ ] Projectile collision detection with asteroids
 - [ ] Ship detection with asteroids
