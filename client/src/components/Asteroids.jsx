@@ -151,14 +151,29 @@ const Asteroids = () => {
 
   // newHits creates a hit counter
   const handleProjectileCollision = (asteroidIndex, projectileIndex) => {
-    setAsteroids(prevAsteroids => prevAsteroids.map((asteroid, index) => {
-      if (index === asteroidIndex) {
-        const newHits = asteroid.hits + 1;
-        console.log(`Asteroid ${asteroid.id} has been hit ${newHits} times`);
-        return newHits >= 3 ? null : { ...asteroid, hits: newHits };
-      }
-      return asteroid;
-    }).filter(asteroid => asteroid !== null));
+    const newAsteroids = [];
+    setAsteroids(prevAsteroids => {
+      prevAsteroids.forEach((asteroid, index) => {
+        if (index === asteroidIndex) {
+          // Break asteroid into two smaller asteroids
+          const newVelocity1 = { x: asteroid.velocity.x + 1, y: asteroid.velocity.y + 1 }; // Adjust velocities as needed
+          const newVelocity2 = { x: asteroid.velocity.x - 1, y: asteroid.velocity.y - 1 }; // Adjust velocities as needed
+          newAsteroids.push({
+            ...asteroid,
+            velocity: newVelocity1,
+            id: asteroid.id * 10 + 1, // Example of assigning unique ids for new asteroids
+          });
+          newAsteroids.push({
+            ...asteroid,
+            velocity: newVelocity2,
+            id: asteroid.id * 10 + 2,
+          });
+        } else {
+          newAsteroids.push(asteroid);
+        }
+      });
+      return newAsteroids;
+    });
     setProjectiles(prevProjectiles => prevProjectiles.filter((_, index) => index !== projectileIndex));
   };
 
