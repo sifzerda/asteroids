@@ -117,7 +117,8 @@ Other:
 - [x] Create moving ship 
 - [x] Create some randomly moving asteroids
 - [ ] Make more asteroids and different size asteroids
-- [ ] Enable projectile firing
+- [x] Enable projectile firing
+- [x] Gunfire decay and boundary wrapping
 - [ ] Projectile collision detection with asteroids
 - [ ] Ship detection with asteroids
 - [ ] When you shoot an asteroid it disappears
