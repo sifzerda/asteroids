@@ -10,9 +10,9 @@ const Asteroid = ({ initialPosition }) => {
 
     useEffect(() => {
       const moveAsteroid = () => {
-        setAstPosition(prevPosition => ({
-          x: wrapPosition(prevPosition.x + astVelocity.x, 'x'),
-          y: wrapPosition(prevPosition.y + astVelocity.y, 'y'),
+        setAstPosition(prevAstPosition => ({
+          x: wrapAstPosition(prevAstPosition.x + astVelocity.x, 'x'),
+          y: wrapAstPosition(prevAstPosition.y + astVelocity.y, 'y'),
         }));
       };
     
@@ -23,7 +23,7 @@ const Asteroid = ({ initialPosition }) => {
         return () => clearInterval(asteroidInterval);
       }, [astVelocity]);
 
-      const wrapPosition = (value, axis) => {
+      const wrapAstPosition = (value, axis) => {
         const maxValue = axis === 'x' ? 900 : 500; // Width and height of game board
         const buffer = 40; // Buffer zone beyond the boundary
     
