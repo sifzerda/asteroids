@@ -24,15 +24,12 @@ const Asteroids = () => {
           break;
         default:
           break;
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [shipPosition]);
+        }
+      };
+  
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [shipPosition]);
 
   const moveShip = () => updateShipPosition('move');
   const rotateShip = (direction) => updateShipPosition(direction);
@@ -130,7 +127,6 @@ const Asteroids = () => {
       const timer = setTimeout(() => {
         // Handle projectile expiration logic here if needed
       }, position.lifetime);
-
       return () => clearTimeout(timer);
     }, [position]);
 
@@ -157,11 +153,8 @@ const Asteroids = () => {
           y: wrapPosition(prevAstPosition.y + asteroid.velocity.y, 'y'),
         }));
       };
-
-      const asteroidInterval = setInterval(() => {
-        moveAsteroid();
-      }, 100); // Adjust speed of asteroid movement
-
+      
+      const asteroidInterval = setInterval(moveAsteroid, 100); //set asteroid speed
       return () => clearInterval(asteroidInterval);
     }, [asteroid]);
 
@@ -185,15 +178,7 @@ const Asteroids = () => {
         <Asteroid key={asteroid.id} asteroid={asteroid} />
       ))}
       {projectiles.map((projectile, index) => (
-        <div key={index} className="projectile" style={{
-          position: 'absolute',
-          left: `${projectile.x}px`,
-          top: `${projectile.y}px`,
-          width: '5px',
-          height: '5px',
-          backgroundColor: 'red',
-          transform: `rotate(${projectile.rotation}deg)`,
-        }}></div>
+        <Projectile key={index} position={projectile} />
       ))}
     </div>
   );
