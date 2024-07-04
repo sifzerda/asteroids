@@ -87,10 +87,10 @@ Controls:
 
 Technologies:
 
-- useRef and requestAnimationFrame: API library to update game state at fps matching the display refresh rate, creating animation, by default 60fps.
-
-- react-spring: animation smoothing, add tension, friction through 'animated divs' (customized through shipStyle, projectileStyle, and asteroidStyle)
-- matter-js: physics and collision detection
+- <strong>useRef and requestAnimationFrame: </strong> API library to update game state at fps matching the display refresh rate, creating animation, by default 60fps.
+- <strong>react-HotKeys: </strong> hook for creating keyboard shortcuts, for game movement.
+- <strong>react-spring: </strong> animation smoothing, add tension, friction through 'animated divs' (customized through shipStyle, projectileStyle, and asteroidStyle)
+- <strong>matter-js: </strong> physics and collision detection
 
 ## (6) Dev Stuff: Building:
 
@@ -109,7 +109,7 @@ The main functions of code:
 11. <u>handleProjectileCollision:</u> when asteroids are hit, they split into new asteroids with differing initial velocities, and size property.
 12. <u>const Projectile:</u> makes projectile lifespan a (decaying) timer from firing.
 13. <u>const moveAsteroid:</u> handles  asteroid motion and speed.
-14. <u></u>
+14. <u>useHotKeys: </u> hook which simplifies movement control code.
 15. <u></u>
 16. <u></u>
 17. <u></u>
