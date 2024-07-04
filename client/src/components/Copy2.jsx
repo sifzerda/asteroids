@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Matter from 'matter-js';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-const Copy2 = () => {
+const AsteroidsGame = () => {
   const [engine] = useState(Matter.Engine.create());
   const [ship, setShip] = useState(null);
   
@@ -43,37 +43,72 @@ const Copy2 = () => {
   }, [engine]);
 
   // Handle ship movement and rotation
-  const moveShipUp = () => {
+  const moveShip = () => {
     if (ship) {
       const angle = ship.angle;
-      const forceMagnitude = 0.01; // Adjust as needed for speed
+      const accelerationMagnitude = 0.0005; // Adjust as needed for speed
+      const forceX = accelerationMagnitude * Math.cos(angle);
+      const forceY = accelerationMagnitude * Math.sin(angle);
+      
+      // Apply forward acceleration force
       Matter.Body.applyForce(ship, ship.position, {
-        x: forceMagnitude * Math.cos(angle),
-        y: forceMagnitude * Math.sin(angle)
+        x: forceX,
+        y: forceY
       });
+
+      // Apply rotational velocity
+      Matter.Body.setAngularVelocity(ship, ship.angularVelocity * 0.95); // Damping angular velocity
+      
+      // Apply centrifugal force
+      applyCentrifugalForce(ship);
     }
   };
 
   const rotateShipLeft = () => {
     if (ship) {
       Matter.Body.setAngularVelocity(ship, -0.05);
+      applyCentrifugalForce(ship);
     }
   };
 
   const rotateShipRight = () => {
     if (ship) {
       Matter.Body.setAngularVelocity(ship, 0.05);
+      applyCentrifugalForce(ship);
     }
   };
 
+  const applyCentrifugalForce = (body) => {
+    const centrifugalForceMagnitude = 0.005;
+    const position = body.position;
+    const velocity = body.velocity;
+    const angle = body.angle - Math.PI / 2; // Perpendicular to ship's angle
+
+    Matter.Body.applyForce(body, position, {
+      x: centrifugalForceMagnitude * Math.cos(angle) * -velocity.x,
+      y: centrifugalForceMagnitude * Math.sin(angle) * -velocity.y
+    });
+  };
+
   // Use react-hotkeys-hook to bind keys to functions
-  useHotkeys('up', moveShipUp);
+  useHotkeys('up', moveShip);
   useHotkeys('left', rotateShipLeft);
   useHotkeys('right', rotateShipRight);
+
+  const wrapPosition = (value, axis) => {
+    const maxValue = axis === 'x' ? 1500 : 680; // Adjust game board dimensions
+    const buffer = 30;
+    if (value < -buffer) {
+      return maxValue + buffer + value;
+    } else if (value > maxValue + buffer) {
+      return value - maxValue - buffer;
+    }
+    return value;
+  };
 
   return (
     <div className="game-board" ref={gameRef} />
   );
 };
 
-export default Copy2;
+export default AsteroidsGame;
