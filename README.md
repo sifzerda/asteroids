@@ -118,7 +118,7 @@ The main functions of code:
 20. <u></u>
 21. <u></u>
 22. <u></u>
-23. <u></u>
+23. <u>const shipBody = Bodies.fromVertices: </u> Shapes ship body vertices and angles. Ship's front is actually right side vertice so has to be rotated on game start to face moveUp direction upwards.
 24. <u></u>
 25. <u></u>
 26. <u></u>
