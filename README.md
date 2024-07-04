@@ -134,6 +134,12 @@ The main functions of code:
 
 ## (8) To do: 
 
+optimization:
+- once you've got multiple asteroids use react-virtualized to only render visible stuff
+- once game basically running, convert it into Redux or Zustand
+- use a bundler like Webpack or Parcel to optimize build output: Enable code splitting, tree-shaking, and minification to reduce bundle size and improve load times.
+
+
 - [x] Create basic black game screen
 - [x] Create moving ship 
 - [x] Create some randomly moving asteroids
