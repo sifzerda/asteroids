@@ -1,14 +1,75 @@
 import { useSpring, animated } from 'react-spring';
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
+import Matter from 'matter-js';
  
-const Asteroids = () => {
+const Stripped = () => {
+  const [engine] = useState(Matter.Engine.create());
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
- 
   const [projectiles, setProjectiles] = useState([]);
   const [gameOver, setGameOver] = useState(false); // State to track game over
- 
-  const requestRef = useRef();
+  const [ship, setShip] = useState(null);
+  const gameRef = useRef();
+
+  // Initialize Matter.js renderer
+  useEffect(() => {
+    engine.world.gravity.y = 0;
+
+    const render = Matter.Render.create({
+      element: gameRef.current,
+      engine: engine,
+      options: {
+        width: 1500,
+        height: 680,
+        wireframes: false
+      }
+    });
+    Matter.Render.run(render);
+
+    const runner = Matter.Runner.create();
+    Matter.Runner.run(runner, engine);
+
+    const shipBody = Matter.Bodies.rectangle(300, 300, 40, 40);
+    setShip(shipBody);
+    Matter.World.add(engine.world, shipBody);
+
+    const cleanupFunctions = () => {
+      Matter.World.clear(engine.world);
+      Matter.Engine.clear(engine);
+      Matter.Render.stop(render);
+      Matter.Runner.stop(runner);
+    };
+
+    return cleanupFunctions;
+  }, [engine]);
+
+  // Handle ship movement and rotation
+  const moveShipUp = () => {
+    if (ship) {
+      Matter.Body.setVelocity(ship, {
+        x: ship.velocity.x + Math.cos(ship.angle) * 0.1,
+        y: ship.velocity.y + Math.sin(ship.angle) * 0.1,
+      });
+    }
+  };
+
+  const rotateShipLeft = () => {
+    if (ship) {
+      Matter.Body.rotate(ship, -0.05);
+    }
+  };
+
+  const rotateShipRight = () => {
+    if (ship) {
+      Matter.Body.rotate(ship, 0.05);
+    }
+  };
+
+  // Use react-hotkeys-hook to bind keys to functions
+  useHotkeys('up', moveShipUp, [shipPosition]);
+  useHotkeys('left', () => rotateShipLeft('left'), [shipPosition]);
+  useHotkeys('right', () => rotateShipRight('right'), [shipPosition]);
+  useHotkeys('space', shootProjectile, [shipPosition]);
 
   const moveShip = () => updateShipPosition('move');
   const rotateShip = (direction) => updateShipPosition(direction);
@@ -43,22 +104,17 @@ const Asteroids = () => {
     setProjectiles(prevProjectiles => [...prevProjectiles, newProjectile]);
   };
 
-  useHotkeys('up', moveShip, [shipPosition]);
-  useHotkeys('left', () => rotateShip('left'), [shipPosition]);
-  useHotkeys('right', () => rotateShip('right'), [shipPosition]);
-  useHotkeys('space', shootProjectile, [shipPosition]);
-
   useEffect(() => {
     const gameLoop = () => {
       if (!gameOver) {
         updateGame();
-        requestRef.current = requestAnimationFrame(gameLoop);
+        gameRef.current = requestAnimationFrame(gameLoop);
       }
     };
 
-    requestRef.current = requestAnimationFrame(gameLoop);
+    gameRef.current = requestAnimationFrame(gameLoop);
 
-    return () => cancelAnimationFrame(requestRef.current);
+    return () => cancelAnimationFrame(gameRef.current);
   }, [gameOver]);
 
   const updateGame = () => {
@@ -152,4 +208,4 @@ const Asteroids = () => {
   );
 };
 
-export default Asteroids;
+export default Stripped;
