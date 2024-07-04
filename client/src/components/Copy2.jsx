@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import Matter from 'matter-js';
+import { useSpring, animated } from 'react-spring';
 import { useHotkeys } from 'react-hotkeys-hook';
+import Matter, { Engine, Render, World, Bodies, Body, Events } from 'matter-js';
+import MatterWrap from 'matter-wrap';
 
 const AsteroidsGame = () => {
   const [engine] = useState(Matter.Engine.create());
@@ -10,6 +12,7 @@ const AsteroidsGame = () => {
 
   // Initialize Matter.js renderer
   useEffect(() => {
+    Matter.use(MatterWrap);
     engine.world.gravity.y = 0;
 
     const render = Matter.Render.create({
@@ -94,6 +97,18 @@ const AsteroidsGame = () => {
   useHotkeys('up', moveShip);
   useHotkeys('left', rotateShipLeft);
   useHotkeys('right', rotateShipRight);
+
+  // Wrapping ship's position
+  useEffect(() => {
+    if (ship) {
+      Events.on(engine, 'beforeUpdate', () => {
+        Body.setPosition(ship, {
+          x: wrapPosition(ship.position.x, 'x'),
+          y: wrapPosition(ship.position.y, 'y')
+        });
+      });
+    }
+  }, [engine, ship]);
 
   const wrapPosition = (value, axis) => {
     const maxValue = axis === 'x' ? 1500 : 680; // Adjust game board dimensions
