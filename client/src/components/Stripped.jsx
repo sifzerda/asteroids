@@ -2,7 +2,6 @@ import { useSpring, animated } from 'react-spring';
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
  
-
 const Asteroids = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
  
