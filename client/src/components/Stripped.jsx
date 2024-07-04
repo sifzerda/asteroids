@@ -10,6 +10,7 @@ const Stripped = () => {
   const [projectiles, setProjectiles] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
+  const [rotationSpeed, setRotationSpeed] = useState(0.08); // Initial rotation speed
   const gameRef = useRef();
 
  // Initialize Matter.js renderer
@@ -84,13 +85,13 @@ const moveShipUp = () => {
 
 const rotateShipLeft = () => {
   if (ship) {
-    Body.rotate(ship, -0.05);
+    Body.rotate(ship, -rotationSpeed); // Use rotationSpeed state variable
   }
 };
 
 const rotateShipRight = () => {
   if (ship) {
-    Body.rotate(ship, 0.05);
+    Body.rotate(ship, rotationSpeed); // Use rotationSpeed state variable
   }
 };
 
@@ -118,8 +119,8 @@ const shootProjectile = () => {
 
 // Use react-hotkeys-hook to bind keys to functions
 useHotkeys('up', moveShipUp, [ship]);
-useHotkeys('left', rotateShipLeft, [ship]);
-useHotkeys('right', rotateShipRight, [ship]);
+useHotkeys('left', rotateShipLeft, [ship, rotationSpeed]);
+useHotkeys('right', rotateShipRight, [ship, rotationSpeed]);
 useHotkeys('space', shootProjectile, [ship]);
 
 // Update projectiles
