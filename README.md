@@ -117,9 +117,9 @@ The main functions of code:
 19. <u></u>
 20. <u></u>
 21. <u></u>
-22. <u></u>
-23. <u>const shipBody = Bodies.fromVertices: </u> Shapes ship body vertices and angles. Ship's front is actually right side vertice so has to be rotated on game start to face moveUp direction upwards.
-24. <u></u>
+22. <u>const [rotationSpeed, setRotationSpeed] = useState(0.08): </u> sets ship rotation speed.
+23. <u>const shipBody = Bodies.fromVertices, const vertices: </u> Shapes ship body. Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
+24. <u>Body.rotate(shipBody, -Math.PI / 2): </u> Initializes ship's starting position (rotated so facing up).
 25. <u></u>
 26. <u></u>
 27. <u></u>
