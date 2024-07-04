@@ -1,7 +1,8 @@
 import { useSpring, animated } from 'react-spring';
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import Matter from 'matter-js';
+import Matter, { Engine, Render, World, Bodies, Body } from 'matter-js';
+import MatterWrap from 'matter-wrap';
  
 const Stripped = () => {
   const [engine] = useState(Matter.Engine.create());
@@ -13,9 +14,14 @@ const Stripped = () => {
 
   // Initialize Matter.js renderer
   useEffect(() => {
-    engine.world.gravity.y = 0;
-
-    const render = Matter.Render.create({
+    // Create an engine
+    const engine = Engine.create();
+  
+    // Enable matter-wrap
+    Matter.use(MatterWrap);
+  
+    // Create a renderer
+    const render = Render.create({
       element: gameRef.current,
       engine: engine,
       options: {
@@ -29,29 +35,40 @@ const Stripped = () => {
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
 
-    const shipBody = Matter.Bodies.rectangle(300, 300, 40, 40);
+    const shipBody = Matter.Bodies.rectangle(300, 300, 40, 40, {
+      plugin: {
+        wrap: {
+          min: { x: 0, y: 0 },
+          max: { x: 1500, y: 680 }
+        }
+      }
+    });
     setShip(shipBody);
     Matter.World.add(engine.world, shipBody);
 
-    const cleanupFunctions = () => {
-      Matter.World.clear(engine.world);
-      Matter.Engine.clear(engine);
-      Matter.Render.stop(render);
-      Matter.Runner.stop(runner);
-    };
+    // Run the engine
+  Engine.run(engine);
 
-    return cleanupFunctions;
-  }, [engine]);
-
-  // Handle ship movement and rotation
-  const moveShipUp = () => {
-    if (ship) {
-      Matter.Body.setVelocity(ship, {
-        x: ship.velocity.x + Math.cos(ship.angle) * 0.1,
-        y: ship.velocity.y + Math.sin(ship.angle) * 0.1,
-      });
-    }
+  // Cleanup
+  return () => {
+    Render.stop(render);
+    World.clear(engine.world);
+    Engine.clear(engine);
   };
+}, []);
+
+// Handle ship movement and rotation
+const moveShipUp = () => {
+  if (ship) {
+    // Calculate force components based on ship's current angle
+    const forceMagnitude = 0.01; // Adjust force magnitude as needed
+    const forceX = Math.cos(ship.angle) * forceMagnitude;
+    const forceY = Math.sin(ship.angle) * forceMagnitude;
+
+    // Apply force to the ship's center of mass
+    Matter.Body.applyForce(ship, ship.position, { x: forceX, y: forceY });
+  }
+};
 
   const rotateShipLeft = () => {
     if (ship) {
@@ -63,6 +80,26 @@ const Stripped = () => {
     if (ship) {
       Matter.Body.rotate(ship, 0.05);
     }
+  };
+
+  const shootProjectile = () => {
+    const speed = 10; // Adjust as needed
+    const newProjectile = {
+      body: Matter.Bodies.rectangle(ship.position.x, ship.position.y, 5, 5, {
+        frictionAir: 0,
+        plugin: {
+          wrap: {
+            min: { x: 0, y: 0 },
+            max: { x: 1500, y: 680 }
+          }
+        }
+      }),
+      rotation: ship.angle,
+      speed,
+      lifetime: 100, // Adjust as needed
+    };
+    Matter.World.add(engine.world, newProjectile.body);
+    setProjectiles(prevProjectiles => [...prevProjectiles, newProjectile]);
   };
 
   // Use react-hotkeys-hook to bind keys to functions
@@ -92,43 +129,38 @@ const Stripped = () => {
     }));
   };
 
-  const shootProjectile = () => {
-    const speed = 10; // Adjust as needed
-    const newProjectile = {
-      x: shipPosition.x + Math.sin(shipPosition.rotation * (Math.PI / 180)) * 15,
-      y: shipPosition.y - Math.cos(shipPosition.rotation * (Math.PI / 180)) * 15,
-      rotation: shipPosition.rotation,
-      speed,
-      lifetime: 100, // Adjust as needed
-    };
-    setProjectiles(prevProjectiles => [...prevProjectiles, newProjectile]);
+// Update game loop to handle projectile updates
+useEffect(() => {
+  const gameLoop = () => {
+    if (!gameOver) {
+      updateGame();
+      gameRef.current = requestAnimationFrame(gameLoop);
+    }
   };
 
-  useEffect(() => {
-    const gameLoop = () => {
-      if (!gameOver) {
-        updateGame();
-        gameRef.current = requestAnimationFrame(gameLoop);
-      }
-    };
+  gameRef.current = requestAnimationFrame(gameLoop);
 
-    gameRef.current = requestAnimationFrame(gameLoop);
+  return () => cancelAnimationFrame(gameRef.current);
+}, [gameOver]);
 
-    return () => cancelAnimationFrame(gameRef.current);
-  }, [gameOver]);
+const updateGame = () => {
+  // Update projectiles using Matter.js physics
+  projectiles.forEach(projectile => {
+    Matter.Body.translate(projectile.body, {
+      x: Math.sin(projectile.rotation * (Math.PI / 180)) * projectile.speed,
+      y: -Math.cos(projectile.rotation * (Math.PI / 180)) * projectile.speed
+    });
+  });
 
-  const updateGame = () => {
-    setProjectiles(prevProjectiles =>
-      prevProjectiles
-        .map(projectile => ({
-          ...projectile,
-          x: wrapPosition(projectile.x + Math.sin(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'x'),
-          y: wrapPosition(projectile.y - Math.cos(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'y'),
-          lifetime: projectile.lifetime - 1,
-        }))
-        .filter(projectile => projectile.lifetime > 0)
-    );
-  };
+  // Remove projectiles that have expired or moved out of bounds
+  setProjectiles(prevProjectiles =>
+    prevProjectiles.filter(projectile =>
+      projectile.lifetime > 0 &&
+      projectile.body.position.x > 0 && projectile.body.position.x < 1500 &&
+      projectile.body.position.y > 0 && projectile.body.position.y < 680
+    )
+  );
+};
 
   const wrapPosition = (value, axis) => {
     const maxValue = axis === 'x' ? 1500 : 680; // Adjust game board dimensions

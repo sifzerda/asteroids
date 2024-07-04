@@ -26,7 +26,9 @@ const Copy2 = () => {
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
 
-    const shipBody = Matter.Bodies.rectangle(300, 300, 40, 40);
+    const shipBody = Matter.Bodies.rectangle(300, 300, 40, 40, {
+      frictionAir: 0.05, // Air resistance to simulate inertia
+    });
     setShip(shipBody);
     Matter.World.add(engine.world, shipBody);
 
@@ -43,22 +45,24 @@ const Copy2 = () => {
   // Handle ship movement and rotation
   const moveShipUp = () => {
     if (ship) {
-      Matter.Body.setVelocity(ship, {
-        x: ship.velocity.x + Math.cos(ship.angle) * 0.1,
-        y: ship.velocity.y + Math.sin(ship.angle) * 0.1,
+      const angle = ship.angle;
+      const forceMagnitude = 0.01; // Adjust as needed for speed
+      Matter.Body.applyForce(ship, ship.position, {
+        x: forceMagnitude * Math.cos(angle),
+        y: forceMagnitude * Math.sin(angle)
       });
     }
   };
 
   const rotateShipLeft = () => {
     if (ship) {
-      Matter.Body.rotate(ship, -0.05);
+      Matter.Body.setAngularVelocity(ship, -0.05);
     }
   };
 
   const rotateShipRight = () => {
     if (ship) {
-      Matter.Body.rotate(ship, 0.05);
+      Matter.Body.setAngularVelocity(ship, 0.05);
     }
   };
 
