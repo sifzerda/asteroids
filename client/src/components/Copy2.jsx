@@ -8,11 +8,10 @@ const Copy2 = () => {
   
   const gameRef = useRef();
 
+  // Initialize Matter.js renderer
   useEffect(() => {
-    // Disable gravity
     engine.world.gravity.y = 0;
 
-    // Initialize Matter.js renderer
     const render = Matter.Render.create({
       element: gameRef.current,
       engine: engine,
@@ -24,16 +23,13 @@ const Copy2 = () => {
     });
     Matter.Render.run(render);
 
-    // Initialize Matter.js runner
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
 
-    // Create ship
     const shipBody = Matter.Bodies.rectangle(300, 300, 40, 40);
     setShip(shipBody);
     Matter.World.add(engine.world, shipBody);
 
-    // Cleanup functions
     const cleanupFunctions = () => {
       Matter.World.clear(engine.world);
       Matter.Engine.clear(engine);
@@ -41,25 +37,35 @@ const Copy2 = () => {
       Matter.Runner.stop(runner);
     };
 
-    // Handle keyboard input using react-hotkeys-hook
-    useHotkeys('up', () => {
-      Matter.Body.setVelocity(shipBody, {
-        x: shipBody.velocity.x + Math.cos(shipBody.angle) * 0.1,
-        y: shipBody.velocity.y + Math.sin(shipBody.angle) * 0.1,
-      });
-    });
-
-    useHotkeys('left', () => {
-      Matter.Body.rotate(shipBody, -0.05);
-    });
-
-    useHotkeys('right', () => {
-      Matter.Body.rotate(shipBody, 0.05);
-    });
-
-    // Cleanup
     return cleanupFunctions;
   }, [engine]);
+
+  // Handle ship movement and rotation
+  const moveShipUp = () => {
+    if (ship) {
+      Matter.Body.setVelocity(ship, {
+        x: ship.velocity.x + Math.cos(ship.angle) * 0.1,
+        y: ship.velocity.y + Math.sin(ship.angle) * 0.1,
+      });
+    }
+  };
+
+  const rotateShipLeft = () => {
+    if (ship) {
+      Matter.Body.rotate(ship, -0.05);
+    }
+  };
+
+  const rotateShipRight = () => {
+    if (ship) {
+      Matter.Body.rotate(ship, 0.05);
+    }
+  };
+
+  // Use react-hotkeys-hook to bind keys to functions
+  useHotkeys('up', moveShipUp);
+  useHotkeys('left', rotateShipLeft);
+  useHotkeys('right', rotateShipRight);
 
   return (
     <div className="game-board" ref={gameRef} />
