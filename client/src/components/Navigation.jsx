@@ -62,11 +62,15 @@ return (
 
     <li className="nav-item">
       <Link to="/Copy" className={isActive('/Copy')}>
-        COPY
+        basic matter.js template
       </Link>
     </li>
 
-
+    <li className="nav-item">
+      <Link to="/Stripped" className={isActive('/Stripped')}>
+        asteroids.js stripped to ship
+      </Link>
+    </li>
 
     {/* ---------------------------------- log in conditional function --------------------------------  */}
 
