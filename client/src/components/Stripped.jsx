@@ -32,14 +32,24 @@ const Stripped = () => {
   const runner = Matter.Runner.create();
   Matter.Runner.run(runner, engine);
 
-  const shipBody = Bodies.trapezoid(300, 300, 40, 50, 1.0, {
-    plugin: {
-      wrap: {
-        min: { x: 0, y: 0 },
-        max: { x: 1500, y: 680 }
+    // Define vertices for a triangular ship shape
+    const vertices = [
+      { x: 0, y: 0 },    // top point  
+      { x: 50, y: 20 },    // bottom-right (ship front)
+      { x: 0, y: 40 }      // bottom-left
+    ];
+
+    const shipBody = Bodies.fromVertices(750, 340, vertices, {
+      plugin: {
+        wrap: {
+          min: { x: 0, y: 0 },
+          max: { x: 1500, y: 680 }
+        }
       }
-    }
-  });
+    });
+
+        // Rotate the ship to face 'moveup' direction
+        Body.rotate(shipBody, -Math.PI / 2); // -90 degrees  
 
   setShip(shipBody);
   World.add(engine.world, shipBody);
