@@ -1,3 +1,4 @@
+import { useSpring, animated } from 'react-spring';
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import FinalScore from './FinalScore';
@@ -166,11 +167,20 @@ const Asteroids = () => {
     setProjectiles(prevProjectiles => prevProjectiles.filter((_, index) => index !== projectileIndex));
   };
 
-  const shipStyle = {
+  const shipStyle = useSpring({
     left: `${shipPosition.x}px`,
     top: `${shipPosition.y}px`,
     transform: `rotate(${shipPosition.rotation}deg)`,
-  };
+    config: {
+      tension: 280,    // Adjust tension for the ship's movement responsiveness
+      friction: 60,    // Adjust friction for the ship's movement responsiveness
+      mass: 1,         // Adjust mass for the ship's movement responsiveness
+      clamp: false,    // Allow ship to move freely without clamping
+      velocity: 0,     // Start with zero initial velocity
+      precision: 0.1,  // Higher precision for smoother animations
+      duration: 500,   // Explicit duration for animations
+    },
+  });
 
   const Projectile = ({ position }) => {
     useEffect(() => {
@@ -178,14 +188,23 @@ const Asteroids = () => {
       return () => clearTimeout(timer);
     }, [position]);
 
-    const projectileStyle = {
+    const projectileStyle = useSpring({
       left: `${position.x}px`,
       top: `${position.y}px`,
       transform: `rotate(${position.rotation}deg)`,
-    };
+      config: {
+        tension: 170,
+        friction: 26,
+        mass: 1,
+        clamp: false,
+        velocity: 0,
+        precision: 0.01,
+        duration: 500,
+      },
+    }); 
 
-    return <div className="projectile" style={projectileStyle}></div>;
-  };
+    return <animated.div className="projectile" style={projectileStyle}></animated.div>;
+  };  
 
   const Asteroid = ({ asteroid }) => {
     const [astPosition, setAstPosition] = useState(asteroid);
@@ -202,22 +221,31 @@ const Asteroids = () => {
       return () => clearInterval(asteroidInterval);
     }, [asteroid]);
   
-    const asteroidStyle = {
+    const asteroidStyle = useSpring({
       left: `${astPosition.x}px`,
       top: `${astPosition.y}px`,
-      width: `${asteroid.size}px`, // Adjust size based on the asteroid's size property
-      height: `${asteroid.size}px`, // Adjust size based on the asteroid's size property
-    };
+      width: `${asteroid.size}px`,
+      height: `${asteroid.size}px`,
+      config: {
+        tension: 120,
+        friction: 14,
+        mass: 1,         // Adjust mass for different asteroid sizes
+        clamp: false,    // Allow asteroids to move freely without clamping
+        velocity: 0,     // Start with zero initial velocity
+        precision: 0.1,  // Higher precision for smoother animations
+        duration: 500,   // Explicit duration for animations
+      },
+    });
 
     // conditionally renders normal or smaller asteroid
     const asteroidClassName = asteroid.size < 50 ? 'asteroid-half' : 'asteroid';
 
-    return <div className={asteroidClassName} style={asteroidStyle}></div>;
+    return <animated.div className={asteroidClassName} style={asteroidStyle}></animated.div>;
   };
 
   return (
     <div className="game-board">
-      {!gameOver && <div className="ship" style={shipStyle}></div>}
+       {!gameOver && <animated.div className="ship" style={shipStyle}></animated.div>}
       {asteroids.map((asteroid) => (
         <Asteroid key={asteroid.id} asteroid={asteroid} />
       ))}
