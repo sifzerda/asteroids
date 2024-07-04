@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: '/stripped',
+        path: '/Stripped',
         element: <Stripped />
       },
 
