@@ -1,5 +1,5 @@
 import '../App.css';
-import Copy from '../components/Copy';
+import Copy2 from '../components/Copy2';
 import '../asteroids.css';
 
 export default function About () {
@@ -9,7 +9,7 @@ export default function About () {
 {/* game component */}
 
 
-<Copy />
+<Copy2 />
 
 
 {/* -------------- */}
