@@ -1,11 +1,6 @@
-// + moving ship
-// + ship rotates around a circular axis (rather than in place)
-// + asteroids move
-// + projectile fire
-// - collision detection
-
 import { useState, useEffect, useRef } from 'react';
 import Matter from 'matter-js';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 const Copy2 = () => {
   const [engine] = useState(Matter.Engine.create());
@@ -38,35 +33,32 @@ const Copy2 = () => {
     setShip(shipBody);
     Matter.World.add(engine.world, shipBody);
 
-    // Handle keyboard input
-    const handleKeyDown = (e) => {
-      switch (e.key) {
-        case 'ArrowUp':
-          Matter.Body.setVelocity(shipBody, {
-            x: shipBody.velocity.x + Math.cos(shipBody.angle) * 0.1,
-            y: shipBody.velocity.y + Math.sin(shipBody.angle) * 0.1,
-          });
-          break;
-        case 'ArrowLeft':
-          Matter.Body.rotate(shipBody, -0.05);
-          break;
-        case 'ArrowRight':
-          Matter.Body.rotate(shipBody, 0.05);
-          break;
-        default:
-          break;
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-
-    // Cleanup
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+    // Cleanup functions
+    const cleanupFunctions = () => {
       Matter.World.clear(engine.world);
       Matter.Engine.clear(engine);
       Matter.Render.stop(render);
       Matter.Runner.stop(runner);
     };
+
+    // Handle keyboard input using react-hotkeys-hook
+    useHotkeys('up', () => {
+      Matter.Body.setVelocity(shipBody, {
+        x: shipBody.velocity.x + Math.cos(shipBody.angle) * 0.1,
+        y: shipBody.velocity.y + Math.sin(shipBody.angle) * 0.1,
+      });
+    });
+
+    useHotkeys('left', () => {
+      Matter.Body.rotate(shipBody, -0.05);
+    });
+
+    useHotkeys('right', () => {
+      Matter.Body.rotate(shipBody, 0.05);
+    });
+
+    // Cleanup
+    return cleanupFunctions;
   }, [engine]);
 
   return (
