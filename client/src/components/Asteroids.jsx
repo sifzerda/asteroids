@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import FinalScore from './FinalScore';
 import HighScores from './HighScores';
 
@@ -10,30 +11,6 @@ const Asteroids = () => {
   const [showHighScores, setShowHighScores] = useState(false);
   
   const requestRef = useRef();
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      switch (e.key) {
-        case 'ArrowUp':
-          moveShip();
-          break;
-        case 'ArrowLeft':
-          rotateShip('left');
-          break;
-        case 'ArrowRight':
-          rotateShip('right');
-          break;
-        case ' ':
-          shootProjectile();
-          break;
-        default:
-          break;
-        }
-      };
-  
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [shipPosition]);
 
   const moveShip = () => updateShipPosition('move');
   const rotateShip = (direction) => updateShipPosition(direction);
@@ -69,6 +46,11 @@ const Asteroids = () => {
     };
     setProjectiles(prevProjectiles => [...prevProjectiles, newProjectile]);
   };
+
+  useHotkeys('up', moveShip, [shipPosition]);
+  useHotkeys('left', () => rotateShip('left'), [shipPosition]);
+  useHotkeys('right', () => rotateShip('right'), [shipPosition]);
+  useHotkeys('space', shootProjectile, [shipPosition]);
 
   useEffect(() => {
     const initialAsteroids = [
