@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSpring, animated } from 'react-spring';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Matter, { Engine, Render, World, Bodies, Body, Events } from 'matter-js';
 import MatterWrap from 'matter-wrap';
 
 const AsteroidsGame = () => {
-  const [engine] = useState(Matter.Engine.create());
+  const [engine] = useState(Engine.create());
   const [ship, setShip] = useState(null);
   
   const gameRef = useRef();
@@ -15,7 +14,7 @@ const AsteroidsGame = () => {
     Matter.use(MatterWrap);
     engine.world.gravity.y = 0;
 
-    const render = Matter.Render.create({
+    const render = Render.create({
       element: gameRef.current,
       engine: engine,
       options: {
@@ -24,21 +23,21 @@ const AsteroidsGame = () => {
         wireframes: false
       }
     });
-    Matter.Render.run(render);
+    Render.run(render);
 
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
 
-    const shipBody = Matter.Bodies.rectangle(300, 300, 40, 40, {
+    const shipBody = Bodies.rectangle(300, 300, 40, 40, {
       frictionAir: 0.05, // Air resistance to simulate inertia
     });
     setShip(shipBody);
-    Matter.World.add(engine.world, shipBody);
+    World.add(engine.world, shipBody);
 
     const cleanupFunctions = () => {
-      Matter.World.clear(engine.world);
-      Matter.Engine.clear(engine);
-      Matter.Render.stop(render);
+      World.clear(engine.world);
+      Engine.clear(engine);
+      Render.stop(render);
       Matter.Runner.stop(runner);
     };
 
@@ -69,14 +68,14 @@ const AsteroidsGame = () => {
 
   const rotateShipLeft = () => {
     if (ship) {
-      Matter.Body.setAngularVelocity(ship, -0.05);
+      Body.setAngularVelocity(ship, -0.05);
       applyCentrifugalForce(ship);
     }
   };
 
   const rotateShipRight = () => {
     if (ship) {
-      Matter.Body.setAngularVelocity(ship, 0.05);
+      Body.setAngularVelocity(ship, 0.05);
       applyCentrifugalForce(ship);
     }
   };
@@ -87,7 +86,7 @@ const AsteroidsGame = () => {
     const velocity = body.velocity;
     const angle = body.angle - Math.PI / 2; // Perpendicular to ship's angle
 
-    Matter.Body.applyForce(body, position, {
+    Body.applyForce(body, position, {
       x: centrifugalForceMagnitude * Math.cos(angle) * -velocity.x,
       y: centrifugalForceMagnitude * Math.sin(angle) * -velocity.y
     });
