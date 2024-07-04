@@ -2,14 +2,13 @@ import { useSpring, animated } from 'react-spring';
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import FinalScore from './FinalScore';
- 
 
 const Asteroids = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [asteroids, setAsteroids] = useState([]);
   const [projectiles, setProjectiles] = useState([]);
   const [gameOver, setGameOver] = useState(false); // State to track game over
- 
+
   const requestRef = useRef();
 
   const moveShip = () => updateShipPosition('move');
@@ -19,7 +18,7 @@ const Asteroids = () => {
     const speed = action === 'move' ? 5 : 5; // Adjust as needed
     const rotationSpeed = action === 'left' ? -5 : action === 'right' ? 5 : 0; // Adjust as needed
 
-    setShipPosition(prevPosition => ({
+    setShipPosition((prevPosition) => ({
       ...prevPosition,
       x: wrapPosition(
         prevPosition.x + Math.sin(prevPosition.rotation * (Math.PI / 180)) * speed,
@@ -44,7 +43,7 @@ const Asteroids = () => {
       speed,
       lifetime: 100, // Adjust as needed
     };
-    setProjectiles(prevProjectiles => [...prevProjectiles, newProjectile]);
+    setProjectiles((prevProjectiles) => [...prevProjectiles, newProjectile]);
   };
 
   useHotkeys('up', moveShip, [shipPosition]);
@@ -54,8 +53,20 @@ const Asteroids = () => {
 
   useEffect(() => {
     const initialAsteroids = [
-      { x: 100, y: 100, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 }, size: 50, id: 1 },
-      { x: 400, y: 200, velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 }, size: 50, id: 2 },
+      {
+        x: 100,
+        y: 100,
+        velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 },
+        size: 50,
+        id: 1,
+      },
+      {
+        x: 400,
+        y: 200,
+        velocity: { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 2 },
+        size: 50,
+        id: 2,
+      },
     ];
     setAsteroids(initialAsteroids);
 
@@ -71,23 +82,29 @@ const Asteroids = () => {
   }, [gameOver]);
 
   const updateGame = () => {
-    setAsteroids(prevAsteroids =>
-      prevAsteroids.map(asteroid => ({
+    setAsteroids((prevAsteroids) =>
+      prevAsteroids.map((asteroid) => ({
         ...asteroid,
         x: wrapPosition(asteroid.x + asteroid.velocity.x, 'x'),
         y: wrapPosition(asteroid.y + asteroid.velocity.y, 'y'),
       }))
     );
 
-    setProjectiles(prevProjectiles =>
+    setProjectiles((prevProjectiles) =>
       prevProjectiles
-        .map(projectile => ({
+        .map((projectile) => ({
           ...projectile,
-          x: wrapPosition(projectile.x + Math.sin(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'x'),
-          y: wrapPosition(projectile.y - Math.cos(projectile.rotation * (Math.PI / 180)) * projectile.speed, 'y'),
+          x: wrapPosition(
+            projectile.x + Math.sin(projectile.rotation * (Math.PI / 180)) * projectile.speed,
+            'x'
+          ),
+          y: wrapPosition(
+            projectile.y - Math.cos(projectile.rotation * (Math.PI / 180)) * projectile.speed,
+            'y'
+          ),
           lifetime: projectile.lifetime - 1,
         }))
-        .filter(projectile => projectile.lifetime > 0)
+        .filter((projectile) => projectile.lifetime > 0)
     );
     // Check for collisions during game loop
     checkCollisions();
@@ -106,9 +123,11 @@ const Asteroids = () => {
 
   const checkCollisions = () => {
     const shipRadius = 18; // Adjust ship radius as needed
-    asteroids.forEach(asteroid => {
+    asteroids.forEach((asteroid) => {
       const asteroidRadius = 25; // Adjust asteroid radius as needed
-      const distance = Math.sqrt((shipPosition.x - asteroid.x) ** 2 + (shipPosition.y - asteroid.y) ** 2);
+      const distance = Math.sqrt(
+        (shipPosition.x - asteroid.x) ** 2 + (shipPosition.y - asteroid.y) ** 2
+      );
       if (distance < shipRadius + asteroidRadius) {
         handleCollision();
       }
@@ -119,7 +138,9 @@ const Asteroids = () => {
       asteroids.forEach((asteroid, aIndex) => {
         const projectileRadius = 15; // Adjust projectile radius as needed
         const asteroidRadius = 25; // Adjust asteroid radius as needed
-        const distance = Math.sqrt((projectile.x - asteroid.x) ** 2 + (projectile.y - asteroid.y) ** 2);
+        const distance = Math.sqrt(
+          (projectile.x - asteroid.x) ** 2 + (projectile.y - asteroid.y) ** 2
+        );
         if (distance < projectileRadius + asteroidRadius) {
           handleProjectileCollision(aIndex, pIndex);
         }
@@ -131,10 +152,9 @@ const Asteroids = () => {
     setGameOver(true); // Set game over state or handle collision logic here
   };
 
-  // newHits creates a hit counter
   const handleProjectileCollision = (asteroidIndex, projectileIndex) => {
     const newAsteroids = [];
-    setAsteroids(prevAsteroids => {
+    setAsteroids((prevAsteroids) => {
       prevAsteroids.forEach((asteroid, index) => {
         if (index === asteroidIndex) {
           // Break asteroid into two smaller asteroids
@@ -163,7 +183,9 @@ const Asteroids = () => {
       });
       return newAsteroids;
     });
-    setProjectiles(prevProjectiles => prevProjectiles.filter((_, index) => index !== projectileIndex));
+    setProjectiles((prevProjectiles) =>
+      prevProjectiles.filter((_, index) => index !== projectileIndex)
+    );
   };
 
   const shipStyle = useSpring({
@@ -171,15 +193,23 @@ const Asteroids = () => {
     top: `${shipPosition.y}px`,
     transform: `rotate(${shipPosition.rotation}deg)`,
     config: {
-      tension: 280,    // Adjust tension for the ship's movement responsiveness
-      friction: 60,    // Adjust friction for the ship's movement responsiveness
-      mass: 1,         // Adjust mass for the ship's movement responsiveness
-      clamp: false,    // Allow ship to move freely without clamping
-      velocity: 0,     // Start with zero initial velocity
-      precision: 0.1,  // Higher precision for smoother animations
-      duration: 500,   // Explicit duration for animations
+      tension: 300, // Adjust tension for the ship's movement responsiveness
+      friction: 30, // Adjust friction for the ship's movement responsiveness
+      mass: 1, // Adjust mass for the ship's movement responsiveness
+      clamp: false, // Allow ship to move freely without clamping
+      velocity: 0, // Start with zero initial velocity
+      precision: 0.1, // Higher precision for smoother animations
+      duration: 500, // Explicit duration for animations
     },
   });
+
+  const triangleStyle = {
+    width: '0',
+    height: '0',
+    borderLeft: '15px solid transparent',
+    borderRight: '15px solid transparent',
+    borderBottom: '40px solid white',
+  };
 
   const Projectile = ({ position }) => {
     useEffect(() => {
@@ -200,26 +230,26 @@ const Asteroids = () => {
         precision: 0.01,
         duration: 500,
       },
-    }); 
+    });
 
     return <animated.div className="projectile" style={projectileStyle}></animated.div>;
-  };  
+  };
 
   const Asteroid = ({ asteroid }) => {
     const [astPosition, setAstPosition] = useState(asteroid);
-  
+
     useEffect(() => {
       const moveAsteroid = () => {
-        setAstPosition(prevAstPosition => ({
+        setAstPosition((prevAstPosition) => ({
           x: wrapPosition(prevAstPosition.x + asteroid.velocity.x, 'x'),
           y: wrapPosition(prevAstPosition.y + asteroid.velocity.y, 'y'),
         }));
       };
-  
+
       const asteroidInterval = setInterval(moveAsteroid, 100); // Set asteroid speed
       return () => clearInterval(asteroidInterval);
     }, [asteroid]);
-  
+
     const asteroidStyle = useSpring({
       left: `${astPosition.x}px`,
       top: `${astPosition.y}px`,
@@ -228,11 +258,11 @@ const Asteroids = () => {
       config: {
         tension: 120,
         friction: 14,
-        mass: 1,         // Adjust mass for different asteroid sizes
-        clamp: false,    // Allow asteroids to move freely without clamping
-        velocity: 0,     // Start with zero initial velocity
-        precision: 0.1,  // Higher precision for smoother animations
-        duration: 500,   // Explicit duration for animations
+        mass: 1, // Adjust mass for different asteroid sizes
+        clamp: false, // Allow asteroids to move freely without clamping
+        velocity: 0, // Start with zero initial velocity
+        precision: 0.1, // Higher precision for smoother animations
+        duration: 500, // Explicit duration for animations
       },
     });
 
@@ -244,7 +274,9 @@ const Asteroids = () => {
 
   return (
     <div className="game-board">
-       {!gameOver && <animated.div className="ship" style={shipStyle}></animated.div>}
+      {!gameOver && (
+        <animated.div className="ship2" style={{ ...triangleStyle, ...shipStyle }}></animated.div>
+      )}
       {asteroids.map((asteroid) => (
         <Asteroid key={asteroid.id} asteroid={asteroid} />
       ))}

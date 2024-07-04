@@ -237,6 +237,17 @@ border: 2px solid var(--volt);
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8)); 
 }
 
+.ship2 {
+  position: absolute;
+  transform-origin: bottom center;
+  width: 30px;
+  height: 30px;
+  border-left: 99px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 30px solid white;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+}
+
 .asteroid {
   position: absolute;
   width: 50px;
