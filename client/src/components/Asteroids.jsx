@@ -10,7 +10,6 @@ const Asteroids = () => {
   const [projectiles, setProjectiles] = useState([]);
   const [gameOver, setGameOver] = useState(false); // State to track game over
  
-  
   const requestRef = useRef();
 
   const moveShip = () => updateShipPosition('move');
