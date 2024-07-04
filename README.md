@@ -85,6 +85,13 @@ Controls:
  - High scores page
  - If logged on: profile page with User scores.
 
+Technologies:
+
+- useRef and requestAnimationFrame: API library to update game state at fps matching the display refresh rate, creating animation, by default 60fps.
+
+- react-spring: animation smoothing, add tension, friction through 'animated divs' (customized through shipStyle, projectileStyle, and asteroidStyle)
+- matter-js: physics and collision detection
+
 ## (6) Dev Stuff: Building:
 
 The main functions of code:

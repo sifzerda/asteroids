@@ -60,6 +60,12 @@ return (
       </Link>
     </li>
 
+    <li className="nav-item">
+      <Link to="/Copy" className={isActive('/Copy')}>
+        COPY
+      </Link>
+    </li>
+
 
 
     {/* ---------------------------------- log in conditional function --------------------------------  */}
