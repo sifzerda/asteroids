@@ -32,7 +32,7 @@ const Stripped = () => {
   const runner = Matter.Runner.create();
   Matter.Runner.run(runner, engine);
 
-  const shipBody = Bodies.rectangle(300, 300, 40, 40, {
+  const shipBody = Bodies.trapezoid(300, 300, 40, 50, 1.0, {
     plugin: {
       wrap: {
         min: { x: 0, y: 0 },
@@ -40,6 +40,7 @@ const Stripped = () => {
       }
     }
   });
+
   setShip(shipBody);
   World.add(engine.world, shipBody);
 
@@ -160,13 +161,13 @@ const shipStyle = useSpring({
   top: `${shipPosition.y}px`,
   transform: `rotate(${shipPosition.rotation}deg)`,
   config: {
-    tension: 280,
-    friction: 60,
-    mass: 1,
-    clamp: false,
-    velocity: 0,
-    precision: 0.1,
-    duration: 500,
+    tension: 100,    // Adjust tension for the ship's movement responsiveness
+    friction: 60,    // Adjust friction for the ship's movement responsiveness
+    mass: 1,         // Adjust mass for the ship's movement responsiveness
+    clamp: false,    // Allow ship to move freely without clamping
+    velocity: 0,     // Start with zero initial velocity
+    precision: 0.1,  // Higher precision for smoother animations
+    duration: 500,   // Explicit duration for animations
   },
 });
 
