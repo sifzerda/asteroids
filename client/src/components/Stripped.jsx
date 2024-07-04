@@ -71,7 +71,7 @@ const Stripped = () => {
 
   const moveShipUp = () => {
     if (ship) {
-      const forceMagnitude = 0.01;
+      const forceMagnitude = 0.0005;
       const forceX = Math.cos(ship.angle) * forceMagnitude;
       const forceY = Math.sin(ship.angle) * forceMagnitude;
       Body.applyForce(ship, ship.position, { x: forceX, y: forceY });
@@ -95,7 +95,7 @@ const Stripped = () => {
       const speed = 10;
       const newProjectile = {
         body: Bodies.rectangle(ship.position.x, ship.position.y, 5, 5, {
-          frictionAir: 0,
+          frictionAir: 0.01, // Adjust air resistance
           plugin: {
             wrap: {
               min: { x: 0, y: 0 },
