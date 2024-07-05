@@ -6,11 +6,19 @@ import MatterWrap from 'matter-wrap';
 
 const Stripped = () => {
   const [engine] = useState(() => Engine.create({ gravity: { x: 0, y: 0 } }));
+
+//  const [engine] = useState(() => {
+///    const newEngine = Engine.create({ gravity: { x: 0, y: 0 } });
+//    newEngine.velocityIterations = 10; // Increase velocity iterations
+//    newEngine.positionIterations = 10; // Increase position iterations
+//    return newEngine;
+//  });
+
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [projectiles, setProjectiles] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
-  const [rotationSpeed, setRotationSpeed] = useState(0.08); // Initial rotation speed
+  const [rotationSpeed, setRotationSpeed] = useState(0.15); // Initial rotation speed
   const gameRef = useRef();
 
   useEffect(() => {
@@ -71,7 +79,7 @@ const Stripped = () => {
 
   const moveShipUp = () => {
     if (ship) {
-      const forceMagnitude = 0.0005;
+      const forceMagnitude = 0.002;
       const forceX = Math.cos(ship.angle) * forceMagnitude;
       const forceY = Math.sin(ship.angle) * forceMagnitude;
       Body.applyForce(ship, ship.position, { x: forceX, y: forceY });
@@ -93,21 +101,25 @@ const Stripped = () => {
   const shootProjectile = () => {
     if (ship) {
       const speed = 10;
-      const newProjectile = {
-        body: Bodies.rectangle(ship.position.x, ship.position.y, 5, 5, {
-          frictionAir: 0.01, // Adjust air resistance
-          plugin: {
-            wrap: {
-              min: { x: 0, y: 0 },
-              max: { x: 1500, y: 680 }
-            }
+      const projectileBody = Bodies.rectangle(ship.position.x, ship.position.y, 5, 5, {
+        frictionAir: 0.01, // Adjust air resistance
+        plugin: {
+          wrap: {
+            min: { x: 0, y: 0 },
+            max: { x: 1500, y: 680 }
           }
-        }),
+        }
+      });
+      const velocityX = Math.cos(ship.angle) * speed;
+      const velocityY = Math.sin(ship.angle) * speed;
+      Body.setVelocity(projectileBody, { x: velocityX, y: velocityY });
+      
+      const newProjectile = {
+        body: projectileBody,
         rotation: ship.angle,
-        speed,
         lifetime: 100,
       };
-      World.add(engine.world, newProjectile.body);
+      World.add(engine.world, projectileBody);
       setProjectiles(prev => [...prev, newProjectile]);
     }
   };
