@@ -99,8 +99,12 @@ const Stripped = () => {
   // Function to shoot projectile
   const shootExhaust = () => {
     if (ship) {
+      const exhaustCount = 3; // Number of exhaust particles to emit
       const speed = -2;
       const offset = -30; // Offset distance from the ship to avoid affecting ship motion
+      
+      for (let i = 0; i < exhaustCount; i++) {
+      
       const particleX = ship.position.x + Math.cos(ship.angle) * offset;
       const particleY = ship.position.y + Math.sin(ship.angle) * offset;
       const particleBody = Bodies.rectangle(particleX, particleY, 5, 5, {
@@ -130,8 +134,8 @@ const Stripped = () => {
         setProjectiles(prev => prev.filter(proj => proj.body !== particleBody));
       }, 2000);
     }
-  };
-
+  }
+};
 
 ///////////////////////////////////////////////////////////////////
 
