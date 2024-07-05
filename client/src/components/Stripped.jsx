@@ -8,7 +8,7 @@ const Stripped = () => {
   const [engine] = useState(() => Engine.create({ gravity: { x: 0, y: 0 } }));
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [projectiles, setProjectiles] = useState([]);
-  const [exhaustParticles, setExhaustParticles] = useState([]); // State for exhaust particles
+  const [particles, setParticles] = useState([]); // State for exhaust particles
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
   const [rotationSpeed, setRotationSpeed] = useState(0.15); // Initial rotation speed
@@ -58,8 +58,6 @@ const Stripped = () => {
         y: shipBody.position.y,
         rotation: shipBody.angle * (180 / Math.PI)
       });
-
- 
     };
 
     Events.on(engine, 'beforeUpdate', updateShipPosition);
@@ -71,8 +69,6 @@ const Stripped = () => {
       Events.off(engine, 'beforeUpdate', updateShipPosition);
     };
   }, [engine]);
-
- 
 
   // Function to move ship up
   const moveShipUp = () => {
@@ -97,6 +93,47 @@ const Stripped = () => {
       Body.rotate(ship, rotationSpeed);
     }
   };
+
+  ////////////////////////////////////////////////////////
+
+  // Function to shoot projectile
+  const shootExhaust = () => {
+    if (ship) {
+      const speed = 10;
+      const offset = 100; // Offset distance from the ship to avoid affecting ship motion
+      const particleX = ship.position.x + Math.cos(ship.angle) * offset;
+      const particleY = ship.position.y + Math.sin(ship.angle) * offset;
+      const particleBody = Bodies.rectangle(particleX, particleY, 5, 5, {
+        frictionAir: 0.01, // Adjust air resistance
+        plugin: {
+          wrap: {
+            min: { x: 0, y: 0 },
+            max: { x: 1500, y: 680 }
+          }
+        }
+      });
+      const velocityX = Math.cos(ship.angle) * speed;
+      const velocityY = Math.sin(ship.angle) * speed;
+      Body.setVelocity(particleBody, { x: velocityX, y: velocityY });
+
+      const newParticle = {
+        body: particleBody,
+        rotation: ship.angle,
+        lifetime: 100,
+      };
+      World.add(engine.world, particleBody);
+      setProjectiles(prev => [...prev, newParticle]);
+
+      // Remove the projectile after 2 seconds (2 seconds)
+      setTimeout(() => {
+        World.remove(engine.world, particleBody);
+        setProjectiles(prev => prev.filter(proj => proj.body !== particleBody));
+      }, 2000);
+    }
+  };
+
+
+///////////////////////////////////////////////////////////////////
 
   // Function to shoot projectile
   const shootProjectile = () => {
@@ -134,8 +171,12 @@ const Stripped = () => {
     }
   };
 
+
+
+
   // Hotkeys for ship controls
   useHotkeys('up', moveShipUp, [ship]);
+  useHotkeys('up', shootExhaust, [ship]); ////////////////////////////////////
   useHotkeys('left', rotateShipLeft, [ship, rotationSpeed]);
   useHotkeys('right', rotateShipRight, [ship, rotationSpeed]);
   useHotkeys('space', shootProjectile, [ship]);
@@ -164,7 +205,12 @@ const Stripped = () => {
       });
     });
 
- 
+    particles.forEach(particle => {
+      Body.translate(particle.body, {
+        x: Math.sin(particle.rotation) * particle.speed,
+        y: -Math.cos(particle.rotation) * particle.speed
+      });
+    });
 
     // Remove off-screen projectiles
     setProjectiles(prev => (
@@ -175,7 +221,13 @@ const Stripped = () => {
       )
     ));
 
- 
+    setParticles(prev => (
+      prev.filter(particle =>
+        particle.lifetime > 0 &&
+        particle.body.position.x > 0 && particle.body.position.x < 1500 &&
+        particle.body.position.y > 0 && particle.body.position.y < 680
+      )
+    ));
   };
 
   // Spring animation for ship
@@ -214,6 +266,25 @@ const Stripped = () => {
     return <animated.div className="projectile" style={projectileStyle}></animated.div>;
   };
 
+  // Component for projectile
+  const Particle = ({ position }) => {
+    const particleStyle = useSpring({
+      left: `${position.x}px`,
+      top: `${position.y}px`,
+      transform: `rotate(${position.rotation}deg)`,
+      config: {
+        tension: 170,
+        friction: 26,
+        mass: 1,
+        clamp: false,
+        velocity: 0,
+        precision: 0.01,
+        duration: 500,
+      },
+    });
+
+    return <animated.div className="projectile" style={particleStyle}></animated.div>;
+  };
  
 
   // Return JSX for game board
@@ -223,7 +294,9 @@ const Stripped = () => {
       {projectiles.map((projectile, index) => (
         <Projectile key={index} position={projectile} />
       ))}
- 
+       {particles.map((particle, index) => (
+        <Particle key={index} position={particle} />
+      ))}
     </div>
   );
 };
