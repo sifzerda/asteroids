@@ -101,7 +101,12 @@ const Stripped = () => {
       });
 
       exhaustParticlesToAdd.push(exhaustParticle);
-    }
+          // Remove exhaust particle after 1 seconds
+    setTimeout(() => {
+      World.remove(engine.world, exhaustParticle);
+      setExhaustParticles(prev => prev.filter(p => p !== exhaustParticle));
+    }, 1000); // exhaust stream disappears after 1 seconds
+  }
 
     setExhaustParticles((prev) => [...prev, ...exhaustParticlesToAdd]);
     exhaustParticlesToAdd.forEach((particle) => World.add(engine.world, particle));
