@@ -148,7 +148,7 @@ I experimented with handling movement keyUp and keyDown separately via useEffect
 
 change 'shootExhaust' fillstyle for randomized stream colours:
 ```bash
-fillStyle: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.8)` // Randomized colors with fixed opacity
+fillStyle: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.8)` 
 ```
 
 ## (8) Bugs and Further Development: 
@@ -170,6 +170,7 @@ optimization:
 - [x] Create some randomly moving asteroids
 - [ ] Make more asteroids and different size asteroids
 - [x] Enable projectile firing
+- [x] make rocket exhaust
 - [ ] timer, score count every asteroid hit
   - [ ] Or one single score count which is continuously running up (like a timer) and gets extra increments every asteroid destroyed
 - [x] Gunfire decay and boundary wrapping
@@ -178,7 +179,7 @@ optimization:
 - [x] When you shoot an asteroid it disappears
   - [x] When you shoot asteroids they break into two smaller, and so on
 - [ ] improve graphics elements
-- [ ] refine ship movement; add limited inertia, add acceleration (longer you hold down up, faster you speed up), 
+- [x] refine ship movement; add limited inertia, add acceleration (longer you hold down up, faster you speed up), 
 - [ ] bullet flashing/muzzle flare effect
 - [ ] asteroids flash or change color when hit
 - [ ] Power ups randomly appear around screen for several seconds which change projectile type/power/appearance:
