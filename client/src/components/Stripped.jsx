@@ -112,7 +112,7 @@ const Stripped = () => {
         frictionAir: 0.02, // Adjust air resistance
         restitution: 0.4, // Bounciness
         render: {
-          fillStyle: '#ff0000'
+          fillStyle: '#ff0000' // red exhaust
         },
         plugin: {
           wrap: {

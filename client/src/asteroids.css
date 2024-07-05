@@ -272,35 +272,21 @@ border: 2px solid var(--volt);
   border-radius: 50%;
 }
 
-.exhaust {
-  position: absolute;
-  width: 500px; /* Adjust width as needed */
-  height: 500px; /* Adjust height as needed */
-  background-color: #ffcc00; /* Example color for the exhaust */
-  border-radius: 50%; /* Makes the exhaust round */
-  opacity: 0.8; /* Adjust opacity */
-  transform-origin: bottom center; /* Sets rotation pivot point */
-  box-shadow: 0 0 10px rgba(255, 204, 0, 0.8); /* Example shadow effect */
-  animation: exhaustAnimation 0.5s ease-in-out infinite alternate; /* Example animation */
-}
 
-@keyframes exhaustAnimation {
-  0% {
-    transform: scale(1) rotate(10deg); /* Example initial scale and rotation */
-  }
-  100% {
-    transform: scale(1.2) rotate(-10deg); /* Example final scale and rotation */
-  }
-}
+
+
+
+
 
 .particle-exhaust {
   width: 6px;
   height: 6px;
   background-color: rgba(255, 140, 0, 0.8); /* Orange color with some transparency */
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.8); /* Example shadow effect */
   border-radius: 50%; /* Circular particles */
   position: absolute;
-  opacity: 0.8;
-  animation: fade 0.5s ease-out forwards;
+  opacity: 0.8; /* Adjust opacity */
+  animation: fade 0.9s ease-out forwards;
 }
 
 @keyframes fade {
@@ -308,40 +294,6 @@ border: 2px solid var(--volt);
     opacity: 0;
     transform: scale(0.5); /* Particles shrink over time */
   }
-}
-
-
-
-
-
-
-.thrust {
-  position: absolute;
-  width: 20px;
-  height: 40px;
-  background-color: orange;
-  border-left: 5px solid transparent; /* Adjust size of the thrust flame */
-  border-right: 5px solid transparent;
-  border-bottom: 10px solid #f00; /* Adjust color and size of the thrust flame */
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out; /* Smooth transition */
-  transform: translateY(30px); /* Adjust position of the thrust flame behind the ship */
-  animation: thrustAnimation 0.2s ease-out forwards;
-}
-
-@keyframes thrustAnimation {
-  0% {
-    opacity: 1;
-    transform: translateY(0px) scale(1); /* Initial position and scale */
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.8); /* Final position and scale */
-  }
-}
-
-.thrust.active {
-  opacity: 1; /* When thrusting, change opacity to 1 */
 }
 
 
