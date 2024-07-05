@@ -1,4 +1,3 @@
-// this one has a rocket exhaust spray that is like a stream of projectile balls, but has issues syncing location to back of ship
 import { useState, useEffect, useRef } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -81,21 +80,13 @@ const Stripped = () => {
     const exhaustSpeed = 5;
     const exhaustCount = 3; // Number of exhaust particles to emit
     const exhaustParticlesToAdd = [];
-  
-    // Choose a vertex from which to emit exhaust particles (e.g., shipBody.vertices[1])
-    const selectedVertex = shipBody.vertices[1]; // Adjust index based on your ship's vertex layout
-  
-    // Calculate the ship's current speed magnitude
-    const shipSpeed = Math.sqrt(shipBody.velocity.x ** 2 + shipBody.velocity.y ** 2);
-  
+
     for (let i = 0; i < exhaustCount; i++) {
-      // Calculate offset based on the selected vertex
-      const offsetX = selectedVertex.x + (5 * Math.random() - 3);
-      const offsetY = selectedVertex.y + (5 * Math.random() - 3);
-  
+      const offsetX = -shipBody.vertices[2].x * Math.cos(shipBody.angle) + 5 * Math.random() - 3;
+      const offsetY = -shipBody.vertices[2].y * Math.sin(shipBody.angle) + 5 * Math.random() - 3;
       const exhaustX = shipBody.position.x + offsetX;
       const exhaustY = shipBody.position.y + offsetY;
-  
+      
       const exhaustParticle = Bodies.circle(exhaustX, exhaustY, 2, {
         frictionAir: 0.02,
         restitution: 0.4,
@@ -103,22 +94,19 @@ const Stripped = () => {
           fillStyle: '#ff0000'
         }
       });
-  
-      // Calculate velocity based on ship's current velocity and exhaust speed
-      // Ensure exhaust speed does not exceed ship's speed
-      const maxExhaustSpeed = Math.min(exhaustSpeed + shipSpeed, 2 * exhaustSpeed);
-      const velocityX = shipBody.velocity.x - Math.cos(shipBody.angle) * maxExhaustSpeed;
-      const velocityY = shipBody.velocity.y - Math.sin(shipBody.angle) * maxExhaustSpeed;
-      Body.setVelocity(exhaustParticle, { x: velocityX, y: velocityY });
-  
+      
+      Body.setVelocity(exhaustParticle, {
+        x: shipBody.velocity.x - Math.cos(shipBody.angle) * exhaustSpeed,
+        y: shipBody.velocity.y - Math.sin(shipBody.angle) * exhaustSpeed
+      });
+
       exhaustParticlesToAdd.push(exhaustParticle);
-  
-      // Remove exhaust particle after 1 second
-      setTimeout(() => {
-        World.remove(engine.world, exhaustParticle);
-        setExhaustParticles(prev => prev.filter(p => p !== exhaustParticle));
-      }, 1000);
-    }
+          // Remove exhaust particle after 1 seconds
+    setTimeout(() => {
+      World.remove(engine.world, exhaustParticle);
+      setExhaustParticles(prev => prev.filter(p => p !== exhaustParticle));
+    }, 1000); // exhaust stream disappears after 1 seconds
+  }
 
     setExhaustParticles((prev) => [...prev, ...exhaustParticlesToAdd]);
     exhaustParticlesToAdd.forEach((particle) => World.add(engine.world, particle));
