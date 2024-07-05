@@ -101,7 +101,7 @@ const Stripped = () => {
   const shootProjectile = () => {
     if (ship) {
       const speed = 10;
-      const offset = 40; // Offset distance from the ship to avoid jerking
+      const offset = 40; // Offset distance from the ship to avoid affecting ship motion
       const projectileX = ship.position.x + Math.cos(ship.angle) * offset;
       const projectileY = ship.position.y + Math.sin(ship.angle) * offset;
       const projectileBody = Bodies.rectangle(projectileX, projectileY, 5, 5, {
