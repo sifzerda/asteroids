@@ -293,7 +293,13 @@ border: 2px solid var(--volt);
   }
 }
 
-
+.exhaust-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background-color: #ff0000; /* Red color */
+  border-radius: 50%; /* Makes it round */
+}
 
 
 

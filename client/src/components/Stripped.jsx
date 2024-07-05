@@ -59,10 +59,7 @@ const Stripped = () => {
         rotation: shipBody.angle * (180 / Math.PI)
       });
 
-      // Emit exhaust particles when ship is moving
-      if (shipBody.speed > 0.1) { // Adjust speed threshold as needed
-        emitExhaustParticles(shipBody);
-      }
+ 
     };
 
     Events.on(engine, 'beforeUpdate', updateShipPosition);
@@ -75,42 +72,7 @@ const Stripped = () => {
     };
   }, [engine]);
 
-  // Function to emit exhaust particles
-  const emitExhaustParticles = (shipBody) => {
-    const exhaustSpeed = 5;
-    const exhaustCount = 3; // Number of exhaust particles to emit
-    const exhaustParticlesToAdd = [];
-
-    for (let i = 0; i < exhaustCount; i++) {
-      const offsetX = -shipBody.vertices[2].x * Math.cos(shipBody.angle) + 5 * Math.random() - 3;
-      const offsetY = -shipBody.vertices[2].y * Math.sin(shipBody.angle) + 5 * Math.random() - 3;
-      const exhaustX = shipBody.position.x + offsetX;
-      const exhaustY = shipBody.position.y + offsetY;
-      
-      const exhaustParticle = Bodies.circle(exhaustX, exhaustY, 2, {
-        frictionAir: 0.02,
-        restitution: 0.4,
-        render: {
-          fillStyle: '#ff0000'
-        }
-      });
-      
-      Body.setVelocity(exhaustParticle, {
-        x: shipBody.velocity.x - Math.cos(shipBody.angle) * exhaustSpeed,
-        y: shipBody.velocity.y - Math.sin(shipBody.angle) * exhaustSpeed
-      });
-
-      exhaustParticlesToAdd.push(exhaustParticle);
-          // Remove exhaust particle after 1 seconds
-    setTimeout(() => {
-      World.remove(engine.world, exhaustParticle);
-      setExhaustParticles(prev => prev.filter(p => p !== exhaustParticle));
-    }, 1000); // exhaust stream disappears after 1 seconds
-  }
-
-    setExhaustParticles((prev) => [...prev, ...exhaustParticlesToAdd]);
-    exhaustParticlesToAdd.forEach((particle) => World.add(engine.world, particle));
-  };
+ 
 
   // Function to move ship up
   const moveShipUp = () => {
@@ -202,13 +164,7 @@ const Stripped = () => {
       });
     });
 
-    // Update exhaust particle positions
-    exhaustParticles.forEach((particle) => {
-      Body.translate(particle, {
-        x: Math.sin(particle.angle) * particle.speed,
-        y: -Math.cos(particle.angle) * particle.speed
-      });
-    });
+ 
 
     // Remove off-screen projectiles
     setProjectiles(prev => (
@@ -219,13 +175,7 @@ const Stripped = () => {
       )
     ));
 
-    // Remove off-screen exhaust particles
-    setExhaustParticles(prev => (
-      prev.filter(particle =>
-        particle.position.x > 0 && particle.position.x < 1500 &&
-        particle.position.y > 0 && particle.position.y < 680
-      )
-    ));
+ 
   };
 
   // Spring animation for ship
@@ -264,25 +214,7 @@ const Stripped = () => {
     return <animated.div className="projectile" style={projectileStyle}></animated.div>;
   };
 
-  // Component for exhaust particle
-  const ExhaustParticle = ({ position }) => {
-    const exhaustStyle = useSpring({
-      left: `${position.x}px`,
-      top: `${position.y}px`,
-      transform: `rotate(${position.rotation}deg)`,
-      config: {
-        tension: 170,
-        friction: 26,
-        mass: 1,
-        clamp: false,
-        velocity: 0,
-        precision: 0.01,
-        duration: 500,
-      },
-    });
-
-    return <animated.div className="exhaust-particle" style={exhaustStyle}></animated.div>;
-  };
+ 
 
   // Return JSX for game board
   return (
@@ -291,9 +223,7 @@ const Stripped = () => {
       {projectiles.map((projectile, index) => (
         <Projectile key={index} position={projectile} />
       ))}
-      {exhaustParticles.map((particle, index) => (
-        <ExhaustParticle key={index} position={particle.position} />
-      ))}
+ 
     </div>
   );
 };
