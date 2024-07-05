@@ -99,8 +99,8 @@ const Stripped = () => {
   // Function to shoot projectile
   const shootExhaust = () => {
     if (ship) {
-      const speed = 10;
-      const offset = 100; // Offset distance from the ship to avoid affecting ship motion
+      const speed = -2;
+      const offset = -30; // Offset distance from the ship to avoid affecting ship motion
       const particleX = ship.position.x + Math.cos(ship.angle) * offset;
       const particleY = ship.position.y + Math.sin(ship.angle) * offset;
       const particleBody = Bodies.rectangle(particleX, particleY, 5, 5, {
@@ -266,7 +266,7 @@ const Stripped = () => {
     return <animated.div className="projectile" style={projectileStyle}></animated.div>;
   };
 
-  // Component for projectile
+  // Component for particle
   const Particle = ({ position }) => {
     const particleStyle = useSpring({
       left: `${position.x}px`,
@@ -283,7 +283,7 @@ const Stripped = () => {
       },
     });
 
-    return <animated.div className="projectile" style={particleStyle}></animated.div>;
+    return <animated.div className="particle-exhaust" style={particleStyle}></animated.div>;
   };
  
 
