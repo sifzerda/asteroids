@@ -12,7 +12,10 @@ const Stripped = () => {
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
   const [rotationSpeed, setRotationSpeed] = useState(0.15); // Initial rotation speed
+  
   const gameRef = useRef();
+
+  const MAX_PARTICLES = 1; // Maximum number of exhaust particles (1-2 preferred for performance)
 
   useEffect(() => {
     // Enable matter-wrap
@@ -73,7 +76,7 @@ const Stripped = () => {
   // Function to move ship up
   const moveShipUp = () => {
     if (ship) {
-      const forceMagnitude = 0.002;
+      const forceMagnitude = 0.001;
       const forceX = Math.cos(ship.angle) * forceMagnitude;
       const forceY = Math.sin(ship.angle) * forceMagnitude;
       Body.applyForce(ship, ship.position, { x: forceX, y: forceY });
@@ -104,23 +107,25 @@ const Stripped = () => {
       const offset = -30; // Offset distance from the ship to avoid affecting ship motion
       const spreadAngle = 0.2; // Angle in radians to spread particles
 
-    for (let i = 0; i < exhaustCount; i++) {
-      const spreadOffset = (i - (exhaustCount - 1) / 2) * spreadAngle; // Calculate spread based on particle index
-      const particleX = ship.position.x + Math.cos(ship.angle) * offset;
-      const particleY = ship.position.y + Math.sin(ship.angle) * offset;
-      const particleBody = Bodies.circle(particleX, particleY, 1, {
-        frictionAir: 0.02, // Adjust air resistance
-        restitution: 0.4, // Bounciness
-        render: {
-          fillStyle: '#ff0000' // red exhaust
-        },
-        plugin: {
-          wrap: {
-            min: { x: 0, y: 0 },
-            max: { x: 1500, y: 680 }
+      const newParticles = [];
+
+      for (let i = 0; i < exhaustCount; i++) {
+        const spreadOffset = (i - (exhaustCount - 1) / 2) * spreadAngle; // Calculate spread based on particle index
+        const particleX = ship.position.x + Math.cos(ship.angle) * offset;
+        const particleY = ship.position.y + Math.sin(ship.angle) * offset;
+        const particleBody = Bodies.circle(particleX, particleY, 1, {
+          frictionAir: 0.02, // Adjust air resistance
+          restitution: 0.4, // Bounciness
+          render: {
+            fillStyle: '#ff0000' // red exhaust
+          },
+          plugin: {
+            wrap: {
+              min: { x: 0, y: 0 },
+              max: { x: 1500, y: 680 }
+            }
           }
-        }
-      });
+        });
 
 const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() - 0.5) * 0.5; // Add slight random variation to jetspray
       const velocityY = Math.sin(ship.angle + spreadOffset) * speed + (Math.random() - 0.5) * 0.5;
@@ -129,19 +134,28 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
       const newParticle = {
         body: particleBody,
         rotation: ship.angle,
-        lifetime: 50 + Math.random() * 50, // Randomize lifetime
+        lifetime: 100 // 
       };
       World.add(engine.world, particleBody);
-      setParticles(prev => [...prev, newParticle]);
+ 
+      newParticles.push(newParticle);
 
-      // Remove the particle after its lifetime
-      setTimeout(() => {
-        World.remove(engine.world, particleBody);
-        setParticles(prev => prev.filter(p => p.body !== particleBody));
-      }, newParticle.lifetime);
+        // Remove the particle after its lifetime
+        setTimeout(() => {
+          World.remove(engine.world, particleBody);
+          setParticles(prev => prev.filter(p => p.body !== particleBody));
+        }, newParticle.lifetime);
+      }
+
+      setParticles(prev => {
+        const combinedParticles = [...prev, ...newParticles];
+        if (combinedParticles.length > MAX_PARTICLES) {
+          return combinedParticles.slice(combinedParticles.length - MAX_PARTICLES);
+        }
+        return combinedParticles;
+      });
     }
-  }
-};
+  };
 
 ///////////////////////////////////////////////////////////////////
 
