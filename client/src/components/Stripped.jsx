@@ -99,16 +99,21 @@ const Stripped = () => {
   // Function to shoot projectile
   const shootExhaust = () => {
     if (ship) {
-      const exhaustCount = 3; // Number of exhaust particles to emit
+      const exhaustCount = 5; // Number of exhaust particles to emit
       const speed = -2;
       const offset = -30; // Offset distance from the ship to avoid affecting ship motion
-      
-      for (let i = 0; i < exhaustCount; i++) {
-      
+      const spreadAngle = 0.2; // Angle in radians to spread particles
+
+    for (let i = 0; i < exhaustCount; i++) {
+      const spreadOffset = (i - (exhaustCount - 1) / 2) * spreadAngle; // Calculate spread based on particle index
       const particleX = ship.position.x + Math.cos(ship.angle) * offset;
       const particleY = ship.position.y + Math.sin(ship.angle) * offset;
-      const particleBody = Bodies.rectangle(particleX, particleY, 5, 5, {
-        frictionAir: 0.01, // Adjust air resistance
+      const particleBody = Bodies.circle(particleX, particleY, 1, {
+        frictionAir: 0.02, // Adjust air resistance
+        restitution: 0.4, // Bounciness
+        render: {
+          fillStyle: '#ff0000'
+        },
         plugin: {
           wrap: {
             min: { x: 0, y: 0 },
@@ -116,23 +121,24 @@ const Stripped = () => {
           }
         }
       });
-      const velocityX = Math.cos(ship.angle) * speed;
-      const velocityY = Math.sin(ship.angle) * speed;
+
+const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() - 0.5) * 0.5; // Add slight random variation to jetspray
+      const velocityY = Math.sin(ship.angle + spreadOffset) * speed + (Math.random() - 0.5) * 0.5;
       Body.setVelocity(particleBody, { x: velocityX, y: velocityY });
 
       const newParticle = {
         body: particleBody,
         rotation: ship.angle,
-        lifetime: 100,
+        lifetime: 50 + Math.random() * 50, // Randomize lifetime
       };
       World.add(engine.world, particleBody);
-      setProjectiles(prev => [...prev, newParticle]);
+      setParticles(prev => [...prev, newParticle]);
 
-      // Remove the projectile after 2 seconds (2 seconds)
+      // Remove the particle after its lifetime
       setTimeout(() => {
         World.remove(engine.world, particleBody);
-        setProjectiles(prev => prev.filter(proj => proj.body !== particleBody));
-      }, 2000);
+        setParticles(prev => prev.filter(p => p.body !== particleBody));
+      }, newParticle.lifetime);
     }
   }
 };

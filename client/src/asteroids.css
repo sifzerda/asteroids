@@ -293,21 +293,21 @@ border: 2px solid var(--volt);
   }
 }
 
-.exhaust-particle {
+.particle-exhaust {
+  width: 6px;
+  height: 6px;
+  background-color: rgba(255, 140, 0, 0.8); /* Orange color with some transparency */
+  border-radius: 50%; /* Circular particles */
   position: absolute;
-  width: 4px;
-  height: 4px;
-  background-color: #ff0000; /* Red color */
-  border-radius: 50%; /* Makes it round */
+  opacity: 0.8;
+  animation: fade 0.5s ease-out forwards;
 }
 
-
-.particle-exhaust {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background-color: #ff0000; /* Red color */
-  border-radius: 50%; /* Makes it round */
+@keyframes fade {
+  to {
+    opacity: 0;
+    transform: scale(0.5); /* Particles shrink over time */
+  }
 }
 
 
