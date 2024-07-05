@@ -14,7 +14,7 @@ Current games in gamestack:
 4. Installation
 5. Usage
 6. Dev Stuff: Building
-7. Bugs 
+7. Bugs and Further Development
 8. To do
 9. To do for all games
 10. Support
@@ -27,9 +27,9 @@ Current games in gamestack:
 
 A personal project to create a react MERN stack app which has a number of simple games. I used trial and error and ChatGPT prompting. 
 
-This was built with React, Node, Javascript, and CSS. 
+This was built with React, Matter.js, Node, Javascript, and CSS. 
 
-The game had to be divided up into the smallest working components/units. It began as a game screen with a moving ship, then a couple of asteroids which moved randomly. Collision detection and projectile shooting were put in later.
+Game was divided up into the smallest working components/units. It began as a game screen with a moving ship, then a couple of asteroids which moved randomly. Collision detection, physics and projectile shooting were put in later. Made three different versions to test alternate physics.
 
 ## (2) Badges
 
@@ -69,7 +69,7 @@ npm run start
 ```
 
 Controls:
-- Press arrow keys to move
+- Arrow keys ⬅️ ⬆️ ➡️ ⬇️ keys to move
 - Spacebar to fire
 - ?
 - ?
@@ -100,18 +100,18 @@ The main functions of code:
 1. <u>const handleKeyDown:</u> key press event listening to control ship movement and gunfire.
 2. <u>const updateShipPosition:</u> sets ship speed and rotational radius.
 3. <u>setShipPosition…wrapPosition:</u> ship’s movement wraps to other side of game boundary when passing outside. A ‘buffer’ zone allows ship to pass and re-enter just outside boundary.
-4. <u>shootProjectile:</u> sets gunfire speed, fire position, and fire decay.
+4. <u>shootProjectile:</u> sets gunfire speed, fire position, and fire decay (setTimeout).
 5. <u>useEffect…initialAsteroids:</u> creates some starting asteroids in random starting position and inertia (velocity).
 6. <u>useEffect…initialAsteroids:</u> creates some starting asteroids in random starting position and inertia (velocity).
 7. <u>const gameLoop:</u>  Keep game running (updating) until game ends. ‘requestAnimationFrame’ is an API which smoothes game updating (of gameLoop) into seamless continual flow. requestRef is a hook which gives each animation ‘frame’ an id, allowing gameLoop to cease on any frame.
 8. <u>const updateGame and setProjectiles:</u> limits asteroid and projectile fire to wrap the game boundary.
-9. <u>const wrapPositions:</u> wraps game boundary around so there is no game edge; objects pass around to opposite side.
+9. <u>const wrapPosition, and Matter Wrap:</u> wraps game boundary around so there is no game edge; objects pass around to opposite side.
 10. <u>const checkCollisions and projectiles.forEach:</u> delimits collision radius of ship and asteroids, and projectiles and asteroids.
 11. <u>handleProjectileCollision:</u> when asteroids are hit, they split into new asteroids with differing initial velocities, and size property.
 12. <u>const Projectile:</u> makes projectile lifespan a (decaying) timer from firing.
 13. <u>const moveAsteroid:</u> handles  asteroid motion and speed.
 14. <u>useHotKeys: </u> hook which simplifies movement control code.
-15. <u></u>
+15. <u>shipStyle, asteroidStyle, projectileStyle: </u> react-spring adds some physics config options to game objects.
 16. <u></u>
 17. <u></u>
 18. <u></u>
@@ -119,21 +119,41 @@ The main functions of code:
 20. <u></u>
 21. <u></u>
 22. <u>const [rotationSpeed, setRotationSpeed] = useState(0.08): </u> sets ship rotation speed.
-23. <u>const shipBody = Bodies.fromVertices, const vertices: </u> Shapes ship body. Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
-24. <u>Body.rotate(shipBody, -Math.PI / 2): </u> Initializes ship's starting position (rotated so facing up).
-25. <u></u>
-26. <u></u>
+23. <u>const shipBody = Bodies.fromVertices, const vertices: </u> Shapes ship body. 
+24. <u>Body.rotate(shipBody, -Math.PI / 2): </u> Initializes ship's starting position (rotated so facing up). Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
+25. <u>UseHotkeys: </u> control binding, simplifies movement code.
+26. <u>gameLoop, requestAnimationFrame </u> repeats game updates, and syncs with display refresh rate to create animation.
 27. <u></u>
 28. <u></u>
-29. <u></u>
 
-## (7) Bugs: 
+## (7) Alternative Config
+
+You can replace :
+```bash
+const [engine] = useState(() => Engine.create({ gravity: { x: 0, y: 0 } }));
+```
+with : 
+```bash
+const [engine] = useState(() => {
+    const newEngine = Engine.create({ gravity: { x: 0, y: 0 } });
+    newEngine.velocityIterations = 10; // Increase velocity iterations
+    newEngine.positionIterations = 10; // Increase position iterations
+    return newEngine;
+  });
+```
+to create smoother ship acceleration, however this may affect performance.
+
+I experimented with handling movement keyUp and keyDown separately via useEffect to apply different physics to ship motion vs rest, but this didn't have much effect.
+
+
+
+## (8) Bugs and Further Development: 
 
 - 
 - 
 - 
 
-## (8) To do: 
+## (9) To do: 
 
 optimization:
 - once you've got multiple asteroids use react-virtualized to only render visible stuff
@@ -198,7 +218,7 @@ Borrow from minesweeper:
 
  
 
-## (9) To do for all games
+## (10) To do for all games
 - [x] create start game landing screen: + start game btn; + high scores btn
 - [x] end game/win game screen, + view score, + submit score, + see high scores, + restart game
 - [x] if user logged in, can save high score (post to user array)
@@ -207,11 +227,11 @@ Borrow from minesweeper:
 - [ ] volume increase/decrease for music
 - [ ] play through albums as 8-bit, and can play next song in list
 
-## (10) Support
+## (11) Support
 
 For support, users can contact tydamon@hotmail.com.
 
-## (11) Contributing
+## (12) Contributing
 
 Any contributions you make are greatly appreciated.
 
@@ -222,17 +242,17 @@ If you have a suggestion that would make this better, please fork the repo and c
 4. Push to the Branch (git push origin feature/NewFeature)
 5. Open a Pull Request
 
-## (12) Authors and acknowledgment
+## (13) Authors and acknowledgment
 
 The author acknowledges and credits those who have contributed to this project, including:
 
 - ChatGPT
 
-## (13) License
+## (14) License
 
 Distributed under the MIT License. See LICENSE.txt for more information.
 
-## (14) Project status
+## (15) Project status
 
 This project is completed. 
 

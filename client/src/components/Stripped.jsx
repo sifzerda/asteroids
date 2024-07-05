@@ -6,14 +6,6 @@ import MatterWrap from 'matter-wrap';
 
 const Stripped = () => {
   const [engine] = useState(() => Engine.create({ gravity: { x: 0, y: 0 } }));
-
-//  const [engine] = useState(() => {
-///    const newEngine = Engine.create({ gravity: { x: 0, y: 0 } });
-//    newEngine.velocityIterations = 10; // Increase velocity iterations
-//    newEngine.positionIterations = 10; // Increase position iterations
-//    return newEngine;
-//  });
-
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [projectiles, setProjectiles] = useState([]);
   const [gameOver, setGameOver] = useState(false);
@@ -124,6 +116,12 @@ const Stripped = () => {
       };
       World.add(engine.world, projectileBody);
       setProjectiles(prev => [...prev, newProjectile]);
+
+      // Remove the projectile after 2 seconds (2 seconds)
+      setTimeout(() => {
+        World.remove(engine.world, projectileBody);
+        setProjectiles(prev => prev.filter(proj => proj.body !== projectileBody));
+      }, 2000);
     }
   };
 
@@ -132,6 +130,7 @@ const Stripped = () => {
   useHotkeys('right', rotateShipRight, [ship, rotationSpeed]);
   useHotkeys('space', shootProjectile, [ship]);
 
+// comment: gameLoop 
   useEffect(() => {
     const gameLoop = () => {
       if (!gameOver) {
