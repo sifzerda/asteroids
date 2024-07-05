@@ -143,9 +143,7 @@ const [engine] = useState(() => {
 ```
 to create smoother ship acceleration, however this may affect performance.
 
-I experimented with handling movement keyUp and keyDown separately via useEffect to apply different physics to ship motion vs rest, but this didn't have much effect.
-
-
+I experimented with handling movement keyUp and keyDown separately via useEffect to apply different physics to ship motion vs rest, but this didn't have much overall effect. I saved the relevant code inside: client/src/components/copies/movementdiff.js
 
 ## (8) Bugs and Further Development: 
 
