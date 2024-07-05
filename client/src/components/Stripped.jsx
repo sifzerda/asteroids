@@ -101,7 +101,10 @@ const Stripped = () => {
   const shootProjectile = () => {
     if (ship) {
       const speed = 10;
-      const projectileBody = Bodies.rectangle(ship.position.x, ship.position.y, 5, 5, {
+      const offset = 40; // Offset distance from the ship to avoid jerking
+      const projectileX = ship.position.x + Math.cos(ship.angle) * offset;
+      const projectileY = ship.position.y + Math.sin(ship.angle) * offset;
+      const projectileBody = Bodies.rectangle(projectileX, projectileY, 5, 5, {
         frictionAir: 0.01, // Adjust air resistance
         plugin: {
           wrap: {
@@ -113,7 +116,7 @@ const Stripped = () => {
       const velocityX = Math.cos(ship.angle) * speed;
       const velocityY = Math.sin(ship.angle) * speed;
       Body.setVelocity(projectileBody, { x: velocityX, y: velocityY });
-      
+
       const newProjectile = {
         body: projectileBody,
         rotation: ship.angle,
