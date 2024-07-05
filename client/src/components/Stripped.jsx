@@ -8,6 +8,7 @@ const Stripped = () => {
   const [engine] = useState(() => Engine.create({ gravity: { x: 0, y: 0 } }));
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [projectiles, setProjectiles] = useState([]);
+  const [exhaustParticles, setExhaustParticles] = useState([]); // State for exhaust particles
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
   const [rotationSpeed, setRotationSpeed] = useState(0.15); // Initial rotation speed
@@ -57,6 +58,11 @@ const Stripped = () => {
         y: shipBody.position.y,
         rotation: shipBody.angle * (180 / Math.PI)
       });
+
+      // Emit exhaust particles when ship is moving
+      if (shipBody.speed > 0.1) { // Adjust speed threshold as needed
+        emitExhaustParticles(shipBody);
+      }
     };
 
     Events.on(engine, 'beforeUpdate', updateShipPosition);
@@ -69,6 +75,39 @@ const Stripped = () => {
     };
   }, [engine]);
 
+  // Function to emit exhaust particles
+  const emitExhaustParticles = (shipBody) => {
+    const exhaustSpeed = 5;
+    const exhaustCount = 3; // Number of exhaust particles to emit
+    const exhaustParticlesToAdd = [];
+
+    for (let i = 0; i < exhaustCount; i++) {
+      const offsetX = -shipBody.vertices[2].x * Math.cos(shipBody.angle) + 5 * Math.random() - 3;
+      const offsetY = -shipBody.vertices[2].y * Math.sin(shipBody.angle) + 5 * Math.random() - 3;
+      const exhaustX = shipBody.position.x + offsetX;
+      const exhaustY = shipBody.position.y + offsetY;
+      
+      const exhaustParticle = Bodies.circle(exhaustX, exhaustY, 2, {
+        frictionAir: 0.02,
+        restitution: 0.4,
+        render: {
+          fillStyle: '#ff0000'
+        }
+      });
+      
+      Body.setVelocity(exhaustParticle, {
+        x: shipBody.velocity.x - Math.cos(shipBody.angle) * exhaustSpeed,
+        y: shipBody.velocity.y - Math.sin(shipBody.angle) * exhaustSpeed
+      });
+
+      exhaustParticlesToAdd.push(exhaustParticle);
+    }
+
+    setExhaustParticles((prev) => [...prev, ...exhaustParticlesToAdd]);
+    exhaustParticlesToAdd.forEach((particle) => World.add(engine.world, particle));
+  };
+
+  // Function to move ship up
   const moveShipUp = () => {
     if (ship) {
       const forceMagnitude = 0.002;
@@ -78,18 +117,21 @@ const Stripped = () => {
     }
   };
 
+  // Function to rotate ship left
   const rotateShipLeft = () => {
     if (ship) {
       Body.rotate(ship, -rotationSpeed);
     }
   };
 
+  // Function to rotate ship right
   const rotateShipRight = () => {
     if (ship) {
       Body.rotate(ship, rotationSpeed);
     }
   };
 
+  // Function to shoot projectile
   const shootProjectile = () => {
     if (ship) {
       const speed = 10;
@@ -125,12 +167,13 @@ const Stripped = () => {
     }
   };
 
+  // Hotkeys for ship controls
   useHotkeys('up', moveShipUp, [ship]);
   useHotkeys('left', rotateShipLeft, [ship, rotationSpeed]);
   useHotkeys('right', rotateShipRight, [ship, rotationSpeed]);
   useHotkeys('space', shootProjectile, [ship]);
 
-// comment: gameLoop 
+  // Game loop effect
   useEffect(() => {
     const gameLoop = () => {
       if (!gameOver) {
@@ -144,7 +187,9 @@ const Stripped = () => {
     return () => cancelAnimationFrame(gameRef.current);
   }, [gameOver]);
 
+  // Function to update game state
   const updateGame = () => {
+    // Update projectile positions
     projectiles.forEach(projectile => {
       Body.translate(projectile.body, {
         x: Math.sin(projectile.rotation) * projectile.speed,
@@ -152,6 +197,15 @@ const Stripped = () => {
       });
     });
 
+    // Update exhaust particle positions
+    exhaustParticles.forEach((particle) => {
+      Body.translate(particle, {
+        x: Math.sin(particle.angle) * particle.speed,
+        y: -Math.cos(particle.angle) * particle.speed
+      });
+    });
+
+    // Remove off-screen projectiles
     setProjectiles(prev => (
       prev.filter(projectile =>
         projectile.lifetime > 0 &&
@@ -159,19 +213,17 @@ const Stripped = () => {
         projectile.body.position.y > 0 && projectile.body.position.y < 680
       )
     ));
+
+    // Remove off-screen exhaust particles
+    setExhaustParticles(prev => (
+      prev.filter(particle =>
+        particle.position.x > 0 && particle.position.x < 1500 &&
+        particle.position.y > 0 && particle.position.y < 680
+      )
+    ));
   };
 
-  const wrapPosition = (value, axis) => {
-    const maxValue = axis === 'x' ? 1500 : 680;
-    const buffer = 30;
-    if (value < -buffer) {
-      return maxValue + buffer + value;
-    } else if (value > maxValue + buffer) {
-      return value - maxValue - buffer;
-    }
-    return value;
-  };
-
+  // Spring animation for ship
   const shipStyle = useSpring({
     left: `${shipPosition.x}px`,
     top: `${shipPosition.y}px`,
@@ -187,29 +239,8 @@ const Stripped = () => {
     },
   });
 
+  // Component for projectile
   const Projectile = ({ position }) => {
-    const projectileRef = useRef(position);
-
-    useEffect(() => {
-      const updateProjectilePosition = () => {
-        projectileRef.current = {
-          ...projectileRef.current,
-          x: wrapPosition(
-            projectileRef.current.x + Math.sin(projectileRef.current.rotation * (Math.PI / 180)) * projectileRef.current.speed,
-            'x'
-          ),
-          y: wrapPosition(
-            projectileRef.current.y - Math.cos(projectileRef.current.rotation * (Math.PI / 180)) * projectileRef.current.speed,
-            'y'
-          ),
-        };
-      };
-
-      const updateInterval = setInterval(updateProjectilePosition, 50);
-
-      return () => clearInterval(updateInterval);
-    }, []);
-
     const projectileStyle = useSpring({
       left: `${position.x}px`,
       top: `${position.y}px`,
@@ -228,11 +259,35 @@ const Stripped = () => {
     return <animated.div className="projectile" style={projectileStyle}></animated.div>;
   };
 
+  // Component for exhaust particle
+  const ExhaustParticle = ({ position }) => {
+    const exhaustStyle = useSpring({
+      left: `${position.x}px`,
+      top: `${position.y}px`,
+      transform: `rotate(${position.rotation}deg)`,
+      config: {
+        tension: 170,
+        friction: 26,
+        mass: 1,
+        clamp: false,
+        velocity: 0,
+        precision: 0.01,
+        duration: 500,
+      },
+    });
+
+    return <animated.div className="exhaust-particle" style={exhaustStyle}></animated.div>;
+  };
+
+  // Return JSX for game board
   return (
     <div className="game-board" ref={gameRef}>
       {!gameOver && <animated.div className="ship" style={shipStyle}></animated.div>}
       {projectiles.map((projectile, index) => (
         <Projectile key={index} position={projectile} />
+      ))}
+      {exhaustParticles.map((particle, index) => (
+        <ExhaustParticle key={index} position={particle.position} />
       ))}
     </div>
   );
