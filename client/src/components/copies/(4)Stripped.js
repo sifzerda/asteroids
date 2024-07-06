@@ -1,3 +1,6 @@
+// randomly sized specced asteroids
+//+ ship find + thrust fire, + projectiles (all fine)
+
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Matter, { Engine, Render, World, Bodies, Body, Events } from 'matter-js';
@@ -69,17 +72,13 @@ const Stripped = () => {
     };
 
     const createAsteroids = () => {
-      const asteroidRadii = [80, 100, 120, 140, 160]; // Predefined radii for asteroids
       const numberOfAsteroids = 5;
       const newAsteroids = [];
-    
+
       for (let i = 0; i < numberOfAsteroids; i++) {
-        const radiusIndex = Math.floor(Math.random() * asteroidRadii.length);
-        const radius = asteroidRadii[radiusIndex];
-    
+        const radius = Math.random() * 30 + 80;
         const numVertices = Math.floor(Math.random() * 5) + 5;
         const vertices = randomVertices(numVertices, radius);
-    
         const startX = Math.random() * 1500;
         const startY = Math.random() * 680;
         const velocityX = (Math.random() - 0.5) * 4;
