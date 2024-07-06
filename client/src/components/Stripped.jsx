@@ -9,6 +9,7 @@ const Stripped = () => {
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [projectiles, setProjectiles] = useState([]);
   const [particles, setParticles] = useState([]); // State for exhaust particles
+  const [asteroids, setAsteroids] = useState([]); // State for asteroids
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
   const [rotationSpeed, setRotationSpeed] = useState(0.15); // Initial rotation speed
@@ -59,6 +60,59 @@ const shipBody = Bodies.fromVertices(750, 340, vertices, {
 
     setShip(shipBody);
     World.add(engine.world, shipBody);
+
+ //////////////////////////////////////////////////
+
+    // Function to create random vertices for asteroids
+    const randomVertices = (numVertices, radius) => {
+      const vertices = [];
+      for (let i = 0; i < numVertices; i++) {
+        const angle = (i / numVertices) * Math.PI * 2;
+        const x = Math.cos(angle) * (radius * (0.8 + Math.random() * 0.4));
+        const y = Math.sin(angle) * (radius * (0.8 + Math.random() * 0.4));
+        vertices.push({ x, y });
+      }
+      return vertices;
+    };
+
+// Create a couple of asteroids
+    // Function to create asteroids with random positions and velocities
+    const createAsteroids = () => {
+      const numberOfAsteroids = 5;
+      const newAsteroids = [];
+
+      for (let i = 0; i < numberOfAsteroids; i++) {
+        const radius = Math.random() * 30 + 80; // Random radius between 20 and 50
+        const numVertices = Math.floor(Math.random() * 5) + 5; // Random number of vertices between 5 and 10
+        const vertices = randomVertices(numVertices, radius);
+        const startX = Math.random() * 1500; // Random x position
+        const startY = Math.random() * 680; // Random y position
+        const velocityX = (Math.random() - 0.5) * 4; // Random velocity x between -2 and 2
+        const velocityY = (Math.random() - 0.5) * 4; // Random velocity y between -2 and 2
+
+        const asteroid = Bodies.fromVertices(startX, startY, vertices, {
+          frictionAir: 0, // No air resistance, for inertia
+          render: {
+            fillStyle: 'transparent', // Make the fill transparent 
+            strokeStyle: '#ffffff', // White border
+            lineWidth: 2 // Border width
+          },
+          plugin: {
+            wrap: {
+              min: { x: 0, y: 0 },
+              max: { x: 1500, y: 680 }
+            }
+          }
+        });
+        Body.setVelocity(asteroid, { x: velocityX, y: velocityY });
+        newAsteroids.push(asteroid);
+        World.add(engine.world, asteroid);
+      }
+      setAsteroids(newAsteroids);
+    };
+    createAsteroids();
+
+ //////////////////////////////////////////////////
 
     const updateShipPosition = () => {
       setShipPosition({
@@ -258,6 +312,22 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
         particle.body.position.y > 0 && particle.body.position.y < 680
       )
     ));
+
+
+    // Remove off-screen asteroids
+    setAsteroids(prev => (
+      prev.filter(asteroid =>
+        asteroid.position.x > 0 && asteroid.position.x < 1500 &&
+        asteroid.position.y > 0 && asteroid.position.y < 680
+      )
+    ));
+
+
+
+
+
+
+
   };
 
   // Spring animation for ship
@@ -316,6 +386,31 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
 
     return <animated.div className="particle-exhaust" style={particleStyle}></animated.div>;
   };
+
+
+
+
+// Component for asteroid
+const Asteroid = ({ position }) => {
+  const asteroidStyle = useSpring({
+    left: `${position.x}px`,
+    top: `${position.y}px`,
+    transform: `rotate(${position.angle}rad)`,
+    config: {
+      tension: 170,
+      friction: 26,
+      mass: 1,
+      clamp: false,
+      velocity: 0,
+      precision: 0.01,
+      duration: 500,
+    },
+  });
+
+  return <animated.div className="asteroids" style={asteroidStyle}></animated.div>;
+};
+
+
  
 
   // Return JSX for game board
@@ -325,8 +420,11 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
       {projectiles.map((projectile, index) => (
         <Projectile key={index} position={projectile} />
       ))}
-       {particles.map((particle, index) => (
+      {particles.map((particle, index) => (
         <Particle key={index} position={particle} />
+      ))}
+      {asteroids.map((asteroid, index) => (
+        <Asteroid key={index} position={asteroid.position} />
       ))}
     </div>
   );
