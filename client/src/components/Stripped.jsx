@@ -173,6 +173,9 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
       const projectileY = ship.position.y + Math.sin(ship.angle) * offset;
       const projectileBody = Bodies.rectangle(projectileX, projectileY, 5, 5, {
         frictionAir: 0.01, // Adjust air resistance
+        render: {
+          fillStyle: '#00FFDC' // cyan
+        },
         plugin: {
           wrap: {
             min: { x: 0, y: 0 },
