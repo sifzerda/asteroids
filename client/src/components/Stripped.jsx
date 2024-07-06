@@ -122,7 +122,7 @@ const shipBody = Bodies.fromVertices(750, 340, vertices, {
           frictionAir: 0.02, // Adjust air resistance
           restitution: 0.4, // Bounciness
           render: {
-            fillStyle: '#ff0000' // red exhaust
+            fillStyle: '#ff3300' // red exhaust
           },
           plugin: {
             wrap: {
