@@ -8,18 +8,16 @@ const Stripped = () => {
   const [engine] = useState(() => Engine.create({ gravity: { x: 0, y: 0 } }));
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [projectiles, setProjectiles] = useState([]);
-  const [particles, setParticles] = useState([]); // State for exhaust particles
-  const [asteroids, setAsteroids] = useState([]); // State for asteroids
+  const [particles, setParticles] = useState([]);
+  const [asteroids, setAsteroids] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
-  const [rotationSpeed, setRotationSpeed] = useState(0.15); // Initial rotation speed
-  
+  const [rotationSpeed, setRotationSpeed] = useState(0.15);
   const gameRef = useRef();
 
-  const MAX_PARTICLES = 1; // Maximum number of exhaust particles (1-2 preferred for performance)
+  const MAX_PARTICLES = 10;
 
   useEffect(() => {
-    // Enable matter-wrap
     Matter.use(MatterWrap);
 
     const render = Render.create({
@@ -37,33 +35,29 @@ const Stripped = () => {
     Matter.Runner.run(runner, engine);
 
     const vertices = [
-      { x: 0, y: 0 },    // top point  
-      { x: 34, y: 14 },    // bottom-right (ship front)
-      { x: 0, y: 27 }      // bottom-left
+      { x: 0, y: 0 },
+      { x: 34, y: 14 },
+      { x: 0, y: 27 }
     ];
 
-const shipBody = Bodies.fromVertices(750, 340, vertices, {
-  render: {
-    fillStyle: 'transparent', // Make the fill transparent
-    strokeStyle: '#ffffff', // White border
-    lineWidth: 2 // Border width
-  },
-  plugin: {
-    wrap: {
-      min: { x: 0, y: 0 },
-      max: { x: 1500, y: 680 }
-    }
-  }
-});
-
-    Body.rotate(shipBody, -Math.PI / 2); // -90 degrees  
+    const shipBody = Bodies.fromVertices(750, 340, vertices, {
+      render: {
+        fillStyle: 'transparent',
+        strokeStyle: '#ffffff',
+        lineWidth: 2
+      },
+      plugin: {
+        wrap: {
+          min: { x: 0, y: 0 },
+          max: { x: 1500, y: 680 }
+        }
+      }
+    });
+    Body.rotate(shipBody, -Math.PI / 2);
 
     setShip(shipBody);
     World.add(engine.world, shipBody);
 
- //////////////////////////////////////////////////
-
-    // Function to create random vertices for asteroids
     const randomVertices = (numVertices, radius) => {
       const vertices = [];
       for (let i = 0; i < numVertices; i++) {
@@ -75,27 +69,25 @@ const shipBody = Bodies.fromVertices(750, 340, vertices, {
       return vertices;
     };
 
-// Create a couple of asteroids
-    // Function to create asteroids with random positions and velocities
     const createAsteroids = () => {
       const numberOfAsteroids = 5;
       const newAsteroids = [];
 
       for (let i = 0; i < numberOfAsteroids; i++) {
-        const radius = Math.random() * 30 + 80; // Random radius between 20 and 50
-        const numVertices = Math.floor(Math.random() * 5) + 5; // Random number of vertices between 5 and 10
+        const radius = Math.random() * 30 + 80;
+        const numVertices = Math.floor(Math.random() * 5) + 5;
         const vertices = randomVertices(numVertices, radius);
-        const startX = Math.random() * 1500; // Random x position
-        const startY = Math.random() * 680; // Random y position
-        const velocityX = (Math.random() - 0.5) * 4; // Random velocity x between -2 and 2
-        const velocityY = (Math.random() - 0.5) * 4; // Random velocity y between -2 and 2
+        const startX = Math.random() * 1500;
+        const startY = Math.random() * 680;
+        const velocityX = (Math.random() - 0.5) * 4;
+        const velocityY = (Math.random() - 0.5) * 4;
 
         const asteroid = Bodies.fromVertices(startX, startY, vertices, {
-          frictionAir: 0, // No air resistance, for inertia
+          frictionAir: 0,
           render: {
-            fillStyle: 'transparent', // Make the fill transparent 
-            strokeStyle: '#ffffff', // White border
-            lineWidth: 2 // Border width
+            fillStyle: 'transparent',
+            strokeStyle: '#ffffff',
+            lineWidth: 2
           },
           plugin: {
             wrap: {
@@ -111,8 +103,6 @@ const shipBody = Bodies.fromVertices(750, 340, vertices, {
       setAsteroids(newAsteroids);
     };
     createAsteroids();
-
- //////////////////////////////////////////////////
 
     const updateShipPosition = () => {
       setShipPosition({
@@ -132,51 +122,45 @@ const shipBody = Bodies.fromVertices(750, 340, vertices, {
     };
   }, [engine]);
 
-  // Function to move ship up
   const moveShipUp = () => {
     if (ship) {
-      const forceMagnitude = 0.0003; // 
+      const forceMagnitude = 0.0003;
       const forceX = Math.cos(ship.angle) * forceMagnitude;
       const forceY = Math.sin(ship.angle) * forceMagnitude;
       Body.applyForce(ship, ship.position, { x: forceX, y: forceY });
     }
   };
 
-  // Function to rotate ship left
   const rotateShipLeft = () => {
     if (ship) {
       Body.rotate(ship, -rotationSpeed);
     }
   };
 
-  // Function to rotate ship right
   const rotateShipRight = () => {
     if (ship) {
       Body.rotate(ship, rotationSpeed);
     }
   };
 
-  ////////////////////////////////////////////////////////
-
-  // Function to shoot projectile
   const makeExhaust = () => {
     if (ship) {
-      const exhaustCount = 5; // Number of exhaust particles to emit
+      const exhaustCount = 5;
       const speed = -2;
-      const offset = -30; // Offset distance from the ship to avoid affecting ship motion
-      const spreadAngle = 0.2; // Angle in radians to spread particles
+      const offset = -30;
+      const spreadAngle = 0.2;
 
       const newParticles = [];
 
       for (let i = 0; i < exhaustCount; i++) {
-        const spreadOffset = (i - (exhaustCount - 1) / 2) * spreadAngle; // Calculate spread based on particle index
+        const spreadOffset = (i - (exhaustCount - 1) / 2) * spreadAngle;
         const particleX = ship.position.x + Math.cos(ship.angle) * offset;
         const particleY = ship.position.y + Math.sin(ship.angle) * offset;
         const particleBody = Bodies.circle(particleX, particleY, 1, {
-          frictionAir: 0.02, // Adjust air resistance
-          restitution: 0.4, // Bounciness
+          frictionAir: 0.02,
+          restitution: 0.4,
           render: {
-            fillStyle: '#ff3300' // red exhaust
+            fillStyle: '#ff3300'
           },
           plugin: {
             wrap: {
@@ -186,20 +170,19 @@ const shipBody = Bodies.fromVertices(750, 340, vertices, {
           }
         });
 
-const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() - 0.5) * 0.5; // Add slight random variation to jetspray
-      const velocityY = Math.sin(ship.angle + spreadOffset) * speed + (Math.random() - 0.5) * 0.5;
-      Body.setVelocity(particleBody, { x: velocityX, y: velocityY });
+        const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() - 0.5) * 0.5;
+        const velocityY = Math.sin(ship.angle + spreadOffset) * speed + (Math.random() - 0.5) * 0.5;
+        Body.setVelocity(particleBody, { x: velocityX, y: velocityY });
 
-      const newParticle = {
-        body: particleBody,
-        rotation: ship.angle,
-        lifetime: 100 // 
-      };
-      World.add(engine.world, particleBody);
- 
-      newParticles.push(newParticle);
+        const newParticle = {
+          body: particleBody,
+          rotation: ship.angle,
+          lifetime: 100
+        };
+        World.add(engine.world, particleBody);
 
-        // Remove the particle after its lifetime
+        newParticles.push(newParticle);
+
         setTimeout(() => {
           World.remove(engine.world, particleBody);
           setParticles(prev => prev.filter(p => p.body !== particleBody));
@@ -216,20 +199,17 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
     }
   };
 
-///////////////////////////////////////////////////////////////////
-
-  // Function to shoot projectile
   const shootProjectile = () => {
     if (ship) {
       const speed = 10;
-      const offset = 40; // Offset distance from the ship to avoid affecting ship motion
+      const offset = 40;
       const projectileX = ship.position.x + Math.cos(ship.angle) * offset;
       const projectileY = ship.position.y + Math.sin(ship.angle) * offset;
-      const projectileBody = Bodies.rectangle(projectileX, projectileY, 15, 3, { // Change dimensions here
-        frictionAir: 0.01, // Adjust air resistance
-        angle: ship.angle, // Set the angle of the projectile to match the ship
+      const projectileBody = Bodies.rectangle(projectileX, projectileY, 15, 3, {
+        frictionAir: 0.01,
+        angle: ship.angle,
         render: {
-          fillStyle: '#00FFDC' // cyan
+          fillStyle: '#00FFDC'
         },
         plugin: {
           wrap: {
@@ -241,16 +221,15 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
       const velocityX = Math.cos(ship.angle) * speed;
       const velocityY = Math.sin(ship.angle) * speed;
       Body.setVelocity(projectileBody, { x: velocityX, y: velocityY });
-  
+
       const newProjectile = {
         body: projectileBody,
         rotation: ship.angle,
-        lifetime: 100,
+        lifetime: 100
       };
       World.add(engine.world, projectileBody);
       setProjectiles(prev => [...prev, newProjectile]);
-  
-      // Remove the projectile after 2 seconds (2 seconds)
+
       setTimeout(() => {
         World.remove(engine.world, projectileBody);
         setProjectiles(prev => prev.filter(proj => proj.body !== projectileBody));
@@ -258,174 +237,48 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
     }
   };
 
-  // Hotkeys for ship controls
   useHotkeys('up', moveShipUp, [ship]);
-  useHotkeys('up', makeExhaust, [ship]); ////////////////////////////////////
+  useHotkeys('up', makeExhaust, [ship]);
   useHotkeys('left', rotateShipLeft, [ship, rotationSpeed]);
   useHotkeys('right', rotateShipRight, [ship, rotationSpeed]);
   useHotkeys('space', shootProjectile, [ship]);
 
-  // Game loop effect
   useEffect(() => {
-    const gameLoop = () => {
-      if (!gameOver) {
-        updateGame();
-        requestAnimationFrame(gameLoop);
-      }
+    const handleCollisions = (event) => {
+      const pairs = event.pairs;
+
+      pairs.forEach(pair => {
+        const { bodyA, bodyB } = pair;
+
+        const isProjectileA = projectiles.find(proj => proj.body === bodyA);
+        const isProjectileB = projectiles.find(proj => proj.body === bodyB);
+        const isAsteroidA = asteroids.find(ast => ast === bodyA);
+        const isAsteroidB = asteroids.find(ast => ast === bodyB);
+
+        if ((isProjectileA && isAsteroidB) || (isProjectileB && isAsteroidA)) {
+          World.remove(engine.world, bodyA);
+          World.remove(engine.world, bodyB);
+
+          setProjectiles(prev => prev.filter(proj => proj.body !== bodyA && proj.body !== bodyB));
+          setAsteroids(prev => prev.filter(ast => ast !== bodyA && ast !== bodyB));
+        }
+      });
     };
 
-    requestAnimationFrame(gameLoop);
+    Events.on(engine, 'collisionStart', handleCollisions);
 
-    return () => cancelAnimationFrame(gameRef.current);
-  }, [gameOver]);
+    return () => {
+      Events.off(engine, 'collisionStart', handleCollisions);
+    };
+  }, [engine, projectiles, asteroids]);
 
-  // Function to update game state
-  const updateGame = () => {
-    // Update projectile positions
-    projectiles.forEach(projectile => {
-      Body.translate(projectile.body, {
-        x: Math.sin(projectile.rotation) * projectile.speed,
-        y: -Math.cos(projectile.rotation) * projectile.speed
-      });
-    });
-
-    particles.forEach(particle => {
-      Body.translate(particle.body, {
-        x: Math.sin(particle.rotation) * particle.speed,
-        y: -Math.cos(particle.rotation) * particle.speed
-      });
-    });
-
-    // Remove off-screen projectiles
-    setProjectiles(prev => (
-      prev.filter(projectile =>
-        projectile.lifetime > 0 &&
-        projectile.body.position.x > 0 && projectile.body.position.x < 1500 &&
-        projectile.body.position.y > 0 && projectile.body.position.y < 680
-      )
-    ));
-
-    setParticles(prev => (
-      prev.filter(particle =>
-        particle.lifetime > 0 &&
-        particle.body.position.x > 0 && particle.body.position.x < 1500 &&
-        particle.body.position.y > 0 && particle.body.position.y < 680
-      )
-    ));
-
-
-    // Remove off-screen asteroids
-    setAsteroids(prev => (
-      prev.filter(asteroid =>
-        asteroid.position.x > 0 && asteroid.position.x < 1500 &&
-        asteroid.position.y > 0 && asteroid.position.y < 680
-      )
-    ));
-
-
-
-
-
-
-
-  };
-
-  // Spring animation for ship
-  const shipStyle = useSpring({
-    left: `${shipPosition.x}px`,
-    top: `${shipPosition.y}px`,
-    transform: `rotate(${shipPosition.rotation}deg)`,
-    config: {
-      tension: 100,
-      friction: 60,
-      mass: 1,
-      clamp: false,
-      velocity: 0,
-      precision: 0.1,
-      duration: 500,
-    },
-  });
-
-  // Component for projectile
-  const Projectile = ({ position }) => {
-    const projectileStyle = useSpring({
-      left: `${position.x}px`,
-      top: `${position.y}px`,
-      // fire orientation match ship:
-      transform: `rotate(${position.body.angle}rad)`, // Use radians for rotation
-      config: {
-        tension: 170,
-        friction: 26,
-        mass: 1,
-        clamp: false,
-        velocity: 0,
-        precision: 0.01,
-        duration: 500,
-      },
-    });
-
-    return <animated.div className="projectile" style={projectileStyle}></animated.div>;
-  };
-
-  // Component for particle
-  const Particle = ({ position }) => {
-    const particleStyle = useSpring({
-      left: `${position.x}px`,
-      top: `${position.y}px`,
-      transform: `rotate(${position.rotation}deg)`,
-      config: {
-        tension: 170,
-        friction: 26,
-        mass: 1,
-        clamp: false,
-        velocity: 0,
-        precision: 0.01,
-        duration: 500,
-      },
-    });
-
-    return <animated.div className="particle-exhaust" style={particleStyle}></animated.div>;
-  };
-
-
-
-
-// Component for asteroid
-const Asteroid = ({ position }) => {
-  const asteroidStyle = useSpring({
-    left: `${position.x}px`,
-    top: `${position.y}px`,
-    transform: `rotate(${position.angle}rad)`,
-    config: {
-      tension: 170,
-      friction: 26,
-      mass: 1,
-      clamp: false,
-      velocity: 0,
-      precision: 0.01,
-      duration: 500,
-    },
-  });
-
-  return <animated.div className="asteroids" style={asteroidStyle}></animated.div>;
-};
-
-
- 
-
-  // Return JSX for game board
   return (
-    <div className="game-board" ref={gameRef}>
-      {!gameOver && <animated.div className="ship" style={shipStyle}></animated.div>}
-      {projectiles.map((projectile, index) => (
-        <Projectile key={index} position={projectile} />
-      ))}
-      {particles.map((particle, index) => (
-        <Particle key={index} position={particle} />
-      ))}
-      {asteroids.map((asteroid, index) => (
-        <Asteroid key={index} position={asteroid.position} />
-      ))}
+    <div ref={gameRef} style={{ width: '100%', height: '100%', background: '#111111' }}>
+      {gameOver && (
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#ffffff', fontSize: '48px' }}>
+          Game Over
+        </div>
+      )}
     </div>
   );
 };
