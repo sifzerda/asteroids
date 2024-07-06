@@ -26,10 +26,6 @@ const userSchema = new Schema({
         type: Number,
         required: true,
       },
-      astTimeTaken: {
-        type: Number,
-        required: true,
-      },
     }
   ],
 });

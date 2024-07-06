@@ -5,12 +5,11 @@ const typeDefs = `
     username: String
     email: String
     password: String
-    mineScore: [AstScore]
+    astScore: [AstScore]
   }
 
     type AstScore {
     astPoints: Int
-    astTimeTaken: Int
   }
 
   type Auth {
@@ -30,7 +29,7 @@ const typeDefs = `
     updateUser(username: String, email: String, password: String): User
     login(email: String!, password: String!): Auth
     removeUser: User
-    saveAstScore(userId: ID!, astPoints: Int!, astTimeTaken: Int!): User
+    saveAstScore(userId: ID!, astPoints: Int!): User
   }
 `;
 

@@ -13,10 +13,9 @@ db.once('open', async () => {
         email: 'xandro@aol.com',
         password: '12345',
 /* -----------------minesweeper score*/ 
-        mineScore: [
+        astScore: [
           {
-            minePoints: 100,
-            mineTimeTaken: 10
+            astPoints: 100
           }
         ]
       },
@@ -25,10 +24,9 @@ db.once('open', async () => {
         username: 'Sal',
         email: 'sal@hotmail.com',
         password: '12345',
-        mineScore: [
+        astScore: [
           {
-            minePoints: 90,
-            mineTimeTaken: 12
+            astPoints: 90,
           }
         ]
       },
@@ -37,10 +35,9 @@ db.once('open', async () => {
         username: 'Lernantino',
         email: 'lernantino@gmail.com',
         password: '12345',
-        mineScore: [
+        astScore: [
           {
-            minePoints: 50,
-            mineTimeTaken: 100
+            astPoints: 50,
           }
         ]
       },
@@ -58,7 +55,7 @@ db.once('open', async () => {
     ]);
 
     console.log('🔑 users seeded');
-    console.log('💣 user.minesweeper scores seeded');
+    console.log('🚀 user.astroids scores seeded');
 
     process.exit();
   } catch (err) {

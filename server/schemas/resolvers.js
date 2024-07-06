@@ -73,10 +73,10 @@ const resolvers = {
       return { token, user };
     },
 
-    saveAstScore: async (parent, { userId, astPoints, astTimeTaken }) => {
+    saveAstScore: async (parent, { userId, astPoints }) => {
       const updatedUser = await User.findByIdAndUpdate(
         userId,
-        { $push: { astScore: { astPoints, astTimeTaken } } },
+        { $push: { astScore: { astPoints } } },
         { new: true }
       );
       if (!updatedUser) {

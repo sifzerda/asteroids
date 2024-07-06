@@ -34,14 +34,13 @@ export const REMOVE_USER = gql`
 `;
 
 export const SAVE_AST_SCORE = gql`
-  mutation saveAstScore($userId: ID!, $astPoints: Int!, $astTimeTaken: Int!) {
-    saveAstScore(userId: $userId, astPoints: $astPoints, astTimeTaken: $astTimeTaken) {
+  mutation saveAstScore($userId: ID!, $astPoints: Int!) {
+    saveAstScore(userId: $userId, astPoints: $astPoints) {
       _id
       username
       email
       astScore {
         astPoints
-        astTimeTaken
       }
     }
   }

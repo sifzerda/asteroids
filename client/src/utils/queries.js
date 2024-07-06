@@ -18,7 +18,6 @@ export const QUERY_USERS = gql`
       email
       astScore {
         astPoints
-        astTimeTaken
       }
     }
   }
@@ -32,7 +31,6 @@ export const QUERY_ME = gql`
       email
             astScore {
         astPoints
-        astTimeTaken
       }
     }
   }
@@ -42,7 +40,6 @@ export const GET_AST_SCORE = gql`
   query getAstScore($userId: ID!) {
     getAstScore(userId: $userId) {
       astPoints
-      astTimeTaken
     }
   }
 `;
