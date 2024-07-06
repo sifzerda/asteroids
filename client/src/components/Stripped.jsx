@@ -289,7 +289,7 @@ const Stripped = () => {
       // Remove the projectile
       World.remove(engine.world, projectile);
       setProjectiles(prev => prev.filter(proj => proj.body !== projectile));
-  
+    
       // Get index of the asteroid
       const asteroidIndex = asteroids.findIndex(ast => ast === asteroid);
       if (asteroidIndex !== -1) {
