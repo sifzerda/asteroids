@@ -105,7 +105,7 @@ const shipBody = Bodies.fromVertices(750, 340, vertices, {
   ////////////////////////////////////////////////////////
 
   // Function to shoot projectile
-  const shootExhaust = () => {
+  const makeExhaust = () => {
     if (ship) {
       const exhaustCount = 5; // Number of exhaust particles to emit
       const speed = -2;
@@ -206,7 +206,7 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
 
   // Hotkeys for ship controls
   useHotkeys('up', moveShipUp, [ship]);
-  useHotkeys('up', shootExhaust, [ship]); ////////////////////////////////////
+  useHotkeys('up', makeExhaust, [ship]); ////////////////////////////////////
   useHotkeys('left', rotateShipLeft, [ship, rotationSpeed]);
   useHotkeys('right', rotateShipRight, [ship, rotationSpeed]);
   useHotkeys('space', shootProjectile, [ship]);
