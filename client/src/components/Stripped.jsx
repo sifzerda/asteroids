@@ -372,6 +372,15 @@ const Stripped = () => {
     };
   }, [engine, projectiles, asteroids, asteroidSizes, asteroidHits]);
 
+  useEffect(() => {
+    // Continuous score increment example
+    const scoreInterval = setInterval(() => {
+      setScore(prevScore => prevScore + 1); // Increment score by 1 point every second
+    }, 100); // Adjust interval as needed (e.g., every second)
+
+    return () => clearInterval(scoreInterval); // Cleanup on unmount
+  }, []);
+
   return (
     <div className="game-container" ref={gameRef}>
       {gameOver && (
