@@ -89,8 +89,8 @@ const Stripped = () => {
         const vertices = randomVertices(numVertices, radius);
         const startX = Math.random() * 1500;
         const startY = Math.random() * 680;
-        const velocityX = (Math.random() - 0.5) * 4;
-        const velocityY = (Math.random() - 0.5) * 4;
+        const velocityX = (Math.random() - 0.5) * 2;
+        const velocityY = (Math.random() - 0.5) * 2;
 
         const asteroid = Bodies.fromVertices(startX, startY, vertices, {
           frictionAir: 0,
