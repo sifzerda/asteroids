@@ -15,6 +15,7 @@ const Stripped = () => {
   const [asteroidSizes, setAsteroidSizes] = useState([]);
   const [asteroidHits, setAsteroidHits] = useState([]);
   const [score, setScore] = useState(0); // Initialize score state
+  const [level, setLevel] = useState(1); // Initialize level state
   const gameRef = useRef();
 
   const MAX_PARTICLES = 10;
@@ -236,7 +237,7 @@ const Stripped = () => {
       const velocityX = Math.cos(ship.angle) * speed;
       const velocityY = Math.sin(ship.angle) * speed;
       Body.setVelocity(projectileBody, { x: velocityX, y: velocityY });
-
+  
       const newProjectile = {
         body: projectileBody,
         rotation: ship.angle,
@@ -251,11 +252,21 @@ const Stripped = () => {
         }
         return updatedProjectiles;
       });
-
+  
       setTimeout(() => {
         World.remove(engine.world, projectileBody);
         setProjectiles(prev => prev.filter(proj => proj.body !== projectileBody));
       }, 2000);
+  
+      // Update score
+      setScore(prevScore => {
+        const newScore = prevScore + 10; // Adjust score increment as needed
+        // Check if level should be incremented
+        if (newScore % 100 === 0) {
+          setLevel(prevLevel => prevLevel + 1);
+        }
+        return newScore;
+      });
     }
   };
 
@@ -310,6 +321,11 @@ const Stripped = () => {
           setAsteroids(prev => prev.filter(ast => ast !== asteroid));
           setAsteroidSizes(prev => prev.filter((size, idx) => idx !== asteroidIndex));
           setAsteroidHits(prev => prev.filter((hits, idx) => idx !== asteroidIndex));
+  
+          // Check if level should be incremented
+          if (score % 100 === 0) {
+            setLevel(prevLevel => prevLevel + 1);
+          }
         } else {
           // Split the asteroid into smaller ones
           const asteroidRadius = asteroidSizes[asteroidIndex];
@@ -390,6 +406,9 @@ const Stripped = () => {
       )}
       <div className="score-display">
         Score: {score}
+      </div>
+      <div className="level-display">
+        Level: {level} {/* Replace {level} with your level state */}
       </div>
     </div>
   );

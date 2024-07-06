@@ -245,6 +245,18 @@ border: 2px solid var(--volt);
   z-Index: 100;
 }
 
+.level-display {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
 .game-board {
   position: relative;
   width: 1500px;
