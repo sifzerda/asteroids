@@ -37,18 +37,23 @@ const Stripped = () => {
 
     const vertices = [
       { x: 0, y: 0 },    // top point  
-      { x: 50, y: 20 },    // bottom-right (ship front)
-      { x: 0, y: 40 }      // bottom-left
+      { x: 34, y: 14 },    // bottom-right (ship front)
+      { x: 0, y: 27 }      // bottom-left
     ];
 
-    const shipBody = Bodies.fromVertices(750, 340, vertices, {
-      plugin: {
-        wrap: {
-          min: { x: 0, y: 0 },
-          max: { x: 1500, y: 680 }
-        }
-      }
-    });
+const shipBody = Bodies.fromVertices(750, 340, vertices, {
+  render: {
+    fillStyle: 'transparent', // Make the fill transparent
+    strokeStyle: '#ffffff', // White border
+    lineWidth: 2 // Border width
+  },
+  plugin: {
+    wrap: {
+      min: { x: 0, y: 0 },
+      max: { x: 1500, y: 680 }
+    }
+  }
+});
 
     Body.rotate(shipBody, -Math.PI / 2); // -90 degrees  
 
@@ -76,7 +81,7 @@ const Stripped = () => {
   // Function to move ship up
   const moveShipUp = () => {
     if (ship) {
-      const forceMagnitude = 0.001;
+      const forceMagnitude = 0.0003; // 
       const forceX = Math.cos(ship.angle) * forceMagnitude;
       const forceY = Math.sin(ship.angle) * forceMagnitude;
       Body.applyForce(ship, ship.position, { x: forceX, y: forceY });
@@ -194,9 +199,6 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
       }, 2000);
     }
   };
-
-
-
 
   // Hotkeys for ship controls
   useHotkeys('up', moveShipUp, [ship]);

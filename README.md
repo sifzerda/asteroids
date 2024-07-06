@@ -45,7 +45,8 @@ Game was divided up into the smallest working components/units. It began as a ga
 ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) 
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) 
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![Matter.js](https://img.shields.io/badge/Matter.js-4B5562.svg?style=for-the-badge&logo=matterdotjs&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Apollo-GraphQL](https://img.shields.io/badge/-ApolloGraphQL-311C87?style=for-the-badge&logo=apollo-graphql)
 ![FontAwesome](https://img.shields.io/badge/Font%20Awesome-538DD7.svg?style=for-the-badge&logo=Font-Awesome&logoColor=white) 
@@ -97,34 +98,82 @@ Technologies:
 
 The main functions of code:
 
-1. <u>const handleKeyDown:</u> key press event listening to control ship movement and gunfire.
-2. <u>const updateShipPosition:</u> sets ship speed and rotational radius.
-3. <u>setShipPosition…wrapPosition:</u> ship’s movement wraps to other side of game boundary when passing outside. A ‘buffer’ zone allows ship to pass and re-enter just outside boundary.
-4. <u>shootProjectile:</u> sets gunfire speed, fire position, and fire decay (setTimeout).
-5. <u>useEffect…initialAsteroids:</u> creates some starting asteroids in random starting position and inertia (velocity).
-6. <u>useEffect…initialAsteroids:</u> creates some starting asteroids in random starting position and inertia (velocity).
-7. <u>const gameLoop:</u>  Keep game running (updating) until game ends. ‘requestAnimationFrame’ is an API which smoothes game updating (of gameLoop) into seamless continual flow. requestRef is a hook which gives each animation ‘frame’ an id, allowing gameLoop to cease on any frame.
-8. <u>const updateGame and setProjectiles:</u> limits asteroid and projectile fire to wrap the game boundary.
-9. <u>const wrapPosition, and Matter Wrap:</u> wraps game boundary around so there is no game edge; objects pass around to opposite side.
-10. <u>const checkCollisions and projectiles.forEach:</u> delimits collision radius of ship and asteroids, and projectiles and asteroids.
-11. <u>handleProjectileCollision:</u> when asteroids are hit, they split into new asteroids with differing initial velocities, and size property.
-12. <u>const Projectile:</u> makes projectile lifespan a (decaying) timer from firing.
-13. <u>const moveAsteroid:</u> handles  asteroid motion and speed.
-14. <u>useHotKeys: </u> hook which simplifies movement control code.
-15. <u>shipStyle, asteroidStyle, projectileStyle: </u> react-spring adds some physics config options to game objects.
-16. <u></u>
-17. <u></u>
-18. <u></u>
-19. <u></u>
+(A) Movement: 
+```bash
+const handleKeyDown
+```
+Key press event listening for controls and gunfire.
+```bash
+const updateShipPosition
+```
+Sets ship speed and rotational radius.
+```bash
+setShipPosition…wrapPosition
+```
+Ship’s movement wraps to other side of game boundary when passing outside, with small ‘buffer’ zone so ship fully disappears and re-appears.
+ ```bash
+const wrapPosition, and Matter Wrap
+```
+Wraps game boundary around so there is no game edge; objects pass around to opposite side.
+
+
+
+
+
+
+(B) Ship:
+
+(C) Projectile fire:
+
+Sets ship speed and rotational radius.
+```bash
+shootProjectile
+```
+Sets gunfire speed, fire position, and fire decay (setTimeout).
+```bash
+setProjectiles
+```
+Limits asteroid and projectile fire to wrap the game boundary.
+
+
+
+(D) Thrust fire:
+
+
+
+(E) Asteroids:
+```bash
+useEffect…initialAsteroids
+```
+Creates some starting asteroids in random starting position and inertia (velocity).
+
+ (F) Game
+ ```bash
+const gameLoop
+```
+Game runs (updates) until game ends. API ‘requestAnimationFrame’ smoothes updates (of gameLoop) into continual flow/animation. Hook requestRef gives each animation ‘frame’ an id, allowing gameLoop to cease on any frame.
+
+
+
+3.  <u>const checkCollisions and projectiles.forEach:</u> delimits collision radius of ship and asteroids, and projectiles and asteroids.
+4.  <u>handleProjectileCollision:</u> when asteroids are hit, they split into new asteroids with differing initial velocities, and size property.
+5.  <u>const Projectile:</u> makes projectile lifespan a (decaying) timer from firing.
+6.  <u>const moveAsteroid:</u> handles  asteroid motion and speed.
+7.  <u>useHotKeys: </u> hook which simplifies movement control code.
+8.  <u>shipStyle, asteroidStyle, projectileStyle: </u> react-spring adds some physics config options to game objects.
+9.  <u></u>
+10. <u></u>
+11. <u></u>
+12. <u></u>
+13. <u></u>
+14. <u></u>
+15. <u>const [rotationSpeed, setRotationSpeed] = useState(0.08): </u> sets ship rotation speed.
+16. <u>const shipBody = Bodies.fromVertices, const vertices: </u> Shapes ship body. 
+17. <u>Body.rotate(shipBody, -Math.PI / 2): </u> Initializes ship's starting position (rotated so facing up). Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
+18. <u>UseHotkeys: </u> control binding, simplifies movement code.
+19. <u>gameLoop, requestAnimationFrame </u> repeats game updates, and syncs with display refresh rate to create animation.
 20. <u></u>
 21. <u></u>
-22. <u>const [rotationSpeed, setRotationSpeed] = useState(0.08): </u> sets ship rotation speed.
-23. <u>const shipBody = Bodies.fromVertices, const vertices: </u> Shapes ship body. 
-24. <u>Body.rotate(shipBody, -Math.PI / 2): </u> Initializes ship's starting position (rotated so facing up). Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
-25. <u>UseHotkeys: </u> control binding, simplifies movement code.
-26. <u>gameLoop, requestAnimationFrame </u> repeats game updates, and syncs with display refresh rate to create animation.
-27. <u></u>
-28. <u></u>
 
 ## (7) Alternative Config
 
@@ -146,10 +195,47 @@ to create smoother ship acceleration, however this may affect performance.
 I experimented with handling movement keyUp and keyDown separately via useEffect to apply different physics to ship motion vs rest, but this didn't have much overall effect. I saved the relevant code inside: client/src/components/copies/movementdiff.js
 
 
-change 'shootExhaust' fillstyle for randomized stream colours:
+change 'shootExhaust' fillstyle for randomized exhaust stream colours (i.e. rainbow exhaust stream):
 ```bash
 fillStyle: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.8)` 
 ```
+Note: too much use of Math.floor(Math.random()) in big quantities (e.g. many particles) affected performance, so I tried to limit randomization.
+
+Ship size; x/ vertices by amount (e.g. 50 / .3) for each value:
+(1) Current size:
+```bash
+      { x: 0, y: 0 }, 
+      { x: 34, y: 14 }, 
+      { x: 0, y: 27 }     
+```
+(2) Tiny ship:
+```bash
+      { x: 0, y: 0 },  
+      { x: 16, y: 6 },   
+      { x: 0, y: 13 }  
+```
+(2) Bigger ship:
+```bash
+      { x: 0, y: 0 }, 
+      { x: 50, y: 20 },   
+      { x: 0, y: 40 }   
+```
+(2) Even Bigger ship:
+```bash
+      { x: 0, y: 0 }, 
+      { x: 65, y: 26 },   
+      { x: 0, y: 52 }   
+```
+Acceleration: raise (closer to 1.0) for speed
+```bash
+  const moveShipUp = () => {
+[...]
+      const forceMagnitude = 0.0003; 
+    }
+```
+
+
+
 
 ## (8) Bugs and Further Development: 
 
