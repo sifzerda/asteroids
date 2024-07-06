@@ -477,14 +477,16 @@ useEffect(() => {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  useEffect(() => {
-    // Continuous score increment example
-    const scoreInterval = setInterval(() => {
+useEffect(() => {
+  // Continuous score increment example
+  const scoreInterval = setInterval(() => {
+    if (!gameOver) {
       setScore(prevScore => prevScore + 1); // Increment score by 1 point every second
-    }, 100); // Adjust interval as needed (e.g., every second)
+    }
+  }, 100); // Adjust interval as needed (e.g., every second)
 
-    return () => clearInterval(scoreInterval); // Cleanup on unmount
-  }, []);
+  return () => clearInterval(scoreInterval); // Cleanup on unmount
+}, [gameOver]);
 
   return (
     <div className="game-container" ref={gameRef}>
