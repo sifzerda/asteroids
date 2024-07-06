@@ -13,7 +13,7 @@ function Footer() {
 
           <p className="footer-text">sifzerda</p>
           <p className="footer-text">2024</p>
-          <a href="https://github.com/sifzerda/minesweeper" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/sifzerda/asteroids" target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon={faGithub} size="2x" />
           </a>
 

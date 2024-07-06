@@ -72,9 +72,6 @@ npm run start
 Controls:
 - Arrow keys ⬅️ ⬆️ ➡️ ⬇️ keys to move
 - Spacebar to fire
-- ?
-- ?
-- ?
 
 ## (5) Usage
 
@@ -161,24 +158,21 @@ Creates some starting asteroids [size, number, rotation, velocity].
  ```bash
 useEffect...const handleCollisions
 ```
-When asteroids are hit, they split into new asteroids with differing initial velocities, and size property.
+There are 2 useEffect handleCollisions functions; one for shooting asteroids, and one for the ship getting hit. When asteroids are hit, they split into new asteroids with differing initial velocities, and size property. When the ship is hit, it triggers game over.
+```bash
+emitParticles();
+```
+when asteroids are shot, they break off into 'chunks' (particles)
 
  (F) Game
  ```bash
 const gameLoop
 ```
 Game runs (updates) until game ends. API ‘requestAnimationFrame’ smoothes updates (of gameLoop) into continual flow/animation. Hook requestRef gives each animation ‘frame’ an id, allowing gameLoop to cease on any frame.
-
- 
-1.  <u></u>
-2.  <u></u>
-3.  <u></u>
-4.  <u></u>
-5.  <u></u>
-6.  <u></u>  
- 
-7.  <u></u>
-8.  <u></u>
+ ```bash
+useEffect...const scoreInterval...
+```
+Handles score incrementation.
 
 ## (7) Alternative Config
 
@@ -198,7 +192,6 @@ const [engine] = useState(() => {
 to create smoother ship acceleration, however this may affect performance.
 
 I experimented with handling movement keyUp and keyDown separately via useEffect to apply different physics to ship motion vs rest, but this didn't have much overall effect. I saved the relevant code inside: client/src/components/copies/movementdiff.js
-
 
 change 'shootExhaust' fillstyle for randomized exhaust stream colours (i.e. rainbow exhaust stream):
 ```bash
@@ -239,64 +232,42 @@ Acceleration: raise (closer to 1.0) for speed
     }
 ```
 
-
-
-
 ## (8) Bugs and Further Development: 
 
-- 
-- 
-- 
+- randomly appearing powerups for different gun types
+- sometimes gunfire doesn't destroy asteroid on one hit (collision issue?)
 
-## (9) To do: 
-
-optimization:
-- once you've got multiple asteroids use react-virtualized to only render visible stuff
+Optimization:
+- use react-virtualized to only render visible stuff
 - once game basically running, convert it into Redux or Zustand
 - use a bundler like Webpack or Parcel to optimize build output: Enable code splitting, tree-shaking, and minification to reduce bundle size and improve load times.
+- Consider memoizing components like Projectile and Particle using React.memo to prevent unnecessary re-renders, especially if their props rarely change.
 
-Component Memoization:
-
-Consider memoizing components like Projectile and Particle using React.memo to prevent unnecessary re-renders, especially if their props rarely change.
+## (9) To do: 
 
 - [x] Create basic black game screen
 - [x] Create moving ship 
 - [x] Create some randomly moving asteroids
-- [ ] Make more asteroids and different size asteroids
+- [x] Make more asteroids and different size asteroids
 - [x] Enable projectile firing
 - [x] make rocket exhaust
-- [ ] timer, score count every asteroid hit
-  - [ ] Or one single score count which is continuously running up (like a timer) and gets extra increments every asteroid destroyed
+- [x] timer, score count every asteroid hit
+  - [x] Or one single score count which is continuously running up (like a timer) and gets extra increments every asteroid destroyed
 - [x] Gunfire decay and boundary wrapping
 - [x] Projectile collision detection with asteroids
 - [x] Ship detection with asteroids
 - [x] When you shoot an asteroid it disappears
   - [x] When you shoot asteroids they break into two smaller, and so on
 - [ ] improve graphics elements
-- [x] refine ship movement; add limited inertia, add acceleration (longer you hold down up, faster you speed up), 
+- [x] refine ship movement; add limited inertia, acceleration  
 - [ ] bullet flashing/muzzle flare effect
 - [ ] asteroids flash or change color when hit
 - [ ] Power ups randomly appear around screen for several seconds which change projectile type/power/appearance:
   - [ ] Speed up (or slow down)
   - [ ] Boost (or add boost ability in general)
-  - [ ] 
-- [ ] 
-- [ ] Level progression:
+- [x] Level progression:
   - [ ] Higher level (i.e. more time) asteroids take longer to break up, or break up into smaller divisions
-- [ ] 
-- [ ] Dividing play session into levels. After a certain time, 'level 2' flashes on screen and difficulty ramps each level increase. Also next to timer, put level.
-- [ ]
-- [ ] Points every asteroid hit
-- [ ] Timer (counts from 0)
-- [ ] Time is added to final score or possibly multipled up (every second = 10 or 100 points)
-- [ ] 
-- [ ]
-- [ ]
-- [ ]
-- [ ] 
-- [ ] 
-
-
+- [x] Dividing play session into levels. After a certain time, 'level 2' flashes on screen and difficulty ramps each level increase. Also next to timer, put level.
 
 Borrow from minesweeper:
 
@@ -305,23 +276,16 @@ Borrow from minesweeper:
   - [ ] Timer
   - [ ] Score
   - [ ] Total level
-  - [ ] 
 - [ ] Exit game through main game
 - [ ] Highscores (from start screen)
 - [ ] Submit highscores
 - [ ] Profile scores and logging in
 
-
-
-
-
- 
-
 ## (10) To do for all games
-- [x] create start game landing screen: + start game btn; + high scores btn
-- [x] end game/win game screen, + view score, + submit score, + see high scores, + restart game
-- [x] if user logged in, can save high score (post to user array)
-- [x] profile page where scores can be displayed
+- [ ] create start game landing screen: + start game btn; + high scores btn
+- [ ] end game/win game screen, + view score, + submit score, + see high scores, + restart game
+- [ ] if user logged in, can save high score (post to user array)
+- [ ] profile page where scores can be displayed
 - [ ] have 8-bit chiptune stylized music play during game (with button that starts and stops music, maybe a speaker pic that gets struck through)
 - [ ] volume increase/decrease for music
 - [ ] play through albums as 8-bit, and can play next song in list
