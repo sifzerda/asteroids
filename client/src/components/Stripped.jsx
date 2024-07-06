@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSpring, animated } from 'react-spring';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Matter, { Engine, Render, World, Bodies, Body, Events } from 'matter-js';
 import MatterWrap from 'matter-wrap';
@@ -243,6 +242,7 @@ const Stripped = () => {
   useHotkeys('right', rotateShipRight, [ship, rotationSpeed]);
   useHotkeys('space', shootProjectile, [ship]);
 
+  // Hitting asteroid with gunfire:
   useEffect(() => {
     const handleCollisions = (event) => {
       const pairs = event.pairs;

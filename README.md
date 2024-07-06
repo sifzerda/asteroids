@@ -90,8 +90,8 @@ Technologies:
 
 - <strong>useRef and requestAnimationFrame: </strong> API library to update game state at fps matching the display refresh rate, creating animation, by default 60fps.
 - <strong>react-HotKeys: </strong> hook for creating keyboard shortcuts, for game movement.
-- <strong>react-spring: </strong> animation smoothing, add tension, friction through 'animated divs' (customized through shipStyle, projectileStyle, and asteroidStyle)
-- <strong>matter-js: </strong> physics and collision detection.
++ ~~- <strong>react-spring: </strong> animation smoothing, add tension, friction through 'animated divs' (customized through shipStyle, projectileStyle, and asteroidStyle).~~ Removed; conflict with Matter.js.
+- <strong>matter-js: </strong> physics and collision detection engine.
 - <strong>matter-wrap: </strong> game boundary wrapping.
 
 ## (6) Dev Stuff: Building:
