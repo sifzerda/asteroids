@@ -12,9 +12,24 @@ const Stripped = () => {
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
   const [rotationSpeed, setRotationSpeed] = useState(0.15);
+  const [asteroidSizes, setAsteroidSizes] = useState([]);
+  const [asteroidHits, setAsteroidHits] = useState([]);
   const gameRef = useRef();
 
   const MAX_PARTICLES = 10;
+  const MAX_PROJECTILES = 2;
+
+  // helper function to generate random vertices for generated asteroids
+  const randomVertices = (numVertices, radius) => {
+    const vertices = [];
+    for (let i = 0; i < numVertices; i++) {
+      const angle = (i / numVertices) * Math.PI * 2;
+      const x = Math.cos(angle) * (radius * (0.8 + Math.random() * 0.4));
+      const y = Math.sin(angle) * (radius * (0.8 + Math.random() * 0.4));
+      vertices.push({ x, y });
+    }
+    return vertices;
+  };
 
   useEffect(() => {
     Matter.use(MatterWrap);
@@ -57,29 +72,22 @@ const Stripped = () => {
     setShip(shipBody);
     World.add(engine.world, shipBody);
 
-    const randomVertices = (numVertices, radius) => {
-      const vertices = [];
-      for (let i = 0; i < numVertices; i++) {
-        const angle = (i / numVertices) * Math.PI * 2;
-        const x = Math.cos(angle) * (radius * (0.8 + Math.random() * 0.4));
-        const y = Math.sin(angle) * (radius * (0.8 + Math.random() * 0.4));
-        vertices.push({ x, y });
-      }
-      return vertices;
-    };
-
     const createAsteroids = () => {
       const asteroidRadii = [80, 100, 120, 140, 160]; // Predefined radii for asteroids
       const numberOfAsteroids = 5;
       const newAsteroids = [];
-    
+      const newAsteroidSizes = [];
+      const newAsteroidHits = [];
+
       for (let i = 0; i < numberOfAsteroids; i++) {
         const radiusIndex = Math.floor(Math.random() * asteroidRadii.length);
         const radius = asteroidRadii[radiusIndex];
-    
+        newAsteroidSizes.push(radius);
+        newAsteroidHits.push(0);
+
         const numVertices = Math.floor(Math.random() * 5) + 5;
         const vertices = randomVertices(numVertices, radius);
-    
+
         const startX = Math.random() * 1500;
         const startY = Math.random() * 680;
         const velocityX = (Math.random() - 0.5) * 4;
@@ -103,7 +111,10 @@ const Stripped = () => {
         newAsteroids.push(asteroid);
         World.add(engine.world, asteroid);
       }
+
       setAsteroids(newAsteroids);
+      setAsteroidSizes(newAsteroidSizes);
+      setAsteroidHits(newAsteroidHits);
     };
     createAsteroids();
 
@@ -231,7 +242,14 @@ const Stripped = () => {
         lifetime: 100
       };
       World.add(engine.world, projectileBody);
-      setProjectiles(prev => [...prev, newProjectile]);
+      
+      setProjectiles(prev => {
+        const updatedProjectiles = [...prev, newProjectile];
+        if (updatedProjectiles.length > MAX_PROJECTILES) {
+          return updatedProjectiles.slice(updatedProjectiles.length - MAX_PROJECTILES);
+        }
+        return updatedProjectiles;
+      });
 
       setTimeout(() => {
         World.remove(engine.world, projectileBody);
@@ -246,7 +264,7 @@ const Stripped = () => {
   useHotkeys('right', rotateShipRight, [ship, rotationSpeed]);
   useHotkeys('space', shootProjectile, [ship]);
 
-  // Hitting asteroid with gunfire:
+  // Handling asteroid and projectile collisions:
   useEffect(() => {
     const handleCollisions = (event) => {
       const pairs = event.pairs;
@@ -259,14 +277,88 @@ const Stripped = () => {
         const isAsteroidA = asteroids.find(ast => ast === bodyA);
         const isAsteroidB = asteroids.find(ast => ast === bodyB);
 
-        if ((isProjectileA && isAsteroidB) || (isProjectileB && isAsteroidA)) {
-          World.remove(engine.world, bodyA);
-          World.remove(engine.world, bodyB);
-
-          setProjectiles(prev => prev.filter(proj => proj.body !== bodyA && proj.body !== bodyB));
-          setAsteroids(prev => prev.filter(ast => ast !== bodyA && ast !== bodyB));
+        if (isProjectileA && isAsteroidB) {
+          handleAsteroidCollision(bodyA, bodyB);
+        } else if (isProjectileB && isAsteroidA) {
+          handleAsteroidCollision(bodyB, bodyA);
         }
       });
+    };
+
+    const handleAsteroidCollision = (projectile, asteroid) => {
+      // Remove the projectile
+      World.remove(engine.world, projectile);
+      setProjectiles(prev => prev.filter(proj => proj.body !== projectile));
+  
+      // Get index of the asteroid
+      const asteroidIndex = asteroids.findIndex(ast => ast === asteroid);
+      if (asteroidIndex !== -1) {
+        // Increment hit count for the asteroid
+        const currentHits = asteroidHits[asteroidIndex] + 1;
+        const updatedHits = [...asteroidHits];
+        updatedHits[asteroidIndex] = currentHits;
+        setAsteroidHits(updatedHits);
+  
+        // Check if asteroid should be removed
+        if (currentHits >= 2) {
+          // Remove the asteroid
+          World.remove(engine.world, asteroid);
+          setAsteroids(prev => prev.filter(ast => ast !== asteroid));
+          setAsteroidSizes(prev => prev.filter((size, idx) => idx !== asteroidIndex));
+          setAsteroidHits(prev => prev.filter((hits, idx) => idx !== asteroidIndex));
+        } else {
+          // Split the asteroid into smaller ones
+          const asteroidRadius = asteroidSizes[asteroidIndex];
+          const newRadius = asteroidRadius / 2;
+
+          if (newRadius > 20) { // Ensure the new asteroids are not too small
+            const vertices = randomVertices(Math.floor(Math.random() * 5) + 5, newRadius);
+            const { x: asteroidX, y: asteroidY } = asteroid.position;
+            const velocityX = (Math.random() - 0.5) * 4;
+            const velocityY = (Math.random() - 0.5) * 4;
+  
+            const newAsteroid1 = Bodies.fromVertices(asteroidX, asteroidY, vertices, {
+              frictionAir: 0,
+              render: {
+                fillStyle: 'transparent',
+                strokeStyle: '#ffffff',
+                lineWidth: 2
+              },
+              plugin: {
+                wrap: {
+                  min: { x: 0, y: 0 },
+                  max: { x: 1500, y: 680 }
+                }
+              }
+            });
+            Body.setVelocity(newAsteroid1, { x: velocityX, y: velocityY });
+            World.add(engine.world, newAsteroid1);
+            setAsteroids(prev => [...prev, newAsteroid1]);
+            setAsteroidSizes(prev => [...prev, newRadius]);
+            setAsteroidHits(prev => [...prev, 0]);
+  
+            const newAsteroid2 = Bodies.fromVertices(asteroidX, asteroidY, vertices, {
+              frictionAir: 0,
+              render: {
+                fillStyle: 'transparent',
+                strokeStyle: '#ffffff',
+                lineWidth: 2
+              },
+              plugin: {
+                wrap: {
+                  min: { x: 0, y: 0 },
+                  max: { x: 1500, y: 680 }
+                }
+              }
+            });
+            Body.setVelocity(newAsteroid2, { x: -velocityX, y: -velocityY });
+            World.add(engine.world, newAsteroid2);
+            setAsteroids(prev => [...prev, newAsteroid2]);
+            setAsteroidSizes(prev => [...prev, newRadius]);
+            setAsteroidHits(prev => [...prev, 0]);
+          }
+        }
+      }
     };
 
     Events.on(engine, 'collisionStart', handleCollisions);
@@ -274,7 +366,7 @@ const Stripped = () => {
     return () => {
       Events.off(engine, 'collisionStart', handleCollisions);
     };
-  }, [engine, projectiles, asteroids]);
+  }, [engine, projectiles, asteroids, asteroidSizes, asteroidHits]);
 
   return (
     <div ref={gameRef} style={{ width: '100%', height: '100%', background: '#111111' }}>

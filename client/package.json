@@ -35,6 +35,7 @@
     "matter-wrap": "^0.2.0",
     "mdb-react-ui-kit": "^8.0.0",
     "node-fetch": "^3.3.2",
+    "poly-decomp": "^0.3.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.10.2",
