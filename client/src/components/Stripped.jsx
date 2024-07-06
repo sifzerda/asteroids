@@ -108,6 +108,7 @@ const Stripped = () => {
           }
         });
         Body.setVelocity(asteroid, { x: velocityX, y: velocityY });
+        Body.setAngularVelocity(asteroid, 0.01); // Adjust angular velocity as needed
         newAsteroids.push(asteroid);
         World.add(engine.world, asteroid);
       }
