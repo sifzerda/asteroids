@@ -171,8 +171,9 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
       const offset = 40; // Offset distance from the ship to avoid affecting ship motion
       const projectileX = ship.position.x + Math.cos(ship.angle) * offset;
       const projectileY = ship.position.y + Math.sin(ship.angle) * offset;
-      const projectileBody = Bodies.rectangle(projectileX, projectileY, 5, 5, {
+      const projectileBody = Bodies.rectangle(projectileX, projectileY, 15, 3, { // Change dimensions here
         frictionAir: 0.01, // Adjust air resistance
+        angle: ship.angle, // Set the angle of the projectile to match the ship
         render: {
           fillStyle: '#00FFDC' // cyan
         },
@@ -186,7 +187,7 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
       const velocityX = Math.cos(ship.angle) * speed;
       const velocityY = Math.sin(ship.angle) * speed;
       Body.setVelocity(projectileBody, { x: velocityX, y: velocityY });
-
+  
       const newProjectile = {
         body: projectileBody,
         rotation: ship.angle,
@@ -194,7 +195,7 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
       };
       World.add(engine.world, projectileBody);
       setProjectiles(prev => [...prev, newProjectile]);
-
+  
       // Remove the projectile after 2 seconds (2 seconds)
       setTimeout(() => {
         World.remove(engine.world, projectileBody);
@@ -280,7 +281,8 @@ const velocityX = Math.cos(ship.angle + spreadOffset) * speed + (Math.random() -
     const projectileStyle = useSpring({
       left: `${position.x}px`,
       top: `${position.y}px`,
-      transform: `rotate(${position.rotation}deg)`,
+      // fire orientation match ship:
+      transform: `rotate(${position.body.angle}rad)`, // Use radians for rotation
       config: {
         tension: 170,
         friction: 26,
