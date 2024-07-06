@@ -234,6 +234,7 @@ border: 2px solid var(--volt);
   transform: translate(-50%, -50%);
   color: #ffffff;
   font-size: 48px;
+  z-index: 100;
 }
 
 .score-display {

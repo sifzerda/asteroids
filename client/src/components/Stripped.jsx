@@ -388,6 +388,35 @@ const Stripped = () => {
     };
   }, [engine, projectiles, asteroids, asteroidSizes, asteroidHits]);
 
+  ///////////////////////////////////////////////////////////////////////////////
+
+useEffect(() => {
+  const handleCollisions = (event) => {
+    const pairs = event.pairs;
+
+    pairs.forEach(pair => {
+      const { bodyA, bodyB } = pair;
+
+      const isShipA = bodyA === ship;
+      const isShipB = bodyB === ship;
+      const isAsteroidA = asteroids.find(ast => ast === bodyA);
+      const isAsteroidB = asteroids.find(ast => ast === bodyB);
+
+      if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
+        setGameOver(true);
+      }
+    });
+  };
+
+  Events.on(engine, 'collisionStart', handleCollisions);
+
+  return () => {
+    Events.off(engine, 'collisionStart', handleCollisions);
+  };
+}, [engine, ship, asteroids, setGameOver]);
+
+///////////////////////////////////////////////////////////////////////////////
+
   useEffect(() => {
     // Continuous score increment example
     const scoreInterval = setInterval(() => {
