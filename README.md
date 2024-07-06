@@ -115,17 +115,29 @@ Ship’s movement wraps to other side of game boundary when passing outside, wit
 const wrapPosition, and Matter Wrap
 ```
 Wraps game boundary around so there is no game edge; objects pass around to opposite side.
-
-
-
-
-
+ ```bash
+useHotkeys
+```
+Hook which simplifies movement control code.
 
 (B) Ship:
 
+ ```bash
+  const [rotationSpeed, setRotationSpeed] = useState(0.15)];
+```
+sets ship rotation speed.
+ ```bash
+Body.rotate(shipBody, -Math.PI / 2)
+```
+Initializes ship's starting position (rotated so facing up). Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
+
+ ```bash
+const shipBody = Bodies.fromVertices, const vertices
+```
+Shapes ship body.
+
 (C) Projectile fire:
 
-Sets ship speed and rotational radius.
 ```bash
 shootProjectile
 ```
@@ -135,17 +147,21 @@ setProjectiles
 ```
 Limits asteroid and projectile fire to wrap the game boundary.
 
-
-
 (D) Thrust fire:
-
-
+```bash
+const makeExhaust
+```
+replicates projectile fire but displaced to ship back by 'offset' and renders on arrow key up.
 
 (E) Asteroids:
 ```bash
-useEffect…initialAsteroids
+useEffect…createAsteroids
 ```
-Creates some starting asteroids in random starting position and inertia (velocity).
+Creates some starting asteroids [size, number, rotation, velocity].
+ ```bash
+useEffect...const handleCollisions
+```
+When asteroids are hit, they split into new asteroids with differing initial velocities, and size property.
 
  (F) Game
  ```bash
@@ -153,27 +169,16 @@ const gameLoop
 ```
 Game runs (updates) until game ends. API ‘requestAnimationFrame’ smoothes updates (of gameLoop) into continual flow/animation. Hook requestRef gives each animation ‘frame’ an id, allowing gameLoop to cease on any frame.
 
-
-
-3.  <u>const checkCollisions and projectiles.forEach:</u> delimits collision radius of ship and asteroids, and projectiles and asteroids.
-4.  <u>handleProjectileCollision:</u> when asteroids are hit, they split into new asteroids with differing initial velocities, and size property.
-5.  <u>const Projectile:</u> makes projectile lifespan a (decaying) timer from firing.
-6.  <u>const moveAsteroid:</u> handles  asteroid motion and speed.
-7.  <u>useHotKeys: </u> hook which simplifies movement control code.
-8.  <u>shipStyle, asteroidStyle, projectileStyle: </u> react-spring adds some physics config options to game objects.
-9.  <u></u>
-10. <u></u>
-11. <u></u>
-12. <u></u>
-13. <u></u>
-14. <u></u>
-15. <u>const [rotationSpeed, setRotationSpeed] = useState(0.08): </u> sets ship rotation speed.
-16. <u>const shipBody = Bodies.fromVertices, const vertices: </u> Shapes ship body. 
-17. <u>Body.rotate(shipBody, -Math.PI / 2): </u> Initializes ship's starting position (rotated so facing up). Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
-18. <u>UseHotkeys: </u> control binding, simplifies movement code.
-19. <u>gameLoop, requestAnimationFrame </u> repeats game updates, and syncs with display refresh rate to create animation.
-20. <u></u>
-21. <u></u>
+ 
+1.  <u></u>
+2.  <u></u>
+3.  <u></u>
+4.  <u></u>
+5.  <u></u>
+6.  <u></u>  
+ 
+7.  <u></u>
+8.  <u></u>
 
 ## (7) Alternative Config
 
@@ -349,8 +354,3 @@ Distributed under the MIT License. See LICENSE.txt for more information.
 ## (15) Project status
 
 This project is completed. 
-
-Otherwise it has a couple of minor, non-game-breaking bug issues:
-- Cards can be inserted into tableau piles behind other cards. You have to make sure you drop the card onto the correct (topmost) card.
-- Sometimes cards dropped onto tableau piles turn facedown. You have to click them to turn them back faceup.
-- Further development to fix these issues needed.

@@ -87,7 +87,6 @@ const Stripped = () => {
 
         const numVertices = Math.floor(Math.random() * 5) + 5;
         const vertices = randomVertices(numVertices, radius);
-
         const startX = Math.random() * 1500;
         const startY = Math.random() * 680;
         const velocityX = (Math.random() - 0.5) * 4;
