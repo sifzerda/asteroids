@@ -242,19 +242,16 @@ border: 2px solid var(--volt);
   left: 20px;
   color: #ffffff;
   font-size: 24px;
-  z-Index: 100;
+  z-index: 100;
 }
 
 .level-display {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
+  top: 60px; /* Adjust the top position to create space below the score */
+  left: 20px; /* Adjust the left position to align with the score */
   color: white;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 5px;
+  font-size: 24px;
+  z-index: 100;
 }
 
 .game-board {
