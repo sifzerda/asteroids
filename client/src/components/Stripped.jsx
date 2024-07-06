@@ -489,15 +489,17 @@ useEffect(() => {
   return (
     <div className="game-container" ref={gameRef}>
       {gameOver && (
+        <div className="game-over-overlay">
         <div className="game-over">
           Game Over
+        </div>
         </div>
       )}
       <div className="score-display">
         Score: {score}
       </div>
       <div className="level-display">
-        Level: {level} {/* Replace {level} with your level state */}
+        Level: {level}  
       </div>
     </div>
   );

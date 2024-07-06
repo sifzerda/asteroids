@@ -227,13 +227,24 @@ border: 2px solid var(--volt);
   position: relative;
 }
 
-.game-over {
+.game-over-overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #ffffff;
-  font-size: 48px;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-opaque background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.game-over {
+  font-size: 48px; /* Example font size */
+  color: #fff; /* Example text color */
+  text-align: center;
+  padding: 20px;
+  background-color: #333; /* Example background color */
+  border-radius: 10px; /* Example border radius */
   z-index: 100;
 }
 
