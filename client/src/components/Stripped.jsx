@@ -108,6 +108,7 @@ const Stripped = () => {
             }
           }
         });
+
         Body.setVelocity(asteroid, { x: velocityX, y: velocityY });
         Body.setAngularVelocity(asteroid, 0.01); // Adjust angular velocity as needed
         newAsteroids.push(asteroid);
@@ -301,7 +302,66 @@ const Stripped = () => {
       // Remove the projectile
       World.remove(engine.world, projectile);
       setProjectiles(prev => prev.filter(proj => proj.body !== projectile));
-    
+///// impact particle effects on asteroid hit //////////////////////////////////////////////
+  const emitParticles = () => {
+    const particleCount = 5;
+    const particleSpeed = 2;
+    const particleSpread = 4;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particleX = projectile.position.x + (Math.random() - 0.5) * 10;
+      const particleY = projectile.position.y + (Math.random() - 0.5) * 10;
+
+      // Generate random number of vertices
+      const numVertices = Math.floor(Math.random() * 5) + 5;
+      const vertices = [];
+      for (let j = 0; j < numVertices; j++) {
+        const angle = (j / numVertices) * Math.PI * 2;
+        const radius = 2 + Math.random() * 20; // Adjust radius as needed
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        vertices.push({ x, y });
+      }
+
+      const particleBody = Bodies.fromVertices(particleX, particleY, vertices, {
+        frictionAir: 0,
+        restitution: 0.4,
+        render: {
+          fillStyle: 'transparent', // Transparent fill
+          strokeStyle: '#ffffff', // Outline color
+          lineWidth: 2 // Outline width
+        },
+        plugin: {
+          wrap: {
+            min: { x: 0, y: 0 },
+            max: { x: 1500, y: 680 }
+          }
+        }
+      });
+
+      const angle = Math.atan2(particleY - asteroid.position.y, particleX - asteroid.position.x);
+      const velocityX = Math.cos(angle + (Math.random() - 0.5) * particleSpread) * particleSpeed;
+      const velocityY = Math.sin(angle + (Math.random() - 0.5) * particleSpread) * particleSpeed;
+      Body.setVelocity(particleBody, { x: velocityX, y: velocityY });
+
+      setTimeout(() => {
+        World.remove(engine.world, particleBody);
+        setParticles(prev => prev.filter(p => p.body !== particleBody));
+      }, 1000);
+
+      const newParticle = {
+        body: particleBody,
+        rotation: 0, // Adjust rotation if needed
+        lifetime: 1000 // Adjust lifetime if needed
+      };
+
+      World.add(engine.world, particleBody);
+      setParticles(prev => [...prev, newParticle]);
+    }
+  };
+
+  emitParticles();
+/////////////////////////////////////////////////////////////////////////
       // Get index of the asteroid
       const asteroidIndex = asteroids.findIndex(ast => ast === asteroid);
       if (asteroidIndex !== -1) {
