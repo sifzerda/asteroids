@@ -14,6 +14,7 @@ const Stripped = () => {
   const [rotationSpeed, setRotationSpeed] = useState(0.15);
   const [asteroidSizes, setAsteroidSizes] = useState([]);
   const [asteroidHits, setAsteroidHits] = useState([]);
+  const [score, setScore] = useState(0); // Initialize score state
   const gameRef = useRef();
 
   const MAX_PARTICLES = 10;
@@ -298,6 +299,9 @@ const Stripped = () => {
         const updatedHits = [...asteroidHits];
         updatedHits[asteroidIndex] = currentHits;
         setAsteroidHits(updatedHits);
+
+               // Increment score
+               setScore(prevScore => prevScore + 10); // Adjust score increment as needed
   
         // Check if asteroid should be removed
         if (currentHits >= 2) {
@@ -369,12 +373,15 @@ const Stripped = () => {
   }, [engine, projectiles, asteroids, asteroidSizes, asteroidHits]);
 
   return (
-    <div ref={gameRef} style={{ width: '100%', height: '100%', background: '#111111' }}>
+    <div className="game-container" ref={gameRef}>
       {gameOver && (
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#ffffff', fontSize: '48px' }}>
+        <div className="game-over">
           Game Over
         </div>
       )}
+      <div className="score-display">
+        Score: {score}
+      </div>
     </div>
   );
 };
