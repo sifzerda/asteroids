@@ -1,6 +1,7 @@
 // all ship specs
 // asteroids and collision with projectile
 // no level progression
+// update gravity 
 
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
