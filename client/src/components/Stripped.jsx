@@ -476,7 +476,7 @@ const Stripped = () => {
               if (updatedLives <= 0) {
                 setGameOver(true);
               } else {
-                // Reset ship position
+                // Reset ship position to center
                 Body.setPosition(ship, { x: 790, y: 350 });
                 Body.setVelocity(ship, { x: 0, y: 0 });
                 Body.setAngularVelocity(ship, 0);
