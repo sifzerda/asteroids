@@ -18,6 +18,7 @@ const Stripped = () => {
   const [score, setScore] = useState(0); // Initialize score at 0
   const [level, setLevel] = useState(1); // Initialize level at 1
   const [lives, setLives] = useState(3); // Initialize lives at 3
+
   const gameRef = useRef();
 
   const MAX_PARTICLES = 10;
@@ -38,6 +39,93 @@ const Stripped = () => {
     }
     return vertices;
   };
+
+    // Function to emit explosion particles
+    const emitExplosionParticles = (position) => {
+      const particleCount = 30; // Adjust particle count as needed
+      const particleSpeed = 5; // Adjust particle speed as needed
+      const particleSpread = Math.PI * 2; // Full circle spread
+  
+      for (let i = 0; i < particleCount; i++) {
+        const angle = (i / particleCount) * particleSpread;
+        const velocityX = Math.cos(angle) * particleSpeed;
+        const velocityY = Math.sin(angle) * particleSpeed;
+  
+        const particleBody = Bodies.circle(position.x, position.y, 3, {
+          frictionAir: 0,
+          restitution: 0.4,
+          render: {
+            fillStyle: '#ff0000', // Red color for explosion particles
+          },
+          plugin: {
+            wrap: {
+              min: { x: 0, y: 0 },
+              max: { x: 1500, y: 680 },
+            },
+          },
+        });
+  
+        Body.setVelocity(particleBody, { x: velocityX, y: velocityY });
+        World.add(engine.world, particleBody);
+  
+        setTimeout(() => {
+          World.remove(engine.world, particleBody);
+          setParticles((prev) => prev.filter((p) => p.body !== particleBody));
+        }, 1000);
+      }
+    };
+  
+    // Function to replace all asteroids
+    const replaceAsteroids = () => {
+      const asteroidRadii = [80, 100, 120, 140, 160]; // Predefined radii for asteroids
+      const numberOfAsteroids = 5; // Number of asteroids to replace
+  
+      const newAsteroids = [];
+      const newAsteroidSizes = [];
+      const newAsteroidHits = [];
+  
+      for (let i = 0; i < numberOfAsteroids; i++) {
+        const radiusIndex = Math.floor(Math.random() * asteroidRadii.length);
+        const radius = asteroidRadii[radiusIndex];
+        newAsteroidSizes.push(radius);
+        newAsteroidHits.push(0);
+  
+        const numVertices = Math.floor(Math.random() * 5) + 5;
+        const vertices = randomVertices(numVertices, radius);
+  
+        // Randomize starting position anywhere outside the visible screen
+        const startX = Math.random() * 3000 - 750; // Randomize x position across a wider area
+        const startY = Math.random() * 1700 - 340; // Randomize y position across a wider area
+  
+        // Randomize velocity direction and speed
+        const velocityX = (Math.random() - 0.5) * 4; // Random velocity in x direction
+        const velocityY = (Math.random() - 0.5) * 4; // Random velocity in y direction
+  
+        const asteroid = Bodies.fromVertices(startX, startY, vertices, {
+          frictionAir: 0,
+          render: {
+            fillStyle: 'transparent',
+            strokeStyle: '#ffffff',
+            lineWidth: 2,
+          },
+          plugin: {
+            wrap: {
+              min: { x: 0, y: 0 },
+              max: { x: 1500, y: 680 },
+            },
+          },
+        });
+  
+        Body.setVelocity(asteroid, { x: velocityX, y: velocityY });
+        Body.setAngularVelocity(asteroid, 0.01); // Adjust angular velocity as needed
+        newAsteroids.push(asteroid);
+        World.add(engine.world, asteroid);
+      }
+  
+      setAsteroids(newAsteroids);
+      setAsteroidSizes(newAsteroidSizes);
+      setAsteroidHits(newAsteroidHits);
+    };
 //------------------------// SET UP MATTER.JS GAME OBJECTS //-------------------------//
   useEffect(() => {
     Matter.use(MatterWrap);
@@ -543,6 +631,20 @@ const Stripped = () => {
                 Body.setPosition(ship, { x: 790, y: 350 });
                 Body.setVelocity(ship, { x: 0, y: 0 });
                 Body.setAngularVelocity(ship, 0);
+
+                emitExplosionParticles(ship.position);
+                          // Remove all asteroids
+          asteroids.forEach((asteroid) => {
+            World.remove(engine.world, asteroid);
+          });
+// Replace asteroids after a delay
+setTimeout(() => {
+  replaceAsteroids();
+  setGameOver(false);
+}, 2000); // Adjust delay as needed
+
+
+
               }
               return updatedLives;
             });
@@ -556,7 +658,7 @@ const Stripped = () => {
     return () => {
       Events.off(engine, 'collisionStart', handleCollisions);
     };
-  }, [engine, ship, asteroids, gameOver, setGameOver, setLives]);
+  }, [engine, ship, asteroids, gameOver, setGameOver, setLives, emitExplosionParticles]);
 
 //--------------------------------// CLOCKING SCORE //----------------------------------//
 
