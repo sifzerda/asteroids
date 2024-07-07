@@ -693,7 +693,7 @@ setTimeout(() => {
 //--------------------------------// CLOCKING SCORE //----------------------------------//
 
 useEffect(() => {
-  // Continuous score increment example
+  // Continuous score increment 
   const scoreInterval = setInterval(() => {
     if (!gameOver) {
       setScore(prevScore => prevScore + 1); // Increment score by 1 point every second
