@@ -457,35 +457,36 @@ const Stripped = () => {
 
   ///////////////////////////////////////////////////////////////////////////////
 
-useEffect(() => {
-  const handleCollisions = (event) => {
-    const pairs = event.pairs;
-
-    pairs.forEach(pair => {
-      const { bodyA, bodyB } = pair;
-
-      const isShipA = bodyA === ship;
-      const isShipB = bodyB === ship;
-      const isAsteroidA = asteroids.find(ast => ast === bodyA);
-      const isAsteroidB = asteroids.find(ast => ast === bodyB);
-
-      if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
-        // Decrement lives when ship collides with an asteroid
-        setLives(prevLives => prevLives - 1);
-        // Check if game over condition (lives <= 0)
-        if (lives <= 1) {
-          setGameOver(true);
+  useEffect(() => {
+    const handleCollisions = (event) => {
+      const pairs = event.pairs;
+  
+      pairs.forEach(pair => {
+        const { bodyA, bodyB } = pair;
+  
+        const isShipA = bodyA === ship;
+        const isShipB = bodyB === ship;
+        const isAsteroidA = asteroids.find(ast => ast === bodyA);
+        const isAsteroidB = asteroids.find(ast => ast === bodyB);
+  
+        if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
+          setLives(prevLives => {
+            const updatedLives = prevLives - 1;
+            if (updatedLives <= 0) {
+              setGameOver(true);
+            }
+            return updatedLives;
+          });
         }
-      }
-    });
-  };
-
-  Events.on(engine, 'collisionStart', handleCollisions);
-
-  return () => {
-    Events.off(engine, 'collisionStart', handleCollisions);
-  };
-}, [engine, ship, asteroids, setGameOver]);
+      });
+    };
+  
+    Events.on(engine, 'collisionStart', handleCollisions);
+  
+    return () => {
+      Events.off(engine, 'collisionStart', handleCollisions);
+    };
+  }, [engine, ship, asteroids, setGameOver, setLives]);
 
 //////////////////////////////////// CLOCKING SCORE ///////////////////////////////////////////
 
