@@ -259,8 +259,8 @@ border: 2px solid var(--volt);
 
 .level-display {
   position: absolute;
-  top: 60px; /* Adjust the top position to create space below the score */
-  left: 20px; /* Adjust the left position to align with the score */
+  top: 60px; /* below the score */
+  left: 20px; 
   color: white;
   font-size: 24px;
   z-index: 100;
@@ -268,8 +268,8 @@ border: 2px solid var(--volt);
 
 .lives-display {
   position: absolute;
-  top: 100px; /* Adjust positioning as needed */
-  left: 20px; /* Adjust positioning as needed */
+  top: 100px; /* below the score and level */
+  left: 20px; 
   font-size: 24px;
   color: #ffffff;
   z-index: 100;
