@@ -4,7 +4,7 @@ import Matter, { Engine, Render, World, Bodies, Body, Events } from 'matter-js';
 import MatterWrap from 'matter-wrap';
 
 const Stripped = () => {
-  const [engine] = useState(() => Engine.create({ gravity: { x: 0, y: 0 } }));
+  const [engine] = useState(Engine.create());
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [projectiles, setProjectiles] = useState([]);
   const [particles, setParticles] = useState([]);
@@ -35,7 +35,7 @@ const Stripped = () => {
 
   useEffect(() => {
     Matter.use(MatterWrap);
-
+    engine.world.gravity.y = 0;
     const render = Render.create({
       element: gameRef.current,
       engine,
