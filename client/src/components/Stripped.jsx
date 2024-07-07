@@ -565,7 +565,7 @@ const Stripped = () => {
         const isAsteroidB = asteroids.find(ast => ast === bodyB);
   
         if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
-          //------------------------------------ subtract life ------------------------------------------//
+//------------------------------------ subtract life  on crash ------------------------------------------//
            if (lives === 0) {
             setGameOver(true);
            } else {
