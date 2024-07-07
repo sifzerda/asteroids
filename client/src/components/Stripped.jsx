@@ -40,6 +40,8 @@ const Stripped = () => {
     return vertices;
   };
 
+  //------------------------// asteroids explode on ship hit //-------------------------//
+
     // Function to emit explosion particles
     const emitExplosionParticles = (position) => {
       const particleCount = 30; // Adjust particle count as needed
@@ -51,7 +53,7 @@ const Stripped = () => {
         const velocityX = Math.cos(angle) * particleSpeed;
         const velocityY = Math.sin(angle) * particleSpeed;
   
-        const particleBody = Bodies.circle(position.x, position.y, 3, {
+        const particleBody = Bodies.circle(position.x, position.y, 2, {
           frictionAir: 0,
           restitution: 0.4,
           render: {
@@ -74,8 +76,8 @@ const Stripped = () => {
         }, 1000);
       }
     };
-  
-    // Function to replace all asteroids
+
+    // Function to replace all exploded asteroids
     const replaceAsteroids = () => {
       const asteroidRadii = [80, 100, 120, 140, 160]; // Predefined radii for asteroids
       const numberOfAsteroids = 5; // Number of asteroids to replace
