@@ -18,6 +18,7 @@ const Stripped = () => {
   const [score, setScore] = useState(0); // Initialize score at 0
   const [level, setLevel] = useState(1); // Initialize level at 1
   const [lives, setLives] = useState(3); // Initialize lives at 3
+  const [destroyedAsteroids, setDestroyedAsteroids] = useState(0); // Initialize destroyed asteroids count
 
   const gameRef = useRef();
 
@@ -77,10 +78,10 @@ const Stripped = () => {
       }
     };
 
-    // Function to replace all exploded asteroids
+    // Function to replace all exploded asteroids --------------------------------------------------------//
     const replaceAsteroids = () => {
       const asteroidRadii = [80, 100, 120, 140, 160]; // Predefined radii for asteroids
-      const numberOfAsteroids = 5; // Number of asteroids to replace
+      const numberOfAsteroids = 1; // Number of asteroids to replace
   
       const newAsteroids = [];
       const newAsteroidSizes = [];
@@ -128,10 +129,6 @@ const Stripped = () => {
       setAsteroidSizes(newAsteroidSizes);
       setAsteroidHits(newAsteroidHits);
     };
-
-
-// Interval to replace asteroids every 5 seconds
-//setInterval(replaceAsteroids, 10000);
 
 //------------------------// SET UP MATTER.JS GAME OBJECTS //-------------------------//
   useEffect(() => {
@@ -226,7 +223,7 @@ const Stripped = () => {
     };
     createAsteroids();
 
-        // Interval to replace asteroids every 10 seconds
+        // Interval to replace asteroids every 10 seconds --- causes lag
         //const intervalId = setInterval(createAsteroids, 60000);
 
     const updateShipPosition = () => {
@@ -240,7 +237,7 @@ const Stripped = () => {
     Events.on(engine, 'beforeUpdate', updateShipPosition);
 
     return () => {
-      //clearInterval(intervalId);
+      //clearInterval(intervalId); -- causes lag
       Render.stop(render);
       World.clear(engine.world);
       Engine.clear(engine);
@@ -492,6 +489,14 @@ const Stripped = () => {
           setAsteroids(prev => prev.filter(ast => ast !== asteroid));
           setAsteroidSizes(prev => prev.filter((size, idx) => idx !== asteroidIndex));
           setAsteroidHits(prev => prev.filter((hits, idx) => idx !== asteroidIndex));
+
+                    // Update the destroyed asteroids count and replace asteroids if needed
+                    setDestroyedAsteroids((prev) => prev + 1);
+
+                    if (destroyedAsteroids + 1 === 5) {
+                      replaceAsteroids();
+                      setDestroyedAsteroids(0);
+                    }
   
           // Check if level should be incremented
           if (score % 100 === 0) {
