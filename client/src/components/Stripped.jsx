@@ -43,7 +43,7 @@ const Stripped = () => {
   //------------------------// asteroids explode on ship hit //-------------------------//
 
     // Function to emit explosion particles
-    const emitExplosionParticles = (position) => {
+    const emitExplosionParticles = (collisionPosition) => {
       const particleCount = 30; // Adjust particle count as needed
       const particleSpeed = 5; // Adjust particle speed as needed
       const particleSpread = Math.PI * 2; // Full circle spread
@@ -53,7 +53,7 @@ const Stripped = () => {
         const velocityX = Math.cos(angle) * particleSpeed;
         const velocityY = Math.sin(angle) * particleSpeed;
   
-        const particleBody = Bodies.circle(position.x, position.y, 2, {
+        const particleBody = Bodies.circle(collisionPosition.x, collisionPosition.y, 2, {
           frictionAir: 0,
           restitution: 0.4,
           render: {
@@ -610,7 +610,7 @@ const Stripped = () => {
                   World.remove(engine.world, pieceBody);
                   setParticles(prev => prev.filter(p => p.body !== pieceBody));
                   // crash takes 8 secs to disappear
-                }, 8000);
+                }, 6000);
             
                 const newPiece = {
                   body: pieceBody,
@@ -634,7 +634,13 @@ const Stripped = () => {
                 Body.setVelocity(ship, { x: 0, y: 0 });
                 Body.setAngularVelocity(ship, 0);
 
-                emitExplosionParticles(ship.position);
+                      // Calculate collision position as the midpoint between bodyA and bodyB
+      const collisionPosition = {
+        x: (bodyA.position.x + bodyB.position.x) / 2,
+        y: (bodyA.position.y + bodyB.position.y) / 2,
+      };
+
+                emitExplosionParticles(collisionPosition);
                           // Remove all asteroids
           asteroids.forEach((asteroid) => {
             World.remove(engine.world, asteroid);
