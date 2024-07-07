@@ -565,9 +565,78 @@ const Stripped = () => {
         const isAsteroidB = asteroids.find(ast => ast === bodyB);
   
         if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
-//------------------------------------ subtract life  on crash ------------------------------------------//
+          //----------------------------------- expel ship parts --------------------------------------------//
+          const emitCrash = (shipBody) => {
+            const pieceCount = 10;
+            const pieceSpeed = 10;
+            const pieceSpread = 4;
+          
+            for (let i = 0; i < pieceCount; i++) {
+              const pieceX = shipBody.position.x + (Math.random() - 0.5) * 10;
+              const pieceY = shipBody.position.y + (Math.random() - 0.5) * 10;
+          
+              // Generate random number of vertices
+              const numVertices = Math.floor(Math.random() * 5) + 5;
+              const vertices = [];
+              for (let j = 0; j < numVertices; j++) {
+                const angle = (j / numVertices) * Math.PI * 2;
+                const radius = 2 + Math.random() * 20; // Adjust radius as needed
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                vertices.push({ x, y });
+              }
+          
+              const pieceBody = Bodies.fromVertices(pieceX, pieceY, vertices, {
+                frictionAir: 0,
+                restitution: 0.4,
+                render: {
+                  fillStyle: 'transparent', // Transparent fill
+                  strokeStyle: '#ffffff', // Outline color
+                  lineWidth: 2 // Outline width
+                },
+                plugin: {
+                  wrap: {
+                    min: { x: 0, y: 0 },
+                    max: { x: 1500, y: 680 }
+                  }
+                }
+              });
+          
+              const angle = Math.atan2(pieceY - shipBody.position.y, pieceX - shipBody.position.x);
+              const velocityX = Math.cos(angle + (Math.random() - 0.5) * pieceSpread) * pieceSpeed;
+              const velocityY = Math.sin(angle + (Math.random() - 0.5) * pieceSpread) * pieceSpeed;
+              Body.setVelocity(pieceBody, { x: velocityX, y: velocityY });
+          
+              setTimeout(() => {
+                World.remove(engine.world, pieceBody);
+                setParticles(prev => prev.filter(p => p.body !== pieceBody));
+                // crash takes 8 secs to disappear
+              }, 6000);
+          
+              const newPiece = {
+                body: pieceBody,
+                rotation: 5, // Adjust rotation if needed
+                lifetime: 1000 // Adjust lifetime if needed
+              };
+          
+              World.add(engine.world, pieceBody);
+              setParticles(prev => [...prev, newPiece]);
+            }
+          };
+          emitCrash(ship); // trigger when ship collides with asteroid
+
+      // Calculate collision position as the midpoint between bodyA and bodyB
+      const collisionPosition = {
+        x: (bodyA.position.x + bodyB.position.x) / 2,
+        y: (bodyA.position.y + bodyB.position.y) / 2,
+      };
+//------------------------------------ subtract life on crash ------------------------------------------//
            if (lives === 0) {
             setGameOver(true);
+            emitCrash(ship); // trigger when ship collides with asteroid
+            emitExplosionParticles(collisionPosition);
+
+
            } else {
             setLives(prevLives => {
               const updatedLives = prevLives - 1;
@@ -577,74 +646,6 @@ const Stripped = () => {
                 Body.setVelocity(ship, { x: 0, y: 0 });
                 Body.setAngularVelocity(ship, 0);
                 
-//----------------------------------- expel ship parts ------------------------------//
-            const emitCrash = (shipBody) => {
-              const pieceCount = 10;
-              const pieceSpeed = 10;
-              const pieceSpread = 4;
-            
-              for (let i = 0; i < pieceCount; i++) {
-                const pieceX = shipBody.position.x + (Math.random() - 0.5) * 10;
-                const pieceY = shipBody.position.y + (Math.random() - 0.5) * 10;
-            
-                // Generate random number of vertices
-                const numVertices = Math.floor(Math.random() * 5) + 5;
-                const vertices = [];
-                for (let j = 0; j < numVertices; j++) {
-                  const angle = (j / numVertices) * Math.PI * 2;
-                  const radius = 2 + Math.random() * 20; // Adjust radius as needed
-                  const x = Math.cos(angle) * radius;
-                  const y = Math.sin(angle) * radius;
-                  vertices.push({ x, y });
-                }
-            
-                const pieceBody = Bodies.fromVertices(pieceX, pieceY, vertices, {
-                  frictionAir: 0,
-                  restitution: 0.4,
-                  render: {
-                    fillStyle: 'transparent', // Transparent fill
-                    strokeStyle: '#ffffff', // Outline color
-                    lineWidth: 2 // Outline width
-                  },
-                  plugin: {
-                    wrap: {
-                      min: { x: 0, y: 0 },
-                      max: { x: 1500, y: 680 }
-                    }
-                  }
-                });
-            
-                const angle = Math.atan2(pieceY - shipBody.position.y, pieceX - shipBody.position.x);
-                const velocityX = Math.cos(angle + (Math.random() - 0.5) * pieceSpread) * pieceSpeed;
-                const velocityY = Math.sin(angle + (Math.random() - 0.5) * pieceSpread) * pieceSpeed;
-                Body.setVelocity(pieceBody, { x: velocityX, y: velocityY });
-            
-                setTimeout(() => {
-                  World.remove(engine.world, pieceBody);
-                  setParticles(prev => prev.filter(p => p.body !== pieceBody));
-                  // crash takes 8 secs to disappear
-                }, 6000);
-            
-                const newPiece = {
-                  body: pieceBody,
-                  rotation: 5, // Adjust rotation if needed
-                  lifetime: 1000 // Adjust lifetime if needed
-                };
-            
-                World.add(engine.world, pieceBody);
-                setParticles(prev => [...prev, newPiece]);
-              }
-            };
-            emitCrash(ship); // trigger when ship collides with asteroid
-
-
-
-       
-                      // Calculate collision position as the midpoint between bodyA and bodyB
-      const collisionPosition = {
-        x: (bodyA.position.x + bodyB.position.x) / 2,
-        y: (bodyA.position.y + bodyB.position.y) / 2,
-      };
 
                 emitExplosionParticles(collisionPosition);
                           // Remove all asteroids
