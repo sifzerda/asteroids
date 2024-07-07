@@ -371,6 +371,8 @@ const Stripped = () => {
     }
   };
 
+  // --------------------------------// HOTKEYS //-----------------------------------//
+
   useHotkeys('up', moveShipUp, [ship]);
   useHotkeys('up', makeExhaust, [ship]);
   useHotkeys('left', rotateShipLeft, [ship, rotationSpeed]);
