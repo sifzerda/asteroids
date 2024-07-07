@@ -88,14 +88,18 @@ const Stripped = () => {
         const radius = asteroidRadii[radiusIndex];
         newAsteroidSizes.push(radius);
         newAsteroidHits.push(0);
-
+    
         const numVertices = Math.floor(Math.random() * 5) + 5;
         const vertices = randomVertices(numVertices, radius);
-        const startX = Math.random() * 1500;
-        const startY = Math.random() * 680;
-        const velocityX = (Math.random() - 0.5) * 2;
-        const velocityY = (Math.random() - 0.5) * 2;
-
+    
+        // Randomize starting position anywhere outside the visible screen
+        const startX = Math.random() * 3000 - 750; // Randomize x position across a wider area
+        const startY = Math.random() * 1700 - 340; // Randomize y position across a wider area
+    
+        // Randomize velocity direction and speed
+        const velocityX = (Math.random() - 0.5) * 4; // Random velocity in x direction
+        const velocityY = (Math.random() - 0.5) * 4; // Random velocity in y direction
+    
         const asteroid = Bodies.fromVertices(startX, startY, vertices, {
           frictionAir: 0,
           render: {
