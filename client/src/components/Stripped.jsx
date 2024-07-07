@@ -468,7 +468,7 @@ const Stripped = () => {
         const isShipB = bodyB === ship;
         const isAsteroidA = asteroids.find(ast => ast === bodyA);
         const isAsteroidB = asteroids.find(ast => ast === bodyB);
-  
+  // 3 lives lost = game over
         if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
           setLives(prevLives => {
             const updatedLives = prevLives - 1;
@@ -501,6 +501,10 @@ useEffect(() => {
   return () => clearInterval(scoreInterval); // Cleanup on unmount
 }, [gameOver]);
 
+////////////////////////////////// LIVE DISPLAY /////////////////////////////////////////////
+
+ 
+
 ////////////////////////////////// RENDERING /////////////////////////////////////////////
 
 return (
@@ -519,7 +523,7 @@ return (
       Level: {level}
     </div>
     <div className="lives-display">
-      Lives: {lives}
+    Lives: {'▷'.repeat(lives)}
     </div>
   </div>
   );
