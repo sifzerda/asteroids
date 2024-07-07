@@ -519,7 +519,8 @@ const Stripped = () => {
                 setTimeout(() => {
                   World.remove(engine.world, pieceBody);
                   setParticles(prev => prev.filter(p => p.body !== pieceBody));
-                }, 1000);
+                  // crash takes 8 secs to disappear
+                }, 8000);
             
                 const newPiece = {
                   body: pieceBody,
