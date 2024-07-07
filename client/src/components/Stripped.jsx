@@ -17,6 +17,7 @@ const Stripped = () => {
   const [asteroidHits, setAsteroidHits] = useState([]);
   const [score, setScore] = useState(0); // Initialize score at 0
   const [level, setLevel] = useState(1); // Initialize level at 1
+  const [lives, setLives] = useState(3); // Initialize lives at 3
   const gameRef = useRef();
 
   const MAX_PARTICLES = 10;
@@ -469,7 +470,12 @@ useEffect(() => {
       const isAsteroidB = asteroids.find(ast => ast === bodyB);
 
       if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
-        setGameOver(true);
+        // Decrement lives when ship collides with an asteroid
+        setLives(prevLives => prevLives - 1);
+        // Check if game over condition (lives <= 0)
+        if (lives <= 1) {
+          setGameOver(true);
+        }
       }
     });
   };
@@ -481,7 +487,7 @@ useEffect(() => {
   };
 }, [engine, ship, asteroids, setGameOver]);
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// CLOCKING SCORE ///////////////////////////////////////////
 
 useEffect(() => {
   // Continuous score increment example
@@ -494,22 +500,27 @@ useEffect(() => {
   return () => clearInterval(scoreInterval); // Cleanup on unmount
 }, [gameOver]);
 
-  return (
-    <div className="game-container" ref={gameRef}>
-      {gameOver && (
-        <div className="game-over-overlay">
+////////////////////////////////// RENDERING /////////////////////////////////////////////
+
+return (
+  <div className="game-container" ref={gameRef}>
+    {gameOver && (
+      <div className="game-over-overlay">
         <div className="game-over">
           Game Over
         </div>
-        </div>
-      )}
-      <div className="score-display">
-        Score: {score}
       </div>
-      <div className="level-display">
-        Level: {level}  
-      </div>
+    )}
+    <div className="score-display">
+      Score: {score}
     </div>
+    <div className="level-display">
+      Level: {level}
+    </div>
+    <div className="lives-display">
+      Lives: {lives}
+    </div>
+  </div>
   );
 };
 
