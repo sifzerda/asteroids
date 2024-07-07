@@ -22,6 +22,7 @@ const Stripped = () => {
 
   const MAX_PARTICLES = 10;
   const MAX_PROJECTILES = 2;
+  
   window.decomp = decomp; // poly-decomp is available globally
 
 //------------------------------------------------------------------------------------//
