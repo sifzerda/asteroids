@@ -15,7 +15,6 @@
 
 // asteroids that are replaced through 'replaceAsteroids' function appear to not have any hit counter (?) or collision detection - make sure to add the hit counter and collision detection to the new asteroids
 
-
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Matter, { Engine, Render, World, Bodies, Body, Events } from 'matter-js';
