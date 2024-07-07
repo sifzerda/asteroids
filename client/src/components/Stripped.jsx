@@ -468,15 +468,17 @@ const Stripped = () => {
         const isShipB = bodyB === ship;
         const isAsteroidA = asteroids.find(ast => ast === bodyA);
         const isAsteroidB = asteroids.find(ast => ast === bodyB);
-  // 3 lives lost = game over
+  
         if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
-          setLives(prevLives => {
-            const updatedLives = prevLives - 1;
-            if (updatedLives <= 0) {
-              setGameOver(true);
-            }
-            return updatedLives;
-          });
+          if (!gameOver) { // Check if game is not over
+            setLives(prevLives => {
+              const updatedLives = prevLives - 1;
+              if (updatedLives <= 0) {
+                setGameOver(true);
+              }
+              return updatedLives;
+            });
+          }
         }
       });
     };
@@ -486,7 +488,7 @@ const Stripped = () => {
     return () => {
       Events.off(engine, 'collisionStart', handleCollisions);
     };
-  }, [engine, ship, asteroids, setGameOver, setLives]);
+  }, [engine, ship, asteroids, gameOver, setGameOver, setLives]);
 
 //////////////////////////////////// CLOCKING SCORE ///////////////////////////////////////////
 
