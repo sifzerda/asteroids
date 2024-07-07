@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-/* ------------------------- minesweeper -------------------------*/
+/* ------------------------- asteroids -------------------------*/
 
 h1 {
   font-family: 'VT323', monospace;
@@ -224,7 +224,7 @@ border: 2px solid var(--volt);
   width: 100%;
   height: 100%;
   background: #111111;
-  position: relative;
+  position: relative; /* Ensure absolute positioning works relative to this container */
 }
 
 .game-over-overlay {
@@ -247,6 +247,7 @@ border: 2px solid var(--volt);
   border-radius: 10px; /* Example border radius */
   z-index: 100;
 }
+
 
 .score-display {
   position: absolute;
@@ -317,6 +318,8 @@ border: 2px solid var(--volt);
   background-color: red;
   border-radius: 50%;
 }
+
+
 
 
 
