@@ -275,6 +275,10 @@ border: 2px solid var(--volt);
   z-index: 100;
 }
 
+.life-triangle {
+  color: var(--light-red);
+}
+
 .game-board {
   position: relative;
   width: 1500px;

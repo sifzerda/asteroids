@@ -523,7 +523,7 @@ return (
       Level: {level}
     </div>
     <div className="lives-display">
-    Lives: {'▷'.repeat(lives)}
+    Lives: <span className='life-triangle'>{'∆ '.repeat(lives)}</span>
     </div>
   </div>
   );
