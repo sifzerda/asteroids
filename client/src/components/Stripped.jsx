@@ -15,8 +15,8 @@ const Stripped = () => {
   const [rotationSpeed, setRotationSpeed] = useState(0.15);
   const [asteroidSizes, setAsteroidSizes] = useState([]);
   const [asteroidHits, setAsteroidHits] = useState([]);
-  const [score, setScore] = useState(0); // Initialize score state
-  const [level, setLevel] = useState(1); // Initialize level state
+  const [score, setScore] = useState(0); // Initialize score at 0
+  const [level, setLevel] = useState(1); // Initialize level at 1
   const gameRef = useRef();
 
   const MAX_PARTICLES = 10;
