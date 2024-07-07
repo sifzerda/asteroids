@@ -24,7 +24,9 @@ const Stripped = () => {
   const MAX_PROJECTILES = 2;
   window.decomp = decomp; // poly-decomp is available globally
 
-  // helper function to generate random vertices for generated asteroids
+//------------------------------------------------------------------------------------//
+
+//---// helper function to generate random vertices for generated asteroids //-------//
   const randomVertices = (numVertices, radius) => {
     const vertices = [];
     for (let i = 0; i < numVertices; i++) {
@@ -35,7 +37,7 @@ const Stripped = () => {
     }
     return vertices;
   };
-
+//------------------------// SET UP MATTER.JS GAME OBJECTS //-------------------------//
   useEffect(() => {
     Matter.use(MatterWrap);
     engine.world.gravity.y = 0;
@@ -76,7 +78,7 @@ const Stripped = () => {
 
     setShip(shipBody);
     World.add(engine.world, shipBody);
-
+//---------------------------------// ASTEROIDS //-----------------------------------//
     const createAsteroids = () => {
       const asteroidRadii = [80, 100, 120, 140, 160]; // Predefined radii for asteroids
       const numberOfAsteroids = 5;
@@ -166,7 +168,7 @@ const Stripped = () => {
       Body.rotate(ship, rotationSpeed);
     }
   };
-
+//-------------------------------- SHIP EXHAUST PARTICLES ---------------------------//
   const makeExhaust = () => {
     if (ship) {
       const exhaustCount = 5;
@@ -222,7 +224,7 @@ const Stripped = () => {
       });
     }
   };
-
+//----------------------------------- SHOOTING ------------------------------//
   const shootProjectile = () => {
     if (ship) {
       const speed = 10;
@@ -309,7 +311,7 @@ const Stripped = () => {
       // Remove the projectile
       World.remove(engine.world, projectile);
       setProjectiles(prev => prev.filter(proj => proj.body !== projectile));
-///// impact particle effects on asteroid hit //////////////////////////////////////////////
+//---------------------- // impact particles on asteroid fire // ----------------------//
   const emitParticles = () => {
     const particleCount = 5;
     const particleSpeed = 2;
@@ -368,7 +370,7 @@ const Stripped = () => {
   };
 
   emitParticles();
-/////////////////////////////////////////////////////////////////////////
+//------------------------// HIT ASTEROID SPLITTING // ---------------------------------//
       // Get index of the asteroid
       const asteroidIndex = asteroids.findIndex(ast => ast === asteroid);
       if (asteroidIndex !== -1) {
@@ -455,7 +457,7 @@ const Stripped = () => {
     };
   }, [engine, projectiles, asteroids, asteroidSizes, asteroidHits]);
 
-  ///////////////////////////////////////////////////////////////////////////////
+  //-----------------------------------------------------------------------------------//
 
   useEffect(() => {
     const handleCollisions = (event) => {
@@ -471,6 +473,65 @@ const Stripped = () => {
   
         if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
           if (!gameOver) { // Check if game is not over
+//----------------------------------- crashed ship parts ------------------------------//
+            const emitCrash = (shipBody) => {
+              const pieceCount = 10;
+              const pieceSpeed = 2;
+              const pieceSpread = 4;
+            
+              for (let i = 0; i < pieceCount; i++) {
+                const pieceX = shipBody.position.x + (Math.random() - 0.5) * 10;
+                const pieceY = shipBody.position.y + (Math.random() - 0.5) * 10;
+            
+                // Generate random number of vertices
+                const numVertices = Math.floor(Math.random() * 5) + 5;
+                const vertices = [];
+                for (let j = 0; j < numVertices; j++) {
+                  const angle = (j / numVertices) * Math.PI * 2;
+                  const radius = 2 + Math.random() * 20; // Adjust radius as needed
+                  const x = Math.cos(angle) * radius;
+                  const y = Math.sin(angle) * radius;
+                  vertices.push({ x, y });
+                }
+            
+                const pieceBody = Bodies.fromVertices(pieceX, pieceY, vertices, {
+                  frictionAir: 0,
+                  restitution: 0.4,
+                  render: {
+                    fillStyle: 'transparent', // Transparent fill
+                    strokeStyle: '#ffffff', // Outline color
+                    lineWidth: 2 // Outline width
+                  },
+                  plugin: {
+                    wrap: {
+                      min: { x: 0, y: 0 },
+                      max: { x: 1500, y: 680 }
+                    }
+                  }
+                });
+            
+                const angle = Math.atan2(pieceY - shipBody.position.y, pieceX - shipBody.position.x);
+                const velocityX = Math.cos(angle + (Math.random() - 0.5) * pieceSpread) * pieceSpeed;
+                const velocityY = Math.sin(angle + (Math.random() - 0.5) * pieceSpread) * pieceSpeed;
+                Body.setVelocity(pieceBody, { x: velocityX, y: velocityY });
+            
+                setTimeout(() => {
+                  World.remove(engine.world, pieceBody);
+                  setParticles(prev => prev.filter(p => p.body !== pieceBody));
+                }, 1000);
+            
+                const newPiece = {
+                  body: pieceBody,
+                  rotation: 0, // Adjust rotation if needed
+                  lifetime: 1000 // Adjust lifetime if needed
+                };
+            
+                World.add(engine.world, pieceBody);
+                setParticles(prev => [...prev, newPiece]);
+              }
+            };
+            emitCrash(ship); // Emit pieces when ship collides with asteroid
+//----------------------------------------------------------------------------------//
             setLives(prevLives => {
               const updatedLives = prevLives - 1;
               if (updatedLives <= 0) {
@@ -487,7 +548,7 @@ const Stripped = () => {
         }
       });
     };
-  
+
     Events.on(engine, 'collisionStart', handleCollisions);
   
     return () => {
@@ -495,7 +556,7 @@ const Stripped = () => {
     };
   }, [engine, ship, asteroids, gameOver, setGameOver, setLives]);
 
-//////////////////////////////////// CLOCKING SCORE ///////////////////////////////////////////
+//--------------------------------// CLOCKING SCORE //----------------------------------//
 
 useEffect(() => {
   // Continuous score increment example
@@ -508,11 +569,7 @@ useEffect(() => {
   return () => clearInterval(scoreInterval); // Cleanup on unmount
 }, [gameOver]);
 
-////////////////////////////////// LIVE DISPLAY /////////////////////////////////////////////
-
- 
-
-////////////////////////////////// RENDERING /////////////////////////////////////////////
+//----------------------------------// RENDERING //----------------------------------//
 
 return (
   <div className="game-container" ref={gameRef}>
