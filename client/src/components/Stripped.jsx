@@ -548,7 +548,7 @@ const Stripped = () => {
     };
   }, [engine, projectiles, asteroids, asteroidSizes, asteroidHits]);
 
-  //-----------------------------------------------------------------------------------//
+  //---------------------------------- // CRASH HANDLING //---------------------------------------//
 
   useEffect(() => {
     const handleCollisions = (event) => {
@@ -563,8 +563,8 @@ const Stripped = () => {
         const isAsteroidB = asteroids.find(ast => ast === bodyB);
   
         if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
-          if (!gameOver) { // Check if game is not over
-//----------------------------------- crashed ship parts ------------------------------//
+          if (!gameOver) { // Check if game is not over before:
+//----------------------------------- expel ship parts ------------------------------//
             const emitCrash = (shipBody) => {
               const pieceCount = 10;
               const pieceSpeed = 10;
@@ -614,7 +614,7 @@ const Stripped = () => {
             
                 const newPiece = {
                   body: pieceBody,
-                  rotation: 0, // Adjust rotation if needed
+                  rotation: 5, // Adjust rotation if needed
                   lifetime: 1000 // Adjust lifetime if needed
                 };
             
@@ -622,8 +622,8 @@ const Stripped = () => {
                 setParticles(prev => [...prev, newPiece]);
               }
             };
-            emitCrash(ship); // Emit pieces when ship collides with asteroid
-//----------------------------------------------------------------------------------//
+            emitCrash(ship); // trigger when ship collides with asteroid
+//------------------------------------ subtract life ------------------------------------------//
             setLives(prevLives => {
               const updatedLives = prevLives - 1;
               if (updatedLives <= 0) {
@@ -649,10 +649,22 @@ const Stripped = () => {
 setTimeout(() => {
   replaceAsteroids();
   setGameOver(false);
-}, 2000); // Adjust delay as needed
+}, 4000); // Adjust delay as needed
 
-
-
+//------------------------// Timeout before resetting ship position //---------------------//
+            setTimeout(() => {
+              setLives(prevLives => {
+                const updatedLives = prevLives - 1;
+                if (updatedLives <= 0) {
+                  setGameOver(true);
+                } else {
+                  // Reset ship position to center
+                  Body.setPosition(ship, { x: 790, y: 350 });
+                  Body.setVelocity(ship, { x: 0, y: 0 }); // Reset ship velocity if needed
+                }
+              });
+            }, 4000);
+//-----------------------------------------------------------------------------------------//
               }
               return updatedLives;
             });
