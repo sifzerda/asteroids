@@ -22,7 +22,7 @@ const Stripped = () => {
 
   const MAX_PARTICLES = 10;
   const MAX_PROJECTILES = 2;
-  
+
   window.decomp = decomp; // poly-decomp is available globally
 
 //------------------------------------------------------------------------------------//
@@ -477,7 +477,7 @@ const Stripped = () => {
 //----------------------------------- crashed ship parts ------------------------------//
             const emitCrash = (shipBody) => {
               const pieceCount = 10;
-              const pieceSpeed = 2;
+              const pieceSpeed = 10;
               const pieceSpread = 4;
             
               for (let i = 0; i < pieceCount; i++) {
