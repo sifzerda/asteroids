@@ -668,7 +668,7 @@ const Stripped = () => {
 setTimeout(() => {
   replaceAsteroids();
   setGameOver(false);
-}, 4000); // Adjust delay as needed
+}, 4000); // 4secs
 
 //------------------------// Timeout before resetting ship position //---------------------//
            setTimeout(() => {
