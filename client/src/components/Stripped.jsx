@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import Matter, { Engine, Render, World, Bodies, Body, Events } from 'matter-js';
 import MatterWrap from 'matter-wrap';
+import decomp from 'poly-decomp';
 
 const Stripped = () => {
   const [engine] = useState(Engine.create());
@@ -20,6 +21,7 @@ const Stripped = () => {
 
   const MAX_PARTICLES = 10;
   const MAX_PROJECTILES = 2;
+  window.decomp = decomp; // Make sure poly-decomp is available globally
 
   // helper function to generate random vertices for generated asteroids
   const randomVertices = (numVertices, radius) => {
