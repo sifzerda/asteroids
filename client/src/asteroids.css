@@ -257,18 +257,9 @@ border: 2px solid var(--volt);
   z-index: 100;
 }
 
-.level-display {
-  position: absolute;
-  top: 60px; /* below the score */
-  left: 20px; 
-  color: white;
-  font-size: 24px;
-  z-index: 100;
-}
-
 .lives-display {
   position: absolute;
-  top: 100px; /* below the score and level */
+  top: 60px; /* below the score and level */
   left: 20px; 
   font-size: 24px;
   color: #ffffff;
@@ -278,6 +269,17 @@ border: 2px solid var(--volt);
 .life-triangle {
   color: var(--light-red);
 }
+
+/* 
+.level-display {
+  position: absolute;
+  top: 100px; 
+  left: 20px; 
+  color: white;
+  font-size: 24px;
+  z-index: 100;
+}
+*/
 
 .game-board {
   position: relative;
