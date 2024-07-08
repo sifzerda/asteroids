@@ -53,7 +53,7 @@ return (
           ))}
         </tbody>
       </table>
-      <button className="submit-button-m" onClick={() => window.location.reload()}>Back</button>
+      <button className="submit-button-m" onClick={() => window.location.reload()}>BACK</button>
     </div>
   );
 };
