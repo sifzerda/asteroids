@@ -17,7 +17,6 @@ const HighScores = () => {
       allScores.push({
         username: user.username,
         astPoints: score.astPoints,
-        astTimeTaken: score.astTimeTaken,
       });
     });
   });
@@ -27,8 +26,6 @@ const HighScores = () => {
   allScores.sort((a, b) => {
     if (b.astPoints !== a.astPoints) {
       return b.astPoints - a.astPoints; // Sort by points descending
-    } else {
-      return a.astTimeTaken - b.astTimeTaken; // Sort by time ascending if points are tied
     }
 });
 
@@ -52,7 +49,6 @@ return (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{score.astPoints}</td>
-              <td>{score.astTimeTaken}</td>
               <td>{score.username}</td>
             </tr>
           ))}

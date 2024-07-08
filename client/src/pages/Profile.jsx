@@ -16,8 +16,6 @@ const Profile = () => {
     const sortedScores = [...astScores].sort((a, b) => {
         if (b.astPoints !== a.astPoints) {
             return b.astPoints - a.astPoints; // Sort by points descending
-        } else {
-            return a.astTimeTaken - b.astTimeTaken; // Sort by time ascending if points are tied
         }
     });
 
@@ -41,7 +39,6 @@ const Profile = () => {
                         <tr>
                             <th>#</th>
                             <th>Score</th>
-                            <th>Time (in Seconds)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,7 +46,6 @@ const Profile = () => {
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{score.astPoints}</td>
-                                <td>{score.astTimeTaken}</td>
                             </tr>
                         ))}
                     </tbody>

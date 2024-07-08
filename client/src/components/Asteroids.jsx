@@ -5,13 +5,16 @@ import Matter, { Engine, Render, World, Bodies, Body, Events } from 'matter-js';
 import MatterWrap from 'matter-wrap';
 import decomp from 'poly-decomp';
 
+import StartScreen from './StartScreen'; 
+import FinalScore from './FinalScore'; 
+import HighScores from './HighScores'; 
+
 const Asteroids = () => {
   const [engine] = useState(Engine.create());
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
   const [projectiles, setProjectiles] = useState([]);
   const [particles, setParticles] = useState([]);
   const [asteroids, setAsteroids] = useState([]);
-  const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
   const [rotationSpeed, setRotationSpeed] = useState(0.15);
   const [asteroidSizes, setAsteroidSizes] = useState([]);
@@ -20,12 +23,28 @@ const Asteroids = () => {
   const [lives, setLives] = useState(3); // Initialize lives at 3
   const [destroyedAsteroids, setDestroyedAsteroids] = useState(0); // Initialize destroyed asteroids count down to 0
 
+  const [startGame, setStartGame] = useState(false); // State to track game start
+  const [gameOver, setGameOver] = useState(false);
+  const [showFinalScore, setShowFinalScore] = useState(false);
+  const [showHighScores, setShowHighScores] = useState(false);
+  
   const gameRef = useRef();
 
   const MAX_PARTICLES = 10;
   const MAX_PROJECTILES = 2;
 
   window.decomp = decomp; // poly-decomp is available globally
+
+  //---------------------------------// START SCREENS //-----------------------------------//
+
+  const startGameHandler = () => {
+    setStartGame(true);
+  };
+
+  const showHighScorePage = () => {
+    setShowHighScores(true);
+    console.log('High Scores button clicked', showHighScores);
+  };
 
 //------------------------------------------------------------------------------------//
 
@@ -118,7 +137,11 @@ const createAsteroid = () => {
 };
 
 //------------------------// SET UP MATTER.JS GAME OBJECTS //-------------------------//
-  useEffect(() => {
+  
+useEffect(() => {
+
+  if (startGame) {
+
     Matter.use(MatterWrap);
     engine.world.gravity.y = 0;
     const render = Render.create({
@@ -187,7 +210,7 @@ for (let i = 0; i < 5; i++) {
       Engine.clear(engine);
       Events.off(engine, 'beforeUpdate', updateShipPosition);
     };
-  }, [engine]);
+  }}, [startGame]);
 
   const moveShipUp = () => {
     if (ship) {
@@ -587,7 +610,11 @@ for (let i = 0; i < 5; i++) {
             setGameOver(true);
             emitCrash(ship); // trigger when ship collides with asteroid
             emitExplosionParticles(collisionPosition);
-
+// Gameover: 5 sec Timeout before final score screen -----//
+            setTimeout(() => {
+              setShowFinalScore(true);
+              }, 5000); // 5 secs before final score screen
+// -------------------------------------------------------//
            } else {
             setLives(prevLives => {
               const updatedLives = prevLives - 1;
@@ -638,25 +665,42 @@ useEffect(() => {
   return () => clearInterval(scoreInterval); // Cleanup on unmount
 }, [gameOver]);
 
+
+// --------------------------------// SCREEN SELECTION //----------------------------------//
+
+if (showHighScores) {
+  return <HighScores />;
+}
+
+if (showFinalScore) {
+  return <FinalScore score={score} onHighScores={showHighScorePage} />;
+}
+
 //----------------------------------// RENDERING //----------------------------------//
 
 return (
-  <div className="game-container" ref={gameRef}>
-    {gameOver && (
-      <div className="game-over-overlay">
-        <div className="game-over">
-          Game Over
+  <div>
+    {!startGame && <StartScreen onStart={startGameHandler} onHighScores={showHighScorePage} />}
+    {startGame && (
+      <div className="game-container" ref={gameRef}>
+        {/* Your existing game rendering code */}
+        {gameOver && (
+          <div className="game-over-overlay">
+            <div className="game-over">
+              Game Over
+            </div>
+          </div>
+        )}
+        <div className="score-display">
+          Score: {score}
+        </div>
+        <div className="lives-display">
+          Lives: <span className='life-triangle'>{'∆ '.repeat(lives)}</span>
         </div>
       </div>
     )}
-    <div className="score-display">
-      Score: {score}
-    </div>
-    <div className="lives-display">
-    Lives: <span className='life-triangle'>{'∆ '.repeat(lives)}</span>
-    </div>
   </div>
-  );
+);
 };
 
 export default Asteroids;

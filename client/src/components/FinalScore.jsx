@@ -6,9 +6,8 @@ import { QUERY_ME } from '../utils/queries';
 import { SAVE_AST_SCORE } from '../utils/mutations'
 import '../App.css';
 
-const FinalScore = ({ score, time, onHighScores }) => {
+const FinalScore = ({ score, onHighScores }) => {
     const [astPoints, setAstPoints] = useState(score);
-    const [astTimeTaken, setAstTimeTaken] = useState(time);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
   
     const { data } = useQuery(QUERY_ME);
@@ -22,8 +21,7 @@ const FinalScore = ({ score, time, onHighScores }) => {
         const { data } = await saveAstScore({
           variables: {
             userId,
-            astPoints,
-            astTimeTaken,
+            astPoints
           },
         });
         console.log('Score saved:', data.saveAstScore);
@@ -41,7 +39,6 @@ const FinalScore = ({ score, time, onHighScores }) => {
         <div className="grid-container">
           <h1 className='start'>Game Over</h1>
           <p className='black-text'>Your final score: {score}</p>
-          <p className='black-text'>Time taken: {time} seconds</p>
     
           {/* Conditional rendering based on success message state */}
           {showSuccessMessage ? (
@@ -71,3 +68,6 @@ const FinalScore = ({ score, time, onHighScores }) => {
     };
     
     export default FinalScore;
+
+
+ 
