@@ -13,7 +13,7 @@ const Stripped = () => {
   const [asteroids, setAsteroids] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
-  const [rotationSpeed, setRotationSpeed] = useState(0.15);
+  const [rotationSpeed, setRotationSpeed] = useState(0.2);
   const [asteroidSizes, setAsteroidSizes] = useState([]);
   const [asteroidHits, setAsteroidHits] = useState([]);
   const [score, setScore] = useState(0); // Initialize score at 0
@@ -142,9 +142,7 @@ const createAsteroid = () => {
     ];
 
     const shipBody = Bodies.fromVertices(750, 340, vertices, {
-      frictionAir: 0.02,
-      restitution: 0,
-      friction: 0.02,
+      frictionAir: 0.05,
       render: {
         fillStyle: 'transparent',
         strokeStyle: '#ffffff', 
@@ -189,13 +187,23 @@ for (let i = 0; i < 5; i++) {
     };
   }, [engine]);
 
-  const moveShipUp = () => {
+  const moveShipUp = (accelerate) => {
     if (ship) {
-      const forceMagnitude = 0.0005;
-      const forceX = Math.cos(ship.angle) * forceMagnitude;
-      const forceY = Math.sin(ship.angle) * forceMagnitude;
+      const acceleration = accelerate ? -0.009 : 0.01; // Adjust acceleration and deceleration values as needed
+      const forceX = Math.cos(ship.angle) * acceleration;
+      const forceY = Math.sin(ship.angle) * acceleration;
       Body.applyForce(ship, ship.position, { x: forceX, y: forceY });
     }
+  };
+
+  // Accelerate ship when "up" key is pressed
+  const accelerateShip = () => {
+    moveShipUp(true);
+  };
+
+  // Decelerate ship when "up" key is released
+  const decelerateShip = () => {
+    moveShipUp(false);
   };
 
   const rotateShipLeft = () => {
@@ -321,7 +329,8 @@ for (let i = 0; i < 5; i++) {
 
   // --------------------------------// HOTKEYS //-----------------------------------//
 
-  useHotkeys('up', moveShipUp, [ship]);
+  useHotkeys('up', accelerateShip, [ship]);
+  useHotkeys('up', decelerateShip, 'keyup'); // Decelerate when 'up' key is released
   useHotkeys('up', makeExhaust, [ship]);
   useHotkeys('left', rotateShipLeft, [ship, rotationSpeed]);
   useHotkeys('right', rotateShipRight, [ship, rotationSpeed]);
