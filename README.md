@@ -71,6 +71,7 @@ npm run start
 Controls:
 - Arrow keys ⬅️ ⬆️ ➡️ ⬇️ keys to move
 - Spacebar to fire
+- Do a tight turn or doughnut: press UP + L/R Arrow Key together (not sequentially)
 
 ## (5) Usage
 
@@ -183,7 +184,8 @@ Acceleration: raise (closer to 1.0) for speed
 
 ## (8) Bugs and Further Development: 
 
-- sometimes gunfire doesn't destroy asteroid on one hit (collision issue?)
+- occasionally asteroids are spawned which seem to lack collision detection so you can't hit or crash into them.
+- spam shooting gunfire everywhere trips up the collision detection and won't hit asteroids.
 
 Optimization:
 - use react-virtualized to only render visible stuff
@@ -202,7 +204,7 @@ Optimization:
 - [x] Make more asteroids and different size asteroids
 - [x] Enable projectile firing
 - [x] make rocket exhaust
-- [x] timer, score count every asteroid hit
+- [x] ~~timer, score count every asteroid hit~~
   - [x] Or one single score count which is continuously running up (like a timer) and gets extra increments every asteroid destroyed
 - [x] Gunfire decay and boundary wrapping
 - [x] Projectile collision detection with asteroids
@@ -210,27 +212,26 @@ Optimization:
 - [x] When you shoot an asteroid it disappears
   - [x] When you shoot asteroids they break into two smaller, and so on
 - [ ] improve graphics elements
-- [x] refine ship movement; add limited inertia, acceleration  
+- [x] refine ship movement; add limited inertia
 - [ ] bullet flashing/muzzle flare effect
 - [ ] asteroids flash or change color when hit
 - [ ] Power ups randomly appear around screen for several seconds which change projectile type/power/appearance:
-  - [ ] Speed up (or slow down)
   - [ ] Boost (or add boost ability in general)
-- [x] Level progression:
-  - [ ] Higher level (i.e. more time) asteroids take longer to break up, or break up into smaller divisions
-- [x] Dividing play session into levels. After a certain time, 'level 2' flashes on screen and difficulty ramps each level increase. Also next to timer, put level.
+- [x] ~~Level progression:~~
+  - [ ] ~~Higher level (i.e. more time) asteroids take longer to break up, or break up into smaller divisions~~
+- [x] ~~Dividing play session into levels. After a certain time, 'level 2' flashes on screen and difficulty ramps each level increase.~~
 
-Borrow from minesweeper:
+Navigation:
 
-- [ ] Game Start screen
-- [ ] Game win/loss screen
-  - [ ] Timer
-  - [ ] Score
-  - [ ] Total level
+- [x] Game Start screen
+- [x] Game win/loss screen
+  - ~~[ ] Timer~~
+  - [x] Score
+  - ~~[ ] Total level~~
 - [ ] Exit game through main game
-- [ ] Highscores (from start screen)
-- [ ] Submit highscores
-- [ ] Profile scores and logging in
+- [x] Highscores (from start screen)
+- [x] Submit highscores
+- [x] Profile scores and logging in
 
 ## (10) Support
 
@@ -249,9 +250,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## (12) Authors and acknowledgment
 
-The author acknowledges and credits those who have contributed to this project, including:
-
-- ChatGPT
+The author acknowledges and credits those who have contributed to this project.
 
 ## (13) License
 
