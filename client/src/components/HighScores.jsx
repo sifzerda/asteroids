@@ -40,7 +40,6 @@ return (
           <tr>
             <th>#</th>
             <th>Score</th>
-            <th>Seconds</th>
             <th>Username</th>
           </tr>
         </thead>
