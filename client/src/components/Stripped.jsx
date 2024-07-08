@@ -669,6 +669,7 @@ setTimeout(() => {
   replaceAsteroids(); // make new asteroids
      Body.setPosition(ship, { x: 790, y: 350 }); // reset ship pos to center
      Body.setVelocity(ship, { x: 0, y: 0 }); // Reset ship velocity 
+     Body.setAngularVelocity(ship, 0); // Reset ship angular velocity
   setGameOver(false);
   ship.render.visible = true; // ship reappears new life
 }, 5000); // 4secs before reset
