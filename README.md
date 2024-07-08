@@ -246,8 +246,6 @@ Optimization:
 - alt screens: start game, game over, score submission etc
 - make layout distinct from minesweeper and solitaire
 - 
-
-
 - [x] Create basic black game screen
 - [x] Create moving ship 
 - [x] Create some randomly moving asteroids
