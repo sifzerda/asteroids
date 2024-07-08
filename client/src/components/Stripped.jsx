@@ -715,7 +715,7 @@ setTimeout(() => {
     return () => {
       Events.off(engine, 'collisionStart', handleCollisions);
     };
-  }, [engine, ship, asteroids, gameOver, setGameOver, setLives, emitExplosionParticles]);
+  }, [engine, ship, asteroids, gameOver]);
 
 //--------------------------------// CLOCKING SCORE //----------------------------------//
 
