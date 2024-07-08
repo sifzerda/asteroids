@@ -671,38 +671,20 @@ const Stripped = () => {
            } else {
             setLives(prevLives => {
               const updatedLives = prevLives - 1;
-              
-                // Reset ship position to center
-                Body.setPosition(ship, { x: 790, y: 350 });
-                Body.setVelocity(ship, { x: 0, y: 0 });
-                Body.setAngularVelocity(ship, 0);
                 
                 emitExplosionParticles(collisionPosition);
                           // Remove all asteroids
           asteroids.forEach((asteroid) => {
             World.remove(engine.world, asteroid);
           });
-// Replace asteroids after a delay
+//------------------------// Timeout before reset new life state //---------------------//
 setTimeout(() => {
   replaceAsteroids();
+  Body.setPosition(ship, { x: 790, y: 350 });
+                  Body.setVelocity(ship, { x: 0, y: 0 }); // Reset ship velocity if needed
   setGameOver(false);
-}, 4000); // Adjust delay as needed
-
-//------------------------// Timeout before resetting ship position //---------------------//
-          // setTimeout(() => {
-          //    setLives(prevLives => {
-          //      const updatedLives = prevLives - 1;
-          //      if (updatedLives <= 0) {
-          //        setGameOver(true);
-           //     } else {
-           //       // Reset ship position to center
-          //        Body.setPosition(ship, { x: 790, y: 350 });
-          //        Body.setVelocity(ship, { x: 0, y: 0 }); // Reset ship velocity if needed
-          //      }
-          //    });
-         //   }, 4000);
+}, 4000); // 4secs before reset
 //-----------------------------------------------------------------------------------------//
-
               return updatedLives;
             });
            }
