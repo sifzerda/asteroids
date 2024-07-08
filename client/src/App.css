@@ -244,6 +244,7 @@ div.container.my-1-9 {
 header.header {
   background: black;
   border: none;
+  border-radius: 10px;
 }
 
 *,
@@ -268,8 +269,9 @@ footer {
   border-top: var(--dark-blue) ridge 8px;
   margin-top: auto;
   background: black;
-  padding: 16px;
+  padding: 15px;
   width: 100%;
+  border-radius: 10px;
 }
 
 a {
