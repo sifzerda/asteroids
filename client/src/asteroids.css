@@ -221,7 +221,7 @@ p.success {
 }
 
 .main-content {
-border: 2px solid var(--cyan);
+border: 1px solid var(--cyan);
 border-radius: 10px;
 margin-left: -1px!important;
 margin-right: -1px!important;
