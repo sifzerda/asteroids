@@ -95,83 +95,45 @@ Technologies:
 The main functions of code:
 
 (A) Movement: 
-```bash
-const handleKeyDown
-```
-Key press event listening for controls and gunfire.
-```bash
-const updateShipPosition
-```
-Sets ship speed and rotational radius.
-```bash
-setShipPosition…wrapPosition
-```
-Ship’s movement wraps to other side of game boundary when passing outside, with small ‘buffer’ zone so ship fully disappears and re-appears.
- ```bash
-const wrapPosition, and Matter Wrap
-```
-Wraps game boundary around so there is no game edge; objects pass around to opposite side.
- ```bash
-useHotkeys
-```
-Hook which simplifies movement control code.
 
+- <u>const handleKeyDown </u>: Key press event listening for controls and gunfire.
+- <u>const updateShipPosition: </u> Sets ship speed and rotational radius.
+- <u>setShipPosition…wrapPosition: </u> Ship’s movement wraps to other side of game boundary when passing outside, with small ‘buffer’ zone so ship fully disappears and re-appears.
+- <u>const wrapPosition, and Matter Wrap</u>: Wraps game boundary around so there is no game edge; objects pass around to opposite side.
+- 
 (B) Ship:
 
- ```bash
-  const [rotationSpeed, setRotationSpeed] = useState(0.15)];
-```
-sets ship rotation speed.
- ```bash
-Body.rotate(shipBody, -Math.PI / 2)
-```
-Initializes ship's starting position (rotated so facing up). Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
-
- ```bash
-const shipBody = Bodies.fromVertices, const vertices
-```
-Shapes ship body.
+- <u>useHotkeys</u>:  Hook which simplifies movement control code.
+- <u>const [rotationSpeed, setRotationSpeed] = useState(0.15)];</u>:  sets ship rotation speed.
+- <u>Body.rotate(shipBody, -Math.PI / 2)</u>:  Initializes ship's starting position (rotated so facing up). Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
+- <u>const shipBody = Bodies.fromVertices, const vertices</u>: Shapes ship body.
 
 (C) Projectile fire:
 
-```bash
-shootProjectile
-```
-Sets gunfire speed, fire position, and fire decay (setTimeout).
-```bash
-setProjectiles
-```
-Limits asteroid and projectile fire to wrap the game boundary.
+- <u>shootProjectile</u>: Sets gunfire speed, fire position, and fire decay (setTimeout).
+- <u>setProjectiles</u>: Limits asteroid and projectile fire to wrap the game boundary.
 
 (D) Thrust fire:
-```bash
-const makeExhaust
-```
-replicates projectile fire but displaced to ship back by 'offset' and renders on arrow key up.
+
+- <u>const makeExhaust</u>: replicates projectile fire but displaced to ship back by 'offset' and renders on arrow key up.
 
 (E) Asteroids:
-```bash
-useEffect…createAsteroids
-```
-Creates some starting asteroids [size, number, rotation, velocity].
- ```bash
-useEffect...const handleCollisions
-```
-There are 2 useEffect handleCollisions functions; one for shooting asteroids, and one for the ship getting hit. When asteroids are hit, they split into new asteroids with differing initial velocities, and size property. When the ship is hit, it triggers game over.
-```bash
-emitParticles();
-```
-when asteroids are shot, they break off into 'chunks' (particles)
 
- (F) Game
- ```bash
-const gameLoop
-```
-Game runs (updates) until game ends. API ‘requestAnimationFrame’ smoothes updates (of gameLoop) into continual flow/animation. Hook requestRef gives each animation ‘frame’ an id, allowing gameLoop to cease on any frame.
- ```bash
-useEffect...const scoreInterval...
-```
-Handles score incrementation.
+- <u>useEffect…createAsteroids</u>: Creates some starting asteroids [size, number, rotation, velocity].
+- <u>useEffect...const handleCollisions</u>:  There are 2 useEffect handleCollisions functions; one for shooting asteroids, and one for the ship getting hit. When asteroids are hit, they split into new asteroids with differing initial velocities, and size property. When the ship is hit, it triggers game over.
+- <u>emitParticles();</u>: when asteroids are shot, they break off into 'chunks' (particles)
+
+ (F) Game:
+
+- <u>const gameLoop</u>:  Game runs (updates) until game ends. API ‘requestAnimationFrame’ smoothes updates (of gameLoop) into continual flow/animation. Hook requestRef gives each animation ‘frame’ an id, allowing gameLoop to cease on any frame.
+- <u>useEffect...const scoreInterval...</u>: Handles score incrementation.
+- <u></u>: 
+- <u></u>: 
+- <u></u>: 
+- <u></u>: 
+- <u></u>: 
+- <u></u>: 
+- <u></u>: 
 
 ## (7) Alternative Config
 
