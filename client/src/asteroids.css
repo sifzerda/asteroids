@@ -222,7 +222,7 @@ margin-right: -1px!important;
   display: flex;
   justify-content: center; /* Centers horizontally */
   align-items: center;    /* Centers vertically */
-
+  display: relative;
 }
 
 canvas {
@@ -255,8 +255,9 @@ canvas {
 
 .score-display {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-800px, -375px);
   color: #ffffff;
   font-size: 24px;
   z-index: 100;
@@ -264,8 +265,9 @@ canvas {
 
 .lives-display {
   position: absolute;
-  top: 60px; /* below the score and level */
-  left: 20px; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-800px, -330px);
   font-size: 24px;
   color: #ffffff;
   z-index: 100;
