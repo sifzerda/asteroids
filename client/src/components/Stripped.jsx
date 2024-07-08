@@ -19,7 +19,7 @@ const Stripped = () => {
   const [score, setScore] = useState(0); // Initialize score at 0
   const [lives, setLives] = useState(3); // Initialize lives at 3
   const [destroyedAsteroids, setDestroyedAsteroids] = useState(0); // Initialize destroyed asteroids count
-
+  
   const gameRef = useRef();
 
   const MAX_PARTICLES = 10;
@@ -608,7 +608,8 @@ for (let i = 0; i < 5; i++) {
 }
   setGameOver(false);
   ship.render.visible = true; // ship reappears new life
-}, 5000); // 4secs before reset
+
+}, 4000); // 4secs before reset
 //-----------------------------------------------------------------------------------------//
               return updatedLives;
             });
