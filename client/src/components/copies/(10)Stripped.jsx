@@ -88,57 +88,7 @@ const Stripped = () => {
       }
     };
 
-    // Function to replace all exploded asteroids --------------------------------------------------------//
-    const replaceAsteroids = () => {
-      const asteroidRadii = [80, 100, 120, 140, 160]; // Predefined radii for asteroids
-      const numberOfAsteroids = 1; // Number of asteroids to replace
-  
-      const newAsteroids = [];
-      const newAsteroidSizes = [];
-      const newAsteroidHits = [];
-  
-      for (let i = 0; i < numberOfAsteroids; i++) {
-        const radiusIndex = Math.floor(Math.random() * asteroidRadii.length);
-        const radius = asteroidRadii[radiusIndex];
-        newAsteroidSizes.push(radius);
-        newAsteroidHits.push(0);
-  
-        const numVertices = Math.floor(Math.random() * 5) + 5;
-        const vertices = randomVertices(numVertices, radius);
-  
-        // Randomize starting position anywhere outside the visible screen
-        const startX = Math.random() * 3000 - 750; // Randomize x position across a wider area
-        const startY = Math.random() * 1700 - 340; // Randomize y position across a wider area
-  
-        // Randomize velocity direction and speed
-        const velocityX = (Math.random() - 0.5) * 4; // Random velocity in x direction
-        const velocityY = (Math.random() - 0.5) * 4; // Random velocity in y direction
-  
-        const asteroid = Bodies.fromVertices(startX, startY, vertices, {
-          frictionAir: 0,
-          render: {
-            fillStyle: 'transparent',
-            strokeStyle: '#ffffff',
-            lineWidth: 2,
-          },
-          plugin: {
-            wrap: {
-              min: { x: 0, y: 0 },
-              max: { x: 1500, y: 680 },
-            },
-          },
-        });
-  
-        Body.setVelocity(asteroid, { x: velocityX, y: velocityY });
-        Body.setAngularVelocity(asteroid, 0.01); // Adjust angular velocity as needed
-        newAsteroids.push(asteroid);
-        World.add(engine.world, asteroid);
-      }
-  
-      setAsteroids(newAsteroids);
-      setAsteroidSizes(newAsteroidSizes);
-      setAsteroidHits(newAsteroidHits);
-    };
+ 
 
 //------------------------// SET UP MATTER.JS GAME OBJECTS //-------------------------//
   useEffect(() => {

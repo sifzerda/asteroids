@@ -17,7 +17,6 @@ const Stripped = () => {
   const [asteroidSizes, setAsteroidSizes] = useState([]);
   const [asteroidHits, setAsteroidHits] = useState([]);
   const [score, setScore] = useState(0); // Initialize score at 0
-  const [level, setLevel] = useState(1); // Initialize level at 1
   const [lives, setLives] = useState(3); // Initialize lives at 3
   const [destroyedAsteroids, setDestroyedAsteroids] = useState(0); // Initialize destroyed asteroids count
 
@@ -83,7 +82,6 @@ const Stripped = () => {
     const replaceAsteroids = () => {
       const asteroidRadii = [80, 100, 120, 140, 160]; // Predefined radii for asteroids
       const numberOfAsteroids = 1; // Number of asteroids to replace
-  
       const newAsteroids = [];
       const newAsteroidSizes = [];
       const newAsteroidHits = [];
@@ -372,10 +370,6 @@ const Stripped = () => {
       // Update score
       setScore(prevScore => {
         const newScore = prevScore + 10; // Adjust score increment as needed
-        // Check if level should be incremented
-        if (newScore % 100 === 0) {
-          setLevel(prevLevel => prevLevel + 1);
-        }
         return newScore;
       });
     }
@@ -498,14 +492,9 @@ const Stripped = () => {
                     setDestroyedAsteroids((prev) => prev + 1);
 
                     if (destroyedAsteroids + 1 === 5) {
-                      replaceAsteroids();
+
                       setDestroyedAsteroids(0);
                     }
-  
-          // Check if level should be incremented
-          if (score % 100 === 0) {
-            setLevel(prevLevel => prevLevel + 1);
-          }
         } else {
           // Split the asteroid into smaller ones
           const asteroidRadius = asteroidSizes[asteroidIndex];
@@ -714,9 +703,6 @@ return (
     )}
     <div className="score-display">
       Score: {score}
-    </div>
-    <div className="level-display">
-      Level: {level}
     </div>
     <div className="lives-display">
     Lives: <span className='life-triangle'>{'∆ '.repeat(lives)}</span>
