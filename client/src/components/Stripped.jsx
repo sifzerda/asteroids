@@ -18,7 +18,7 @@ const Stripped = () => {
   const [asteroidHits, setAsteroidHits] = useState([]);
   const [score, setScore] = useState(0); // Initialize score at 0
   const [lives, setLives] = useState(3); // Initialize lives at 3
-  const [destroyedAsteroids, setDestroyedAsteroids] = useState(0); // Initialize destroyed asteroids count
+  const [destroyedAsteroids, setDestroyedAsteroids] = useState(0); // Initialize destroyed asteroids count down to 0
 
   const gameRef = useRef();
 
@@ -45,9 +45,9 @@ const Stripped = () => {
 
     // Function to emit explosion particles
     const emitExplosionParticles = (collisionPosition) => {
-      const particleCount = 30; // Adjust particle count as needed
-      const particleSpeed = 5; // Adjust particle speed as needed
-      const particleSpread = Math.PI * 2; // Full circle spread
+      const particleCount = 30; 
+      const particleSpeed = 5; 
+      const particleSpread = Math.PI * 2;
   
       for (let i = 0; i < particleCount; i++) {
         const angle = (i / particleCount) * particleSpread;
