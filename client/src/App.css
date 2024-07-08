@@ -114,7 +114,7 @@ body,
   display: grid;
   font-family: "Poppins", sans-serif;
   place-items: center;
-  background-color:  rgb(59, 119, 197);
+  background-color: rgb(59, 119, 197);
 }
 
 #root {
@@ -200,24 +200,25 @@ a.back-link {
 }
 
 .error-text {
-  color: #dc3545;
+  color:  var(--flame);
 }
 
 h2.login-title {
   text-align: center;
   margin-bottom: 20px;
   margin-top: 20px;
-  color: var(--volt);
+  font-family: 'Audiowide';
+  color: var(--blue);
 }
 
 div.container.my-1-9 {
   width: 100%;
-  max-width: 500px;
+  max-width: 620px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 5px;
   background-color: black;
-  border: 1px solid white;
+  border: 4px solid var(--dark-blue);
 }
 
 /* bucket app ---------------------------------------------------------*/
@@ -267,7 +268,7 @@ header.header {
 
 footer {
   border-top: var(--dark-blue) ridge 8px;
-  margin-top: auto;
+  margin-top: -1px;
   background: black;
   padding: 15px;
   width: 100%;
