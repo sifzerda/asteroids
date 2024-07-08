@@ -74,14 +74,6 @@ Controls:
 
 ## (5) Usage
 
- The app executes a version of the retro arcade game 'asteroids'. Parts:
- 
- - Start screen
- - Game
- - Final score page + score submission
- - High scores page
- - If logged on: profile page with User scores.
-
 Technologies:
 
 - <strong>useRef and requestAnimationFrame: </strong> API library to update game state at fps matching the display refresh rate, creating animation, by default 60fps.
@@ -107,6 +99,7 @@ The main functions of code:
 - <u>const [rotationSpeed, setRotationSpeed] = useState(0.15)];</u>:  sets ship rotation speed.
 - <u>Body.rotate(shipBody, -Math.PI / 2)</u>:  Initializes ship's starting position (rotated so facing up). Ship's front is actually right side angle, has to be rotated on game start to face moveUp direction upwards.
 - <u>const shipBody = Bodies.fromVertices, const vertices</u>: Shapes ship body.
+- <u>emitExplosionParticles</u>: creates red particles when ship crashes.
 
 (C) Projectile fire:
 
@@ -119,7 +112,7 @@ The main functions of code:
 
 (E) Asteroids:
 
-- <u>useEffect…createAsteroids</u>: Creates some starting asteroids [size, number, rotation, velocity].
+- <u>useEffect…createAsteroids</u>: Creates some starting asteroids [size, number, rotation, velocity] and calls in new asteroid/s over time. Gets called again on ship crash.
 - <u>useEffect...const handleCollisions</u>:  There are 2 useEffect handleCollisions functions; one for shooting asteroids, and one for the ship getting hit. When asteroids are hit, they split into new asteroids with differing initial velocities, and size property. When the ship is hit, it triggers game over.
 - <u>emitParticles();</u>: when asteroids are shot, they break off into 'chunks' (particles)
 
@@ -127,13 +120,8 @@ The main functions of code:
 
 - <u>const gameLoop</u>:  Game runs (updates) until game ends. API ‘requestAnimationFrame’ smoothes updates (of gameLoop) into continual flow/animation. Hook requestRef gives each animation ‘frame’ an id, allowing gameLoop to cease on any frame.
 - <u>useEffect...const scoreInterval...</u>: Handles score incrementation.
-- <u></u>: 
-- <u></u>: 
-- <u></u>: 
-- <u></u>: 
-- <u></u>: 
-- <u></u>: 
-- <u></u>: 
+- <u>useEffect(() => {Matter.use...})</u>: Sets up Matter.js game engine, world, objects.
+- <u>useEffect(() => {const scoreInterval = setInterval(() => {})})</u>: keeps score.
 
 ## (7) Alternative Config
 
@@ -150,11 +138,11 @@ const [engine] = useState(() => {
     return newEngine;
   });
 ```
-to create smoother ship acceleration, however this may affect performance.
+to create smoother ship acceleration, however this may affect performance and not offer much improvement.
 
 I experimented with handling movement keyUp and keyDown separately via useEffect to apply different physics to ship motion vs rest, but this didn't have much overall effect. I saved the relevant code inside: client/src/components/copies/movementdiff.js
 
-change 'shootExhaust' fillstyle for randomized exhaust stream colours (i.e. rainbow exhaust stream):
+change 'shootExhaust' fillStyle for randomized exhaust stream colours (i.e. rainbow exhaust stream):
 ```bash
 fillStyle: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.8)` 
 ```

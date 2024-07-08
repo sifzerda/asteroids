@@ -19,7 +19,7 @@ const Stripped = () => {
   const [score, setScore] = useState(0); // Initialize score at 0
   const [lives, setLives] = useState(3); // Initialize lives at 3
   const [destroyedAsteroids, setDestroyedAsteroids] = useState(0); // Initialize destroyed asteroids count
-  
+
   const gameRef = useRef();
 
   const MAX_PARTICLES = 10;
@@ -58,7 +58,7 @@ const Stripped = () => {
           frictionAir: 0,
           restitution: 0.4,
           render: {
-            fillStyle: '#e5ff00', // yellow
+            fillStyle: '#ff5e00', // orange
           },
           plugin: {
             wrap: {
@@ -633,7 +633,7 @@ useEffect(() => {
     if (!gameOver) {
       setScore(prevScore => prevScore + 1); // Increment score by 1 point every second
     }
-  }, 100); // Adjust interval as needed (e.g., every second)
+  }, 100); 
 
   return () => clearInterval(scoreInterval); // Cleanup on unmount
 }, [gameOver]);
