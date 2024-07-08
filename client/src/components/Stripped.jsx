@@ -597,7 +597,7 @@ const Stripped = () => {
         const isAsteroidB = asteroids.find(ast => ast === bodyB);
   
         if ((isShipA && isAsteroidB) || (isShipB && isAsteroidA)) {
-          //----------------------------------- expel ship parts --------------------------------------------//
+//----------------------------------- expel ship parts --------------------------------------------//
           const emitCrash = (shipBody) => {
             const pieceCount = 10;
             const pieceSpeed = 10;
@@ -617,7 +617,7 @@ const Stripped = () => {
                 const y = Math.sin(angle) * radius;
                 vertices.push({ x, y });
               }
-          
+          // ship parts:
               const pieceBody = Bodies.fromVertices(pieceX, pieceY, vertices, {
                 frictionAir: 0,
                 restitution: 0.4,
