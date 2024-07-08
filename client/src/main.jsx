@@ -7,8 +7,6 @@ import App from './App.jsx';
 import Error from './pages/Error.jsx';
 import About from './pages/About.jsx';
 import Profile from './pages/Profile.jsx';
-import Copy from './pages/Copy.jsx';
-import Stripped from './pages/Stripped.jsx';
 
 // subjects
 
@@ -39,16 +37,6 @@ const router = createBrowserRouter([
       {
         path: '/Profile',
         element: <Profile />
-      },
-
-      {
-        path: '/Copy',
-        element: <Copy />
-      },
-
-      {
-        path: '/Stripped',
-        element: <Stripped />
       },
 
     ],

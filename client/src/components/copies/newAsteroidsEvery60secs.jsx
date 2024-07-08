@@ -1,3 +1,9 @@
+
+//====================================================================================//
+//       THIS HAS CODE WHICH SPAWNS NEW ASTEROIDS EVERY 60 SECS                       //
+//====================================================================================//
+
+
 import { useState, useEffect, useRef } from 'react';
 import Matter, { Engine, Render, World, Bodies, Body } from 'matter-js';
 import MatterWrap from 'matter-wrap';

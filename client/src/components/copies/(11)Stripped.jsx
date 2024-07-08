@@ -1,5 +1,3 @@
-
-
 // ship, asteroids, projectiles, particles
 // movement, shooting, collisions
 // score lives

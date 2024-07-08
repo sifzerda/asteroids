@@ -1,3 +1,7 @@
+//====================================================================================//
+//                          SHIP MOVEMENT VIA USE-EFFECT                              //
+//====================================================================================//
+
 // this has a useEffect for MoveShipUp so it can be called when the up key is pressed
 // makes movement happen from once key is pressed
 
