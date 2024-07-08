@@ -17,7 +17,7 @@
 
 @keyframes neon-flashing {
   from {
-    text-shadow: 0 0 10px  white, 0 0 20px var(--volt), 0 0 30px var(--volt), 0 0 40px var(--volt), 0 0 70px #00fff6, 0 0 80px #00fff6;
+    text-shadow: 0 0 10px  white, 0 0 20px var(--blue), 0 0 30px var(--blue), 0 0 40px var(--blue), 0 0 70px #0066ff, 0 0 80px #00fff6;
   }
   to {
     text-shadow: none;
@@ -124,7 +124,6 @@ p.black-text {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-
 }
 
 .high-scores-table th, .high-scores-table td {
@@ -222,7 +221,7 @@ p.success {
 }
 
 .main-content {
-border: 2px solid var(--volt);
+border: 2px solid var(--cyan);
 border-radius: 10px;
 margin-left: -1px!important;
 margin-right: -1px!important;

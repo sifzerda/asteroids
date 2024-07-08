@@ -280,7 +280,7 @@ a {
 
 /* svg icons on contact page*/
 a:hover {
-  color: var(--volt)!important;
+  color: var(--cyan)!important;
 }
 
 /* ------ -------------------- ----------- */
@@ -314,8 +314,8 @@ aside.sidebar {
 
 .nav-link.active {
   background-color: black !important;
-  color: var(--volt) !important;
-  border: 2px solid var(--volt) !important;
+  color: var(--cyan) !important;
+  border: 2px solid var(--blue) !important;
   font-style: italic;
 }
 
