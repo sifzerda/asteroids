@@ -1,3 +1,6 @@
+// tried movement by useState, useEffect + hotkeys (toggling acceleration on and off)
+// tried using a keyUp for deceleration, and also useState, useEffect + hotkeys (toggling acceleration on and off) 
+// to create more responsive acceleration and deceleration, but doing this lost angular inertia/centrifugal inertia effect
 
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
