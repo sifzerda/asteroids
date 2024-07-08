@@ -16,18 +16,17 @@ Current games in gamestack:
 6. Dev Stuff: Building
 7. Bugs and Further Development
 8. To do
-9. To do for all games
-10. Support
-11. Contributing 
-12. Authors and acknowledgment
-13. License
-14. Project status
+9. Support
+10. Contributing 
+11. Authors and acknowledgment
+12. License
+13. Project status
 
 ## (1) Description
 
 A personal project to create a react MERN stack app which has a number of simple games. I used trial and error and ChatGPT prompting. 
 
-This was built with React, Matter.js, Node, Javascript, and CSS. 
+This was built with React, Matter.js, ~~react-spring~~ Node, Javascript, and CSS. 
 
 Game was divided up into the smallest working components/units. It began as a game screen with a moving ship, then a couple of asteroids which moved randomly. Collision detection, physics and projectile shooting were put in later. Made three different versions to test alternate physics.
 
@@ -234,7 +233,6 @@ Acceleration: raise (closer to 1.0) for speed
 
 ## (8) Bugs and Further Development: 
 
-- randomly appearing powerups for different gun types
 - sometimes gunfire doesn't destroy asteroid on one hit (collision issue?)
 
 Optimization:
@@ -286,20 +284,11 @@ Borrow from minesweeper:
 - [ ] Submit highscores
 - [ ] Profile scores and logging in
 
-## (10) To do for all games
-- [ ] create start game landing screen: + start game btn; + high scores btn
-- [ ] end game/win game screen, + view score, + submit score, + see high scores, + restart game
-- [ ] if user logged in, can save high score (post to user array)
-- [ ] profile page where scores can be displayed
-- [ ] have 8-bit chiptune stylized music play during game (with button that starts and stops music, maybe a speaker pic that gets struck through)
-- [ ] volume increase/decrease for music
-- [ ] play through albums as 8-bit, and can play next song in list
-
-## (11) Support
+## (10) Support
 
 For support, users can contact tydamon@hotmail.com.
 
-## (12) Contributing
+## (11) Contributing
 
 Any contributions you make are greatly appreciated.
 
@@ -310,16 +299,16 @@ If you have a suggestion that would make this better, please fork the repo and c
 4. Push to the Branch (git push origin feature/NewFeature)
 5. Open a Pull Request
 
-## (13) Authors and acknowledgment
+## (12) Authors and acknowledgment
 
 The author acknowledges and credits those who have contributed to this project, including:
 
 - ChatGPT
 
-## (14) License
+## (13) License
 
 Distributed under the MIT License. See LICENSE.txt for more information.
 
-## (15) Project status
+## (14) Project status
 
 This project is completed. 
