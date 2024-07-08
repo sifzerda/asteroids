@@ -679,9 +679,9 @@ const Stripped = () => {
           });
 //------------------------// Timeout before reset new life state //---------------------//
 setTimeout(() => {
-  replaceAsteroids();
-  Body.setPosition(ship, { x: 790, y: 350 });
-                  Body.setVelocity(ship, { x: 0, y: 0 }); // Reset ship velocity if needed
+  replaceAsteroids(); // make new asteroids
+     Body.setPosition(ship, { x: 790, y: 350 }); // reset ship pos to center
+     Body.setVelocity(ship, { x: 0, y: 0 }); // Reset ship velocity 
   setGameOver(false);
 }, 4000); // 4secs before reset
 //-----------------------------------------------------------------------------------------//
