@@ -82,7 +82,7 @@ const Asteroids = () => {
           plugin: {
             wrap: {
               min: { x: 0, y: 0 },
-              max: { x: 1500, y: 680 },
+              max: { x: 1650, y: 800 },
             },
           },
         });
@@ -123,7 +123,7 @@ const createAsteroid = () => {
     plugin: {
       wrap: {
         min: { x: 0, y: 0 },
-        max: { x: 1500, y: 680 },
+        max: { x: 1650, y: 800 },
       },
     },
   });
@@ -148,8 +148,8 @@ useEffect(() => {
       element: gameRef.current,
       engine,
       options: {
-        width: 1500,
-        height: 680,
+        width: 1650,
+        height: 800,
         wireframes: false
       }
     });
@@ -177,7 +177,7 @@ useEffect(() => {
       plugin: {
         wrap: {
           min: { x: 0, y: 0 },
-          max: { x: 1500, y: 680 }
+          max: { x: 1650, y: 800 }
         }
       }
     });
@@ -256,7 +256,7 @@ for (let i = 0; i < 5; i++) {
           plugin: {
             wrap: {
               min: { x: 0, y: 0 },
-              max: { x: 1500, y: 680 }
+              max: { x: 1650, y: 800 }
             }
           }
         });
@@ -306,7 +306,7 @@ for (let i = 0; i < 5; i++) {
         plugin: {
           wrap: {
             min: { x: 0, y: 0 },
-            max: { x: 1500, y: 680 }
+            max: { x: 1650, y: 800 }
           }
         }
       });
@@ -407,7 +407,7 @@ for (let i = 0; i < 5; i++) {
         plugin: {
           wrap: {
             min: { x: 0, y: 0 },
-            max: { x: 1500, y: 680 }
+            max: { x: 1650, y: 800 }
           }
         }
       });
@@ -483,7 +483,7 @@ for (let i = 0; i < 5; i++) {
               plugin: {
                 wrap: {
                   min: { x: 0, y: 0 },
-                  max: { x: 1500, y: 680 }
+                  max: { x: 1650, y: 800 }
                 }
               }
             });
@@ -503,7 +503,7 @@ for (let i = 0; i < 5; i++) {
               plugin: {
                 wrap: {
                   min: { x: 0, y: 0 },
-                  max: { x: 1500, y: 680 }
+                  max: { x: 1650, y: 800 }
                 }
               }
             });
@@ -571,7 +571,7 @@ for (let i = 0; i < 5; i++) {
                 plugin: {
                   wrap: {
                     min: { x: 0, y: 0 },
-                    max: { x: 1500, y: 680 }
+                    max: { x: 1650, y: 800 }
                   }
                 }
               });

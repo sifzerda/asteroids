@@ -12,7 +12,7 @@ db.once('open', async () => {
         username: 'Xandromus',
         email: 'xandro@aol.com',
         password: '12345',
-/* -----------------minesweeper score*/ 
+/* ----------------- score*/ 
         astScore: [
           {
             astPoints: 100
@@ -55,7 +55,7 @@ db.once('open', async () => {
     ]);
 
     console.log('🔑 users seeded');
-    console.log('🚀 user.astroids scores seeded');
+    console.log('🚀 user.asteroids scores seeded');
 
     process.exit();
   } catch (err) {
