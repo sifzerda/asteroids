@@ -12,7 +12,7 @@ const AsteroidsGame = () => {
   const [asteroids, setAsteroids] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   const [ship, setShip] = useState(null);
-  const [rotationSpeed, setRotationSpeed] = useState(0.15);
+  const [rotationSpeed, setRotationSpeed] = useState(0.2);
   const [asteroidSizes, setAsteroidSizes] = useState([]);
   const [asteroidHits, setAsteroidHits] = useState([]);
   const [lives, setLives] = useState(3); // Initialize lives at 3roids count
@@ -91,6 +91,8 @@ const AsteroidsGame = () => {
   useEffect(() => {
     Matter.use(MatterWrap);
     engine.world.gravity.y = 0;
+    engine.world.angularFriction = 0.1; // Adjusted angular friction
+
     const render = Render.create({
       element: gameRef.current,
       engine,
@@ -112,6 +114,10 @@ const AsteroidsGame = () => {
     ];
 
     const shipBody = Bodies.fromVertices(750, 340, vertices, {
+      frictionAir: 0.05,
+      friction: 0.1, // Adjusted friction
+      inertia: Infinity, // Infinite inertia for more responsive rotation
+      //restitution: 0.5,
       render: {
         fillStyle: 'transparent',
         strokeStyle: '#ffffff', 
@@ -205,10 +211,9 @@ const AsteroidsGame = () => {
     };
   }, [engine]);
 
-  
   const moveShipUp = () => {
     if (ship) {
-      const forceMagnitude = 0.0003;
+      const forceMagnitude = 0.001;
       const forceX = Math.cos(ship.angle) * forceMagnitude;
       const forceY = Math.sin(ship.angle) * forceMagnitude;
       Body.applyForce(ship, ship.position, { x: forceX, y: forceY });

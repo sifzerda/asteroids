@@ -284,6 +284,7 @@ const Stripped = () => {
         const particleBody = Bodies.circle(particleX, particleY, 1, {
           frictionAir: 0.02,
           restitution: 0.4,
+          isSensor: true,
           render: {
             fillStyle: '#ff3300' // red
           },
@@ -333,6 +334,7 @@ const Stripped = () => {
       const projectileBody = Bodies.rectangle(projectileX, projectileY, 15, 3, {
         frictionAir: 0.01,
         angle: ship.angle,
+        isSensor: true,
         render: {
           fillStyle: '#00FFDC' // cyan
         },
