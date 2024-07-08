@@ -1,20 +1,3 @@
-// + all basic elements (ship, asteroids, projectile fire, exhaust particles)
-// + collision handling (asteroid splitting, ship crash, asteroid particles)
-// + score 
-// + level 
-// + lives 
-// + game over on 3 lives lost
-// + ship reset on crash
-
-// FIX ISSUES: 
-
-// asteroid replacement on crash - will replace 1 asteroid from 'replaceAsteroids' you have to make a copy function ('replace5asteroids' that replaces 5 and call this on ship crash.
-// call the '1 asteroid replace' function on 'replaceAsteroids' function after 1 asteroid is destroyed (but not hit) - or when an asteroid's hit counter reaches 3 (which means it's destroyed and removed without spawning any more smaller asteroids)
-
-// ship resets position but doesn't disappear on crash - add a timeout to make invisible the ship (??) after a few seconds (4-5) and then reset it to the center of the screen
-
-// asteroids that are replaced through 'replaceAsteroids' function appear to not have any hit counter (?) or collision detection - make sure to add the hit counter and collision detection to the new asteroids
-
 
 import { useState, useEffect, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -76,7 +59,7 @@ const Stripped = () => {
           frictionAir: 0,
           restitution: 0.4,
           render: {
-            fillStyle: '#ff0000', // Red color for explosion particles
+            fillStyle: '#e5ff00', // yellow
           },
           plugin: {
             wrap: {
@@ -175,8 +158,9 @@ const Stripped = () => {
     const shipBody = Bodies.fromVertices(750, 340, vertices, {
       render: {
         fillStyle: 'transparent',
-        strokeStyle: '#ffffff',
-        lineWidth: 2
+        strokeStyle: '#ffffff', 
+        lineWidth: 2,
+        visible: true // Conditional visibility
       },
       plugin: {
         wrap: {
@@ -301,7 +285,7 @@ const Stripped = () => {
           frictionAir: 0.02,
           restitution: 0.4,
           render: {
-            fillStyle: '#ff3300'
+            fillStyle: '#ff3300' // red
           },
           plugin: {
             wrap: {
@@ -350,7 +334,7 @@ const Stripped = () => {
         frictionAir: 0.01,
         angle: ship.angle,
         render: {
-          fillStyle: '#00FFDC'
+          fillStyle: '#00FFDC' // cyan
         },
         plugin: {
           wrap: {
@@ -642,8 +626,8 @@ const Stripped = () => {
               setTimeout(() => {
                 World.remove(engine.world, pieceBody);
                 setParticles(prev => prev.filter(p => p.body !== pieceBody));
-                // crash takes 8 secs to disappear
-              }, 6000);
+                // crash takes 5 secs to disappear
+              }, 5000);
           
               const newPiece = {
                 body: pieceBody,
@@ -655,7 +639,8 @@ const Stripped = () => {
               setParticles(prev => [...prev, newPiece]);
             }
           };
-          emitCrash(ship); // trigger when ship collides with asteroid
+          emitCrash(ship); // ship explodes on crash
+          ship.render.visible = false; // ship disappears on crash
 
       // Calculate collision position as the midpoint between bodyA and bodyB
       const collisionPosition = {
@@ -672,7 +657,7 @@ const Stripped = () => {
             setLives(prevLives => {
               const updatedLives = prevLives - 1;
                 
-                emitExplosionParticles(collisionPosition);
+                emitExplosionParticles(collisionPosition); // asteroid explodes on crash
                           // Remove all asteroids
           asteroids.forEach((asteroid) => {
             World.remove(engine.world, asteroid);
@@ -683,7 +668,8 @@ setTimeout(() => {
      Body.setPosition(ship, { x: 790, y: 350 }); // reset ship pos to center
      Body.setVelocity(ship, { x: 0, y: 0 }); // Reset ship velocity 
   setGameOver(false);
-}, 4000); // 4secs before reset
+  ship.render.visible = true; // ship reappears new life
+}, 5000); // 4secs before reset
 //-----------------------------------------------------------------------------------------//
               return updatedLives;
             });
