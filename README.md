@@ -250,7 +250,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 ## (12) Authors and acknowledgment
 
-The author acknowledges and credits those who have contributed to this project.
+The author acknowledges and credits those who have contributed to this project including:
+
+- ChatGPT
 
 ## (13) License
 
