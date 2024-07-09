@@ -53,7 +53,7 @@ Game was divided up into the smallest working components/units. It began as a ga
 
 ## (3) Visuals
 
-[Visit App deployed to Heroku](https://asteroids-10-[...].herokuapp.com/)
+[Visit App deployed to Heroku](https://asteroids-10-d02b9b752090.herokuapp.com/)
 
 ![asteroids-screenshot-1](https://github.com/sifzerda/solitaire/assets/139626561/a82c2908-baa8-4085-89b9-f19f782646c9)
 
