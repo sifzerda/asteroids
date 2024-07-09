@@ -276,14 +276,15 @@ div.container.my-1-9 {
 footer {
   border-top: var(--dark-blue) ridge 8px;
   background: black;
-  padding: 10px;
   width: 100%;
   border-radius: 10px;
 }
 
 a {
   text-decoration: none;
+padding: 5px;
 }
+
 
 /* svg icons on contact page*/
 a:hover {
@@ -333,6 +334,8 @@ p {
 
 p.footer-text {
   color: white;
+  margin-bottom: 3px;
+  margin-top: 2px;
 }
 
 h4 {
