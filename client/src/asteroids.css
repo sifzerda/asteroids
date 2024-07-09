@@ -109,7 +109,37 @@ p.black-text {
 
 .bright {
   color: yellow;
+}
 
+.submit-button-y {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 4px auto;
+  padding: 12px 16px;
+  font-size: 16px;
+  background-color: transparent;
+  color: var(--cyan);
+  border: 2px solid var(--blue);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s, border-color 0.3s;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  /* Increased box shadow for lift effect */
+}
+
+.submit-button-y:hover {
+  background-color: #ffffff;
+  border: 2px solid var(--cyan);
+  color: black;
+  font-weight: bold;
+}
+
+.submit-button-y:active {
+  transform: translateY(2px);
+  /* Move button down slightly when pressed */
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  /* Reduce shadow for pressed effect */
 }
 
 /* HIGH SCORES TABLE ---------------------------------*/
@@ -290,7 +320,7 @@ canvas {
 .lives-display {
   position: absolute;
   top: 5%;
-  left: 1%;
+  left: 3%;
   color: #ffffff;
   font-size: 1.2vw; /* Use viewport width units for responsive sizing */
   z-index: 100;

@@ -55,11 +55,11 @@ const FinalScore = ({ score, onHighScores }) => {
             )
           )}
     
-          <button className="submit-button-m" onClick={onHighScores}>
+          <button className="submit-button-y" onClick={onHighScores}>
             High Scores
           </button>
     
-          <button className="submit-button-m" onClick={() => window.location.reload()}>
+          <button className="submit-button-y" onClick={() => window.location.reload()}>
             Play Again
           </button>
         </div>
