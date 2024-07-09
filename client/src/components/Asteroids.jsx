@@ -9,12 +9,6 @@ import StartScreen from './StartScreen';
 import FinalScore from './FinalScore'; 
 import HighScores from './HighScores'; 
 
-// Import audio files
-import laserSound from './../../public/sounds/01laser.mp3';
-import thrustSound from './../../public/sounds/02thrust.mp3';
-import crashSound from './../../public/sounds/03crash.mp3';
-import explodeSound from './../../public/sounds/04explode.mp3';
-
 const Asteroids = () => {
   const [engine] = useState(Engine.create());
   const [shipPosition, setShipPosition] = useState({ x: 300, y: 300, rotation: 0 });
