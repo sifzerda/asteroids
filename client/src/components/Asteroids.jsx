@@ -33,6 +33,9 @@ const Asteroids = () => {
   const MAX_PARTICLES = 10;
   const MAX_PROJECTILES = 2;
 
+  const [playShootSound] = useSound('../../public/sounds/01laser.mp3');
+  const [playHitSound] = useSound('../../public/sounds/03hit.mp3');
+
   window.decomp = decomp; // poly-decomp is available globally
 
   //---------------------------------// START SCREENS //-----------------------------------//
@@ -292,6 +295,7 @@ for (let i = 0; i < 5; i++) {
 //----------------------------------- SHOOTING ------------------------------//
   const shootProjectile = () => {
     if (ship) {
+      playShootSound();
       const speed = 10;
       const offset = 40;
       const projectileX = ship.position.x + Math.cos(ship.angle) * offset;
@@ -434,6 +438,7 @@ for (let i = 0; i < 5; i++) {
   };
 
   emitParticles();
+  playHitSound(); // Play hit sound on asteroid collision
 //------------------------// HIT ASTEROID SPLITTING // ---------------------------------//
       // Get index of the asteroid
       const asteroidIndex = asteroids.findIndex(ast => ast === asteroid);

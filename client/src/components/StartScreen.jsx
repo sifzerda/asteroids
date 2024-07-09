@@ -7,9 +7,7 @@ const StartScreen = ({ onStart, onHighScores }) => {
 
       {/* Conditional rendering based on success message state */}
       {!Auth.loggedIn() && (
-        <p className='black-text'>
           <p className='color'>You must be logged in to submit your highscore</p>
-        </p>
       )}
       
       <button className="submit-button-m" onClick={onStart}>START GAME</button>
