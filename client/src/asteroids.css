@@ -271,24 +271,19 @@ canvas {
   z-index: 100;
 }
 
-.score-display {
+.score-display,
+.lives-display {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-800px, -375px);
+  top: 5%;
+  left: 3%;
   color: #ffffff;
-  font-size: 24px;
+  font-size: 1.2vw; /* Use viewport width units for responsive sizing */
   z-index: 100;
 }
 
 .lives-display {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-800px, -330px);
-  font-size: 24px;
-  color: #ffffff;
-  z-index: 100;
+  top: 10%;
+  font-size: 1.2vw; /* Use viewport width units for responsive sizing */
 }
 
 .life-triangle {
@@ -365,6 +360,18 @@ canvas {
   .main-content {
     padding: 0;
   }
+
+  .score-display,
+  .lives-display {
+    position: absolute;
+    top:105%;
+    left: 3%;
+    font-size: 3.3vw; /* Use viewport width units for responsive sizing */
+  }
+
+  .lives-display {
+    top: 116%;
+  }
 }
 
 
@@ -373,6 +380,18 @@ canvas {
 
   .main-content {
     padding: 0;
+  }
+
+  .score-display,
+  .lives-display {
+    position: absolute;
+    top:105%;
+    left: 3%;
+    font-size: 2.2vw; /* Use viewport width units for responsive sizing */
+  }
+
+  .lives-display {
+    top: 114%;
   }
 }
 
