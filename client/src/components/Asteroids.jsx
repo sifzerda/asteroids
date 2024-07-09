@@ -4,6 +4,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import Matter, { Engine, Render, World, Bodies, Body, Events } from 'matter-js';
 import MatterWrap from 'matter-wrap';
 import decomp from 'poly-decomp';
+import useSound from 'use-sound';
 
 import StartScreen from './StartScreen'; 
 import FinalScore from './FinalScore'; 
