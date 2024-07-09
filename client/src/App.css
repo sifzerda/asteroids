@@ -240,13 +240,11 @@ div.container.my-1-9 {
   /* Change to row to align items horizontally */
   justify-content: flex-start;
   width: 100%;
-  min-height: 720px;
   background:  black;
   text-align: left;
   margin: 0 auto;
   background-color: black;
   border-top: var(--dark-blue) ridge 8px;
-  min-height: 100vh - 100px;
 }
 
 .main-content {
