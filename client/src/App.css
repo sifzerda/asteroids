@@ -102,7 +102,8 @@ body,
   display: grid;
   font-family: "Poppins", sans-serif;
   place-items: center;
-  background-color: rgb(59, 119, 197);
+  background-color: black;
+  border-bottom: 1px solid rgb(59, 119, 197);
 }
 
 #root {
