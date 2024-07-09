@@ -290,7 +290,7 @@ canvas {
 .lives-display {
   position: absolute;
   top: 5%;
-  left: 3%;
+  left: 1%;
   color: #ffffff;
   font-size: 1.2vw; /* Use viewport width units for responsive sizing */
   z-index: 100;
