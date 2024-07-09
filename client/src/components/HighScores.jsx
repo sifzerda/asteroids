@@ -1,4 +1,4 @@
-import '../App.css'; // Assuming App.css is your stylesheet for styling
+import '../App.css'; 
 import { useQuery } from '@apollo/client';
 import { QUERY_USERS } from '../utils/queries';
 
@@ -10,7 +10,7 @@ const HighScores = () => {
 
   const users = data.users; // Extracting users from query data
 
-  // Aggregate all mineScore entries with associated usernames
+  // Aggregate all astScore entries with associated usernames
   let allScores = [];
   users.forEach(user => {
     user.astScore.forEach(score => {
@@ -21,8 +21,8 @@ const HighScores = () => {
     });
   });
 
-  // Sort combined scores by minePoints in descending order
-  // If points are the same, then sort by mineTimeTaken in ascending order
+  // Sort combined scores by astPoints in descending order
+  // If points are the same, then sort by astTimeTaken in ascending order
   allScores.sort((a, b) => {
     if (b.astPoints !== a.astPoints) {
       return b.astPoints - a.astPoints; // Sort by points descending
