@@ -36,6 +36,7 @@ return (
   <div className="grid-wrapper">
     <div className="grid-container">
       <h1 className='end'>High Scores</h1>
+      <div className="table-container">
       <table className="high-scores-table">
         <thead>
           <tr>
@@ -54,8 +55,10 @@ return (
           ))}
         </tbody>
       </table>
+      </div>
       <button className="submit-button-m" onClick={() => window.location.reload()}>BACK</button>
     </div>
+    
     </div>
   );
 };

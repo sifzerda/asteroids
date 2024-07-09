@@ -114,23 +114,32 @@ p.black-text {
 
 /* HIGH SCORES TABLE ---------------------------------*/
 
+.table-container {
+  border: 3px solid var(--midnight);
+  border-radius: 10px;
+  padding: 0px;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 650px; 
+  box-sizing: border-box; 
+  color: white;
+}
+
 .high-scores-table {
   width: 100%;
-  min-width: 400px;
-  max-width: 600px;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 
 .high-scores-table th,
 .high-scores-table td {
   padding: 12px;
   text-align: center;
-  border: 1px solid #c0c0c0;
+  border: 3px solid black;
 }
 
 .high-scores-table th {
-  background-color: #b7f4fc;
+  background-color: var(--midnight);
+  border-bottom: 5px solid black;
 }
 
 .high-scores-table tbody tr {
@@ -139,6 +148,12 @@ p.black-text {
 
 .high-scores-table tbody tr:hover {
   background-color: #e9ecef;
+}
+
+.high-scores-table td {
+  color: var(--volt);
+  background-color: black;
+
 }
 
 .black-text a {
